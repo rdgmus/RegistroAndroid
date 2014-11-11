@@ -19,7 +19,7 @@
         android:text="@string/authorEmail"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/colorBlue"
-        android:textSize="25sp"
+        android:textSize="15sp"
         android:textStyle="bold" />
 
     <TextView
@@ -33,18 +33,8 @@
         android:text="@string/author"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/colorBlue"
-        android:textSize="25sp"
+        android:textSize="15sp"
         android:textStyle="bold" />
-
-    <ImageButton
-        android:id="@+id/imageButtonStart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp"
-        android:contentDescription="@string/home"
-        android:src="@drawable/ic_registro1" />
 
     <TextView
         android:id="@+id/textViewTitle"
@@ -57,7 +47,7 @@
         android:text="@string/title"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/colorBlue"
-        android:textSize="35sp"
+        android:textSize="25sp"
         android:textStyle="bold" />
 
     <TextView
@@ -71,5 +61,15 @@
         android:textColor="@color/colorStart"
         android:textSize="15sp"
         android:textStyle="bold" />
+
+    <ImageButton
+        android:id="@+id/imageButtonStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:contentDescription="@string/home"
+        android:src="@drawable/ic_registro1" />
 
 </RelativeLayout>
