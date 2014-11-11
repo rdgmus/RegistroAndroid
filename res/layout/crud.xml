@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+
+            <Button
+                android:id="@+id/bCrudUpdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Update"
+                android:textColor="@color/colorRed"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/bCrudDelete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/bCrudUpdate"
+                android:text="Delete"
+                android:textColor="@color/colorRed"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/bCrudCreate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/bCrudDelete"
+                android:text="Create"
+                android:textColor="@color/colorBlue"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/bCrudClear"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:text="Clear"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/bCrudView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/bCrudCreate"
+                android:text="Select"
+                android:textColor="@color/colorStart"
+                android:textStyle="bold" />
+        </RelativeLayout>
+    </FrameLayout>
+

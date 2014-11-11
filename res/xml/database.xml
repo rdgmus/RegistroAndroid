@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <ListPreference
+        android:entries="@array/databaseList"
+        android:entryValues="@array/databaseListValues"
+        android:key="databaseList"
+        android:summary="Scegli Database del Registro Scolastico"
+        android:title="Database List " android:defaultValue="1" android:dialogIcon="@drawable/database_list"/>
+
+    <PreferenceCategory
+        android:enabled="true"
+        android:key="mysql"
+        android:selectable="true"
+        android:summary="MySQL connection parameters"
+        android:title="MySQL Database network parameters" >
+        <EditTextPreference
+            android:dialogIcon="@drawable/logo_mysql"
+            android:key="ipMySQL"
+            android:summary="Database ip address"
+            android:title="IP MySQL" />
+        <EditTextPreference
+            android:dialogIcon="@drawable/logo_mysql"
+            android:key="userNameMySQL"
+            android:summary="Database user name"
+            android:title="User MySQL" />
+        <EditTextPreference
+            android:dialogIcon="@drawable/logo_mysql"
+            android:inputType="textPassword"
+            android:key="userPasswdMySQL"
+            android:summary="Database user password"
+            android:title="Password MySQL" />
+        <EditTextPreference
+            android:dialogIcon="@drawable/logo_mysql"
+            android:key="portMySQL"
+            android:summary="MySQL port number"
+            android:title="Port " />
+        <EditTextPreference
+            android:dialogIcon="@drawable/logo_mysql"
+            android:key="schemaMySQL"
+            android:summary="MySQL schema"
+            android:title="Schema" />
+        <EditTextPreference
+            android:defaultValue="com.mysql.jdbc.Driver"
+            android:dialogIcon="@drawable/logo_mysql"
+            android:enabled="true"
+            android:key="jdbcMySQL"
+            android:summary="MySQL jdbc driver"
+            android:title="JDBC" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:enabled="true"
+        android:key="postgreSQL"
+        android:selectable="true"
+        android:summary="PostgreSQL connection parameters"
+        android:title="PostgreSQL Database network parameters" >
+        <EditTextPreference
+            android:dialogIcon="@drawable/logo_postgresql"
+            android:key="ipPostgreSQL"
+            android:summary="Database ip address"
+            android:title="IP PostgreSQL" />
+        <EditTextPreference
+            android:dialogIcon="@drawable/logo_postgresql"
+            android:key="userNamePostgreSQL"
+            android:summary="Database user name"
+            android:title="User PostgreSQL" />
+        <EditTextPreference
+            android:dialogIcon="@drawable/logo_postgresql"
+            android:inputType="textPassword"
+            android:key="userPasswdPostgreSQL"
+            android:summary="Database user password"
+            android:title="Password PostgreSQL" />
+        <EditTextPreference
+            android:dialogIcon="@drawable/logo_postgresql"
+            android:key="portPostgreSQL"
+            android:summary="PostgreSQL port number"
+            android:title="Port " />
+        <EditTextPreference
+            android:dialogIcon="@drawable/logo_postgresql"
+            android:key="schemaPostgreSQL"
+            android:summary="PostgreSQL schema"
+            android:title="Schema" />
+        <EditTextPreference
+            android:defaultValue="org.postgresql.Driver"
+            android:dialogIcon="@drawable/logo_postgresql"
+            android:enabled="true"
+            android:key="jdbcPostgreSQL"
+            android:summary="PostgreSQL jdbc driver"
+            android:title="JDBC" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

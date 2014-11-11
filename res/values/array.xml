@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="databaseList">
+        <item>PostgreSQL</item>
+        <item>MySQL</item>
+    </string-array>
+    <string-array name="databaseListValues">
+        <item>PostgreSQL</item>
+        <item>MySQL</item>
+    </string-array>
+    <string-array name="ruoloList">
+        <item>Amministratore</item>
+        <item>Professore</item>
+        <item>Ata</item>
+        <item>Segreteria</item>
+    </string-array>
+    <string-array name="ruoloListValues">
+        <item>Amministratore</item>
+        <item>Professore</item>
+        <item>Ata</item>
+        <item>Segreteria</item>
+    </string-array>
+    <string-array name="fieldTypesList">
+        <item>INTEGER</item>
+        <item>BOOL</item>
+        <item>REAL</item>
+        <item>DOUBLE</item>
+        <item>FLOAT</item>
+        <item>CHAR</item>
+        <item>TEXT</item>
+        <item>VARCHAR</item>
+        <item>BLOB</item>
+        <item>NUMERIC</item>
+        <item>DATETIME</item>
+    </string-array>
+    <string-array name="fieldTypeValuesList">
+        <item>INTEGER</item>
+        <item>BOOL</item>
+        <item>REAL</item>
+        <item>DOUBLE</item>
+        <item>FLOAT</item>
+        <item>CHAR</item>
+        <item>TEXT</item>
+        <item>VARCHAR</item>
+        <item>BLOB</item>
+        <item>NUMERIC</item>
+        <item>DATETIME</item>
+    </string-array>
+
+</resources>

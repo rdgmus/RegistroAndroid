@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/llSqlite"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/application_background"
+    android:orientation="vertical"
+    android:padding="5dp" >
+
+    <!-- Screen Design for Photos -->
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/bExecuteSqLite"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Execute Sql"
+            android:textColor="@color/colorStart" />
+
+        <Chronometer
+            android:id="@+id/chronometerSelection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chronometer"
+            android:textSize="25dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="15dip"
+            android:text="SELECT"
+            android:textColor="@color/colorBlue"
+            android:textSize="18dip"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/ibTables"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/select" />
+
+        <ImageButton
+            android:id="@+id/ibFilterRecords"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/filter_icon" />
+
+        <ImageButton
+            android:id="@+id/ibUndoWhere"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/filter_undo_icon" />
+
+        <ImageButton
+            android:id="@+id/ibDialogClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/dialog_close_icon" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/etSqliteSql"
+        android:layout_width="match_parent"
+        android:layout_height="112dp"
+        android:ems="10"
+        android:gravity="top"
+        android:inputType="textMultiLine"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:textAppearance="@android:style/TextAppearance.Widget.EditText"
+        android:textSize="12dp"
+        android:textStyle="bold" >
+
+        <requestFocus />
+    </EditText>
+
+    <LinearLayout
+        android:id="@+id/llButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <ImageButton
+            android:id="@+id/ibCommit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/db_commit" />
+
+        <ImageButton
+            android:id="@+id/ibRollback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/rollback" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/tvNumRecordsTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:text="Num. Recs.:"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/colorBlue"
+                android:textSize="18dip"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/tvNumRecordsTitle"
+                android:text="Recs/Page:"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/colorBlue"
+                android:textSize="18dip"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvRecsOnPage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/textView1"
+                android:layout_alignBottom="@+id/textView1"
+                android:layout_alignLeft="@+id/tvNumRecords"
+                android:gravity="center"
+                android:maxLength="10"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="0000"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/colorBlack"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/TextView02"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/tvRecsOnPage"
+                android:layout_alignBottom="@+id/tvRecsOnPage"
+                android:layout_toRightOf="@+id/tvNumRecords"
+                android:paddingLeft="5dp"
+                android:text="end:"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/colorBlue"
+                android:textSize="18dip"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/TextView01"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/tvNumRecords"
+                android:layout_alignLeft="@+id/TextView02"
+                android:layout_alignTop="@+id/tvNumRecords"
+                android:paddingLeft="5dp"
+                android:text="start:"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/colorBlue"
+                android:textSize="18dip"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvEndRec"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/TextView01"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/TextView01"
+                android:maxLength="10"
+                android:paddingLeft="5dp"
+                android:text="0000"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/colorBlack"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvStartRec"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/tvEndRec"
+                android:layout_alignBaseline="@id/tvNumRecords"
+                android:layout_alignLeft="@+id/tvEndRec"
+                android:layout_centerVertical="true"
+                android:focusable="true"
+                android:maxLength="10"
+                android:paddingLeft="5dp"
+                android:text="0000"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/colorBlack"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvNumRecords"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/tvNumRecordsTitle"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/tvNumRecordsTitle"
+                android:maxLength="10"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="0000"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/colorBlack"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <ImageButton
+            android:id="@+id/ibPrevious"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/previous" />
+
+        <ImageButton
+            android:id="@+id/ibNext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/next" />
+    </LinearLayout>
+
+    <it.keyorchestra.registrowebapp.scuola.util.ScrollingTable
+        android:id="@+id/leaderboardScrollingTable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <HorizontalScrollView
+            android:id="@+id/horizontalScrollViewHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TableLayout
+                android:id="@+id/tlTableHeader"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:stretchColumns="0,1" >
+
+                <TableRow
+                    android:id="@+id/trSqliteSqlh"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp" >
+
+                    <TextView
+                        android:id="@+id/tvIdh"
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/cell_shape"
+                        android:gravity="center"
+                        android:text="id"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvCognomeh"
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/cell_shape"
+                        android:gravity="center"
+                        android:text="Cognome"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvNomeh"
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/cell_shape"
+                        android:gravity="center"
+                        android:text="Nome"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvEmailh"
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/cell_shape"
+                        android:gravity="center"
+                        android:text="Email"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvPasswordh"
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/cell_shape"
+                        android:gravity="center"
+                        android:text="Password"
+                        android:textStyle="bold" />
+                </TableRow>
+            </TableLayout>
+        </HorizontalScrollView>
+
+        <ScrollView
+            android:id="@+id/scrollViewVerticalBody"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <HorizontalScrollView
+                android:id="@+id/horizontalScrollViewBody"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TableLayout
+                    android:id="@+id/tlSqliteSql"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:stretchColumns="0,1" >
+
+                    <TableRow
+                        android:id="@+id/trSqliteSql"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp" >
+
+                        <TextView
+                            android:id="@+id/tvId"
+                            android:layout_width="wrap_content"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="1"
+                            android:background="@drawable/cell_shape"
+                            android:gravity="center"
+                            android:text="id"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvCognome"
+                            android:layout_width="wrap_content"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="1"
+                            android:background="@drawable/cell_shape"
+                            android:gravity="center"
+                            android:text="Cognome"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvNome"
+                            android:layout_width="wrap_content"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="1"
+                            android:background="@drawable/cell_shape"
+                            android:gravity="center"
+                            android:text="Nome"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvEmail"
+                            android:layout_width="wrap_content"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="1"
+                            android:background="@drawable/cell_shape"
+                            android:gravity="center"
+                            android:text="Email"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvPassword"
+                            android:layout_width="wrap_content"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="1"
+                            android:background="@drawable/cell_shape"
+                            android:gravity="center"
+                            android:text="Password"
+                            android:textStyle="bold" />
+                    </TableRow>
+                </TableLayout>
+            </HorizontalScrollView>
+        </ScrollView>
+    </it.keyorchestra.registrowebapp.scuola.util.ScrollingTable>
+
+</LinearLayout>

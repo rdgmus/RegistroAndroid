@@ -1,0 +1,75 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/application_background"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".Splash" >
+
+    <TextView
+        android:id="@+id/TextViewAuthorEmail"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/TextViewAuthor"
+        android:layout_below="@+id/TextViewAuthor"
+        android:gravity="center"
+        android:text="@string/authorEmail"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/colorBlue"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/TextViewAuthor"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textViewTitle"
+        android:layout_below="@+id/textViewTitle"
+        android:layout_marginTop="37dp"
+        android:gravity="center"
+        android:text="@string/author"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/colorBlue"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+
+    <ImageButton
+        android:id="@+id/imageButtonStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:contentDescription="@string/home"
+        android:src="@drawable/ic_registro1" />
+
+    <TextView
+        android:id="@+id/textViewTitle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageButtonStart"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="62dp"
+        android:gravity="center"
+        android:text="@string/title"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/colorBlue"
+        android:textSize="35sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/imageButtonStart"
+        android:gravity="center"
+        android:text="@string/startNow" 
+        android:textColor="@color/colorStart"
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
+</RelativeLayout>

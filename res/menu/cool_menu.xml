@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/aboutUs"
+        android:alphabeticShortcut="a"
+        android:title="About Us"/>
+    <item
+        android:id="@+id/preferences"
+        android:alphabeticShortcut="p"
+        android:title="Preferences"/>
+    <item
+        android:id="@+id/databases"
+        android:alphabeticShortcut="d"
+        android:title="Database"/>
+    <item
+        android:id="@+id/exit"
+        android:alphabeticShortcut="x"
+        android:title="Exit"/>
+
+</menu>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <CheckBoxPreference
+        android:enabled="true"
+        android:key="checkConnection"
+        android:selectable="true"
+        android:summary="Prova Connessione al Database"
+        android:summaryOff="Database irragiungibile!"
+        android:summaryOn="Database Connesso!"
+        android:title="Connect to Database" />
+
+</PreferenceScreen>

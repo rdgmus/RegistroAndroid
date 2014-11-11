@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:padding="25sp"
+    android:background="@drawable/application_background">
+
+    <TextView
+        android:id="@+id/tvIP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:text="IP:" />
+
+    <EditText
+        android:id="@+id/etIP1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/tvIP"
+        android:ems="3"
+        android:text="000" >
+
+    </EditText>
+
+    <EditText
+        android:id="@+id/etIP2"
+        android:text="000"
+        android:layout_toRightOf="@id/etIP1"
+        android:layout_below="@id/tvIP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="3" />
+
+    <EditText
+        android:id="@+id/etIP3"
+        android:text="000"
+        android:layout_toRightOf="@id/etIP2"
+        android:layout_below="@id/tvIP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="3" />
+
+    <EditText
+        android:id="@+id/etIP4"
+        android:text="000"
+        android:layout_toRightOf="@id/etIP3"
+        android:layout_below="@id/tvIP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="3" />
+
+    <TextView
+        android:id="@+id/tvUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/etIP1"
+        android:layout_below="@+id/etIP1"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:text="User:" />
+
+    <EditText
+        android:id="@+id/editText1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tvUser"
+        android:layout_below="@+id/tvUser"
+        android:ems="10" >
+
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:id="@+id/tvPasswd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/editText1"
+        android:layout_below="@+id/editText1"
+        android:text="Password:"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/etPasswd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvPasswd"
+        android:ems="10"
+        android:inputType="textPassword" />
+
+</RelativeLayout>

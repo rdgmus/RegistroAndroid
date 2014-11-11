@@ -1,0 +1,11 @@
+package it.keyorchestra.registrowebapp.interfaces;
+
+import android.content.DialogInterface;
+
+public interface AlertMagnatic {
+	
+	public abstract void PositiveMethod(DialogInterface dialog, int id);
+
+	public abstract void NegativeMethod(DialogInterface dialog, int id);
+    
+}

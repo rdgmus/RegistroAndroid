@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="it.keyorchestra.registrowebapp"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="18" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.SET_WALLPAPER" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_registro1"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="it.keyorchestra.registrowebapp.Splash"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="it.keyorchestra.registrowebapp.Menu"
+            android:icon="@drawable/ic_registro1"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="it.keyorchestra.registrowebapp.MENU" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="it.keyorchestra.registrowebapp.ScuolaTablesMenu"
+            android:icon="@drawable/ic_registro1"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="it.keyorchestra.registrowebapp.SCUOLA_TABLES_MENU" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="it.keyorchestra.registrowebapp.MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="it.keyorchestra.registrowebapp.MAIN_ACTIVITY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="it.keyorchestra.registrowebapp.Login"
+            android:label="@string/title_activity_login" >
+            <intent-filter>
+                <action android:name="android.intent.action.LOGIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="it.keyorchestra.registrowebapp.Iscrizione"
+            android:label="@string/title_activity_register_user" >
+            <intent-filter>
+                <action android:name="android.intent.action.REGISTER_USER" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="it.keyorchestra.registrowebapp.sqllite.SQLView"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.SQLVIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="it.keyorchestra.registrowebapp.AdminDatabases"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.ADMIN_DATABASES" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="it.keyorchestra.registrowebapp.BrowseSqlTabLayoutActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="user" >
+            <intent-filter>
+                <action android:name="it.keyorchestra.registrowebapp.BROWSE_SQL" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="it.keyorchestra.registrowebapp.SqLite"
+            android:screenOrientation="user" />
+        <activity
+            android:name="it.keyorchestra.registrowebapp.Email"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="it.keyorchestra.registrowebapp.Camera"
+            android:label="@string/title_activity_camera" >
+        </activity>
+        <activity
+            android:name="it.keyorchestra.registrowebapp.Data"
+            android:label="@string/title_activity_data" >
+        </activity>
+        <activity
+            android:name="it.keyorchestra.registrowebapp.GFX"
+            android:label="GFX" >
+        </activity>
+        <activity
+            android:name="it.keyorchestra.registrowebapp.GFXSurface"
+            android:label="GFXSurface" >
+        </activity>
+        <activity
+            android:name="it.keyorchestra.registrowebapp.SoundStaff"
+            android:label="SoundStaff" >
+        </activity>
+        <activity
+            android:name="it.keyorchestra.registrowebapp.sqllite.SQLLiteExample"
+            android:label="SQLLiteExample" >
+        </activity>
+        <activity
+            android:name="it.keyorchestra.registrowebapp.sqllite.ScuolaActivity"
+            android:label="ScuolaActivity" >
+        </activity>
+        <activity
+            android:name="it.keyorchestra.registrowebapp.scuola.UtentiScuola"
+            android:label="UtentiScuola"
+            android:windowSoftInputMode="stateHidden" >
+            <intent-filter>
+                <action android:name="android.intent.action.UTENTI_SCUOLA" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="it.keyorchestra.registrowebapp.OpenedClass"
+            android:label="@string/title_activity_openedclass" >
+        </activity>
+        <activity
+            android:name="it.keyorchestra.registrowebapp.AboutUs"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Dialog" >
+            <intent-filter>
+                <action android:name="it.keyorchestra.registrowebapp.ABOUT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="it.keyorchestra.registrowebapp.Prefs"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="it.keyorchestra.registrowebapp.PREFS" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="it.keyorchestra.registrowebapp.FieldTypePrefs"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="it.keyorchestra.registrowebapp.FIELD_TYPE_PREFS" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="it.keyorchestra.registrowebapp.Database"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="it.keyorchestra.registrowebapp.DATABASE" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="it.keyorchestra.registrowebapp.RuoloUtente"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="it.keyorchestra.registrowebapp.RUOLO_UTENTE" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="it.keyorchestra.registrowebapp.CheckConnection"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="it.keyorchestra.registrowebapp.CHECK_CONNECTION" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="it.keyorchestra.registrowebapp.TableListExpActivity"
+            android:label="@string/title_activity_table_list_exp" >
+            <intent-filter>
+                <action android:name="it.keyorchestra.registrowebapp.LIST_ACTIVITY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="it.keyorchestra.registrowebapp.AdminTables"
+            android:label="@string/title_activity_admin_tables" >
+            <intent-filter>
+                <action android:name="it.keyorchestra.registrowebapp.ADMIN_TABLES" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="it.keyorchestra.registrowebapp.WhereClause"
+            android:label="@string/title_activity_where_clause" >
+            <intent-filter>
+                <action android:name="it.keyorchestra.registrowebapp.WHERE_CLAUSE" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="it.keyorchestra.registrowebapp.ChooseFieldsForSelect"
+            android:label="@string/title_activity_choose_fields_for_select" >
+            <intent-filter>
+                <action android:name="it.keyorchestra.registrowebapp.CHOOSE_FIELDS_FOR_SELECT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

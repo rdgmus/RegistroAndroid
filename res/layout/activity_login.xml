@@ -1,0 +1,113 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/application_background"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:padding="25dp"
+    tools:context=".Login" >
+
+    <TextView
+        android:id="@+id/tvLoginTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/loginText"
+        android:textSize="25sp"
+        android:gravity="center"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/etLoginEmail"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvLoginEmail"
+        android:ems="10"
+        android:hint="@string/emailHint"
+        android:inputType="textEmailAddress"
+        android:textSize="25sp" >
+
+        <requestFocus />
+    </EditText>
+
+    <EditText
+        android:id="@+id/etLoginPasswd"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvLoginPassword"
+        android:ems="10"
+        android:hint="@string/passwdHint"
+        android:inputType="textPassword"
+        android:textSize="32sp" />
+
+    <TextView
+        android:id="@+id/tvLoginEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvLoginTitle"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:text="Email:" />
+
+    <TextView
+        android:id="@+id/tvLoginPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etLoginEmail"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:text="Password:" />
+
+    <TextView
+        android:id="@+id/messageView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/login_button"
+        android:layout_below="@+id/login_button"
+        android:layout_marginTop="52dp"
+        android:gravity="center"
+        android:text="@string/loginMsg"
+        android:textColor="@color/colorRed"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:visibility="visible" />
+
+    <Button
+        android:id="@+id/bCambiaRuolo"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/tvLoginPassword"
+        android:layout_below="@+id/etLoginPasswd"
+        android:textStyle="bold"
+        android:text="Cambia Ruolo" />
+
+    <EditText
+        android:id="@+id/etRuoloScelto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/etLoginPasswd"
+        android:layout_alignTop="@+id/bCambiaRuolo"
+        android:editable="false"
+        android:textStyle="bold"
+        android:text="Ruolo Scelto"
+        android:gravity="center_horizontal"
+        android:textSize="18sp"
+        android:ems="15" />
+
+    <Button
+        android:id="@+id/login_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/etRuoloScelto"
+        android:layout_below="@+id/etRuoloScelto"
+        android:gravity="center"
+        android:text="@string/login_button"
+        android:textColor="@color/colorBlue"
+        android:textStyle="bold" />
+
+</RelativeLayout>

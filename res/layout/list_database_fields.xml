@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+
+    <LinearLayout
+        android:id="@+id/llListFields"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/imageViewChild"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_gravity="fill"
+            android:src="@drawable/field" />
+
+        <TextView
+            android:id="@+id/lblListItemNome"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingLeft="5dp"
+            android:background="@drawable/cell_shape"
+            android:gravity="left"
+            android:scrollHorizontally="true"
+            android:text="NAME"
+            android:textColor="@color/colorBlack"
+            android:textSize="12dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/lblListItemTipo"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingLeft="5dp"
+            android:background="@drawable/cell_shape"
+            android:gravity="left"
+            android:scrollHorizontally="true"
+            android:text="TYPE"
+            android:textColor="@color/colorBlack"
+            android:textSize="12dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/lblListItemNotNull"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/cell_shape"
+            android:gravity="left"
+            android:paddingLeft="5dp"
+            android:scrollHorizontally="true"
+            android:text="NOT NULL"
+            android:textColor="@color/colorBlack"
+            android:textSize="12dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/lblListItemDfltValue"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/cell_shape"
+            android:gravity="left"
+            android:paddingLeft="5dp"
+            android:scrollHorizontally="true"
+            android:text="DEF."
+            android:textColor="@color/colorBlack"
+            android:textSize="12dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/lblListItemPK"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/cell_shape"
+            android:paddingLeft="5dp"
+            android:gravity="left"
+            android:scrollHorizontally="true"
+            android:text="PK"
+            android:textColor="@color/colorBlack"
+            android:textSize="12dp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</LinearLayout>

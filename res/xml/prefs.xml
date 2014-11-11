@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <EditTextPreference
+        android:key="name"
+        android:summary="Enter your name"
+        android:title="EditText" />
+
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="music"
+        android:summary="Splash sound on/off"
+        android:title="Music" />
+    <PreferenceCategory
+        android:enabled="true"
+        android:key="regAdmin"
+        android:selectable="true"
+        android:summary="Parametri account amministratore del Registro Scolastico"
+        android:title="Amministratore del Registro Scolastico" >
+        <EditTextPreference
+            android:defaultValue="rdgmus@live.com"
+            android:dialogIcon="@drawable/ruolo_utente"
+            android:inputType="textEmailAddress"
+            android:key="adminEmail"
+            android:title="Email Admin" />
+        <EditTextPreference
+            android:defaultValue="admin"
+            android:dialogIcon="@drawable/ruolo_utente"
+            android:inputType="textPassword"
+            android:key="adminPasswd"
+            android:title="Password Admin" />
+        <EditTextPreference
+            android:defaultValue="Roberto"
+            android:dialogIcon="@drawable/ruolo_utente"
+            android:key="adminNome"
+            android:title="Nome Admin" />
+        <EditTextPreference
+            android:defaultValue="Della Grotta"
+            android:dialogIcon="@drawable/ruolo_utente"
+            android:key="adminCognome"
+            android:title="Cognome Admin" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

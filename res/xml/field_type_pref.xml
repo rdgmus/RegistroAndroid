@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="fieldTypePrefs"
+    android:title="Choose Type of field" >
+
+    <ListPreference
+        android:dialogIcon="@drawable/field"
+        android:dialogTitle="Choose Type of Field"
+        android:entries="@array/fieldTypesList"
+        android:entryValues="@array/fieldTypeValuesList"
+        android:key="typeOfField"
+        android:title="Scelta Tipo Dato" />
+
+</PreferenceScreen>

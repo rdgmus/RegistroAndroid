@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/application_background"
+    android:orientation="vertical"
+    android:padding="15sp" >
+
+    <include
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        layout="@layout/table_title" />
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <include
+                android:id="@+id/fieldId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                layout="@layout/table_field_number" />
+
+            <include
+                android:id="@+id/fieldCognome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                layout="@layout/table_field_text" />
+
+            <include
+                android:id="@+id/fieldNome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                layout="@layout/table_field_text" />
+
+            <include
+                android:id="@+id/fieldEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                layout="@layout/table_field_text" />
+
+            <include
+                android:id="@+id/fieldPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                layout="@layout/table_field_text" />
+
+            <include
+                android:id="@+id/fieldIdRuolo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                layout="@layout/table_field_number" />
+
+            <include
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                layout="@layout/crud" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
