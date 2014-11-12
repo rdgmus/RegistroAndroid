@@ -6,6 +6,10 @@
         android:alphabeticShortcut="a"
         android:title="About Us"/>
     <item
+        android:id="@+id/mysqlAndroidTest"
+        android:alphabeticShortcut="m"
+        android:title="mysqlAndroidTest"/>
+    <item
         android:id="@+id/preferences"
         android:alphabeticShortcut="p"
         android:title="Preferences"/>

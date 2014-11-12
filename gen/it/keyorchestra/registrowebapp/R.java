@@ -137,7 +137,7 @@ public final class R {
         public static final int cbFieldPK=0x7f0c006a;
         public static final int cbViewPassword=0x7f0c00d5;
         public static final int chronometerSelection=0x7f0c00a7;
-        public static final int databases=0x7f0c00e6;
+        public static final int databases=0x7f0c00e7;
         public static final int editText1=0x7f0c0097;
         public static final int editTextCognome=0x7f0c0029;
         public static final int editTextEmail=0x7f0c002a;
@@ -171,7 +171,7 @@ public final class R {
         public static final int etTableName=0x7f0c0060;
         public static final int etThings=0x7f0c007d;
         public static final int etWhereClause=0x7f0c004d;
-        public static final int exit=0x7f0c00e7;
+        public static final int exit=0x7f0c00e8;
         public static final int expandableListView1=0x7f0c00d7;
         public static final int expandableListViewTables=0x7f0c0009;
         public static final int fieldCognome=0x7f0c00de;
@@ -206,7 +206,7 @@ public final class R {
         public static final int imageView1=0x7f0c0052;
         public static final int imageViewChild=0x7f0c0089;
         public static final int include1=0x7f0c000a;
-        public static final int itemTypeOfField=0x7f0c00e8;
+        public static final int itemTypeOfField=0x7f0c00e9;
         public static final int ivMyIcon=0x7f0c0086;
         public static final int ivReturnedPic=0x7f0c009a;
         public static final int ivTable=0x7f0c00d8;
@@ -231,8 +231,9 @@ public final class R {
         public static final int lvDatabasesList=0x7f0c005a;
         public static final int messageEsitoRegistrazione=0x7f0c002c;
         public static final int messageView=0x7f0c001e;
+        public static final int mysqlAndroidTest=0x7f0c00e5;
         public static final int newUser=0x7f0c0025;
-        public static final int preferences=0x7f0c00e5;
+        public static final int preferences=0x7f0c00e6;
         public static final int programmer=0x7f0c0023;
         public static final int rBoth=0x7f0c00a2;
         public static final int rCrazy=0x7f0c00a0;
@@ -240,7 +241,7 @@ public final class R {
         public static final int registeredUser=0x7f0c0024;
         public static final int registra_button=0x7f0c002b;
         public static final int rgAnswers=0x7f0c009f;
-        public static final int ruoloUtente=0x7f0c00e9;
+        public static final int ruoloUtente=0x7f0c00ea;
         public static final int sbSelection=0x7f0c005c;
         public static final int scrollView1=0x7f0c0014;
         public static final int scrollViewVerticalBody=0x7f0c00c0;

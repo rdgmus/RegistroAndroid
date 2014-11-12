@@ -1,13 +1,30 @@
 package it.keyorchestra.registrowebapp;
 
+import it.keyorchestra.registrowebapp.scuola.util.ExpandableListAdapter;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import it.keyorchestra.registrowebapp.scuola.util.ExpandableListAdapter;
-import android.os.Bundle;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.net.ParseException;
+import android.os.Bundle;
+import android.os.StrictMode;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
@@ -16,6 +33,8 @@ import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.Toast;
 
+
+@SuppressLint("NewApi")
 public class TableListExpActivity extends Activity {
 	ExpandableListAdapter listAdapter;
 	ExpandableListView expListView;
@@ -29,10 +48,15 @@ public class TableListExpActivity extends Activity {
 	String[] htArray = { "Top 250", "Now Showing", "Coming Soon..",
 			"Activity List", "Scuola.Tables" };
 
+	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.table_list_exp);
+
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+
+		StrictMode.setThreadPolicy(policy); 
 
 		// get the listview
 		expListView = (ExpandableListView) findViewById(R.id.expandableListView1);
@@ -196,4 +220,138 @@ public class TableListExpActivity extends Activity {
 		// data
 	}
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// TODO Auto-generated method stub
+		super.onCreateOptionsMenu(menu);
+		getMenuInflater().inflate(R.menu.cool_menu, menu);
+		return true;
+	}
+
+	private void mysqlAndroidTest() {
+		JSONArray jArray = null;
+
+		String result = null;
+
+		StringBuilder sb = null;
+
+		InputStream is = null;
+
+		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+		// http post
+		try {
+			HttpClient httpclient = new DefaultHttpClient();
+
+			// Why to use 10.0.2.2 http://localhost/mySqlAndroidTest.php
+			HttpPost httppost = new HttpPost(
+					"http://192.168.0.215/mySqlAndroidTest.php");
+			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+			HttpResponse response = httpclient.execute(httppost);
+			HttpEntity entity = response.getEntity();
+			is = entity.getContent();
+		} catch (Exception e) {
+			Toast.makeText(getApplicationContext(),
+					"Error in http connection: " + e.toString(),
+					Toast.LENGTH_SHORT).show();
+			// Log.e("log_tag", "Error in http connection"+e.toString());
+		}
+		// convert response to string
+		try {
+			BufferedReader reader = new BufferedReader(new InputStreamReader(
+					is, "iso-8859-1"), 8);
+			sb = new StringBuilder();
+			sb.append(reader.readLine() + "\n");
+
+			String line = "0";
+			while ((line = reader.readLine()) != null) {
+				sb.append(line + "\n");
+			}
+			is.close();
+			result = sb.toString();
+		} catch (Exception e) {
+			Toast.makeText(getApplicationContext(),
+					"Error converting result: " + e.toString(),
+					Toast.LENGTH_SHORT).show();
+			// Log.e("log_tag", "Error converting result "+e.toString());
+		}
+
+		String ruolo;
+		try {
+			jArray = new JSONArray(result);
+			JSONObject json_data = null;
+			for (int i = 0; i < jArray.length(); i++) {
+				json_data = jArray.getJSONObject(i);
+				ruolo = json_data.getString("ruolo");// here "ruolo" is
+														// the column
+														// name in
+														// database
+				Toast.makeText(getBaseContext(), "Ruolo: " + ruolo,
+						Toast.LENGTH_LONG).show();
+			}
+		} catch (JSONException e1) {
+			Toast.makeText(getBaseContext(), "No Data Found", Toast.LENGTH_LONG)
+					.show();
+		} catch (ParseException e1) {
+			e1.printStackTrace();
+		}
+	}
+
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// TODO Auto-generated method stub
+		// return super.onOptionsItemSelected(item);
+		switch (item.getItemId()) {
+		case R.id.aboutUs:
+			Intent i = new Intent("it.keyorchestra.registrowebapp.ABOUT");
+			startActivity(i);
+			break;
+		case R.id.mysqlAndroidTest:
+			Toast.makeText(getApplicationContext(), "mysqlAndroidTest",
+					Toast.LENGTH_SHORT).show();
+			mysqlAndroidTest();
+			break;
+		case R.id.preferences:
+			Intent p = new Intent("it.keyorchestra.registrowebapp.PREFS");
+			startActivity(p);
+			break;
+		case R.id.databases:
+			Intent d = new Intent("it.keyorchestra.registrowebapp.DATABASE");
+			startActivity(d);
+			break;
+		case R.id.exit:
+			finish();
+			break;
+
+		default:
+			break;
+		}
+
+		return false;
+	}
+
+//	class RetrieveFeedTask<RSSFeed> extends AsyncTask<String, Void, RSSFeed> {
+//
+//		private Exception exception;
+//
+//		protected RSSFeed doInBackground(String... urls) {
+//			try {
+//				URL url = new URL(urls[0]);
+//				SAXParserFactory factory = SAXParserFactory.newInstance();
+//				SAXParser parser = factory.newSAXParser();
+//				XMLReader xmlreader = parser.getXMLReader();
+//				RssHandler theRSSHandler = new RssHandler();
+//				xmlreader.setContentHandler(theRSSHandler);
+//				InputSource is = new InputSource(url.openStream());
+//				xmlreader.parse(is);
+//				return theRSSHandler.getFeed();
+//			} catch (Exception e) {
+//				this.exception = e;
+//				return null;
+//			}
+//		}
+//
+//		protected void onPostExecute(RSSFeed feed) {
+//			// TODO: check this.exception
+//			// TODO: do something with the feed
+//		}
+//	}
 }
