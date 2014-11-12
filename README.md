@@ -4,6 +4,7 @@
 
 ###Registro Elettronico per Android: Platform 4.4.2 API level 19
 
+Vedi documentazione: [WIKI](https://github.com/rdgmus/RegistroAndroid/wiki)
 
 ##Splash.java
 
