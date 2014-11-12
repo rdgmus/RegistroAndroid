@@ -28,6 +28,7 @@ public class Splash extends Activity {
 		Boolean music = getPrefs.getBoolean("music", true);
 		if (music)
 			splash_song.start();
+		
 		startButton = (ImageButton) findViewById(R.id.imageButtonStart);
 		startButton.setOnClickListener(new View.OnClickListener() {
 

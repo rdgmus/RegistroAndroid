@@ -11,6 +11,7 @@
         android:key="music"
         android:summary="Splash sound on/off"
         android:title="Music" />
+    
     <PreferenceCategory
         android:enabled="true"
         android:key="regAdmin"
