@@ -103,7 +103,7 @@ public final class R {
         public static final int bAcceptOtherColumn=0x7f0c004c;
         public static final int bAddField=0x7f0c006f;
         public static final int bBrowseTable=0x7f0c0061;
-        public static final int bCambiaRuolo=0x7f0c0020;
+        public static final int bCambiaRuolo=0x7f0c001e;
         public static final int bCancelOperation=0x7f0c0070;
         public static final int bClearDatabaseName=0x7f0c0057;
         public static final int bCreateConstraints=0x7f0c0072;
@@ -163,7 +163,7 @@ public final class R {
         public static final int etPasswd=0x7f0c0099;
         public static final int etRValue=0x7f0c0044;
         public static final int etRowInfo=0x7f0c00cd;
-        public static final int etRuoloScelto=0x7f0c0021;
+        public static final int etRuoloScelto=0x7f0c001f;
         public static final int etSQLHotness=0x7f0c00ca;
         public static final int etSQLName=0x7f0c00c9;
         public static final int etSend=0x7f0c0082;
@@ -227,10 +227,10 @@ public final class R {
         public static final int llButtons=0x7f0c00ac;
         public static final int llListFields=0x7f0c0088;
         public static final int llSqlite=0x7f0c00a5;
-        public static final int login_button=0x7f0c001f;
+        public static final int login_button=0x7f0c0020;
         public static final int lvDatabasesList=0x7f0c005a;
         public static final int messageEsitoRegistrazione=0x7f0c002c;
-        public static final int messageView=0x7f0c001e;
+        public static final int messageView=0x7f0c0021;
         public static final int mysqlAndroidTest=0x7f0c00e5;
         public static final int newUser=0x7f0c0025;
         public static final int preferences=0x7f0c00e6;

@@ -31,7 +31,7 @@
     <string name="registerMessage">Esito Registrazione</string>
     <string name="vaiAlLogin">Vai al Login</string>
     <string name="title_activity_splash">Splash</string>
-    <string name="emailHint">Email dell\'utente</string>
+    <string name="emailHint">Email utente</string>
     <string name="passwdHint">Password utente</string>
     <string name="nomeHint">Nome dell\'utente</string>
     <string name="cognomeHint">Cognome dell\'utente</string>

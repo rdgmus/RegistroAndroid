@@ -6,8 +6,10 @@
 
     <TextView
         android:id="@+id/tvAbout"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Versione per Android OS 2.2 di Roberto Della Grotta \nEmail: rdgmus@live.com" />
+        android:text="Versione per Android OS 4.4.2 \ndi\n Roberto Della Grotta \nEmail: rdgmus@live.com" 
+        android:gravity="center"
+        android:textStyle="bold"/>
 
 </LinearLayout>

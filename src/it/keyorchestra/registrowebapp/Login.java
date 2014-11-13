@@ -1,38 +1,55 @@
 package it.keyorchestra.registrowebapp;
 
-import it.keyorchestra.registrowebapp.dbMatthed.DatabaseOps;
+import java.util.ArrayList;
 
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.preference.PreferenceManager;
+import it.keyorchestra.registrowebapp.dbMatthed.DatabaseOps;
+import it.keyorchestra.registrowebapp.mysqlandroid.MySqlAndroid;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.StrictMode;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
+//@SuppressLint("NewApi")
 public class Login extends Activity {
 
 	Button loginButton, bCambiaRuolo;
 	TextView loginMessage;
-	EditText etRuoloScelto;
+	TextView etRuoloScelto;
 	Thread myThread = null;
 
+//	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
+//
+//		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+//				.permitAll().build();
+//
+//		StrictMode.setThreadPolicy(policy);
 
 		loginMessage = (TextView) findViewById(R.id.messageView);
-		loginMessage.setText("waiting for connection...");
+		loginMessage.setText("Waiting for connection...");
 
 		loginButton = (Button) findViewById(R.id.login_button);
 		loginButton.setEnabled(false);
-		new FetchSQL().execute();
+
+//		new FetchSQL().execute();
+		// new SqlAndroidComm().execute();
+		// ArrayList<String> results =
+		// MySqlAndroid.mysqlAndroidTest(getBaseContext());
+		// if(results.size() > 0){
+		// loginMessage.setText("Connessione stabilita!");
+		// }
 
 		loginButton.setOnClickListener(new View.OnClickListener() {
 
@@ -53,10 +70,10 @@ public class Login extends Activity {
 			}
 		});
 
-		etRuoloScelto = (EditText) findViewById(R.id.etRuoloScelto);
+		etRuoloScelto = (TextView) findViewById(R.id.etRuoloScelto);
 		SharedPreferences getPrefs = PreferenceManager
 				.getDefaultSharedPreferences(getBaseContext());
-		String ruoloScelto = getPrefs.getString("ruoloList", "1");
+		String ruoloScelto = getPrefs.getString("ruoloList", "Professore");
 		etRuoloScelto.setText(ruoloScelto);
 
 		bCambiaRuolo = (Button) findViewById(R.id.bCambiaRuolo);
@@ -72,15 +89,25 @@ public class Login extends Activity {
 
 			}
 		});
+		
+		ArrayList<String> results = new MySqlAndroid().mysqlAndroidTest(getApplicationContext());
+		
+		new FetchSQL().execute();
+
 	}
 
 	private class FetchSQL extends AsyncTask<Void, Void, String> {
 		@Override
 		protected String doInBackground(Void... params) {
 
-			String retval = DatabaseOps.FetchConnection(getBaseContext());
-			// loginMessage.setText(retval);
-			return retval;
+			 String retval = DatabaseOps.FetchConnection(getBaseContext());
+			 return retval;
+//			ArrayList<String> results =new MySqlAndroid().mysqlAndroidTest(getApplicationContext());
+			 
+//			if (results.size() > 0)
+//				return "1";
+//			else
+//				return "0";
 		}
 
 		@Override
@@ -88,14 +115,7 @@ public class Login extends Activity {
 			SharedPreferences getPrefs = PreferenceManager
 					.getDefaultSharedPreferences(getBaseContext());
 			String defaultDatabase = getPrefs.getString("databaseList", "1");
-			// String database = "";
-			//
-			// if (defaultDatabase.contentEquals("1")) {
-			// database = "PostgreSQL";
-			// } else if (defaultDatabase.contentEquals("2")) {
-			// database = "MySQL";
-			// }
-
+			
 			if (value.equals("1")) {
 				loginMessage.setText("Connessione stabilita! con "
 						+ defaultDatabase);
@@ -104,6 +124,7 @@ public class Login extends Activity {
 				loginMessage
 						.setText("Connessione fallita! con " + defaultDatabase
 								+ ".\n " + "Vai a scelta Database...");
+				openOptionsMenu();
 				loginButton.setEnabled(false);
 				// SE LA CONNESSIONE FALLISCE RIMANDA ALLE PREFERENZE PER
 				// LA SCELTA DI UN'ALTRO DATABASE
@@ -126,11 +147,12 @@ public class Login extends Activity {
 					}
 
 				};
-				timer.start();
+				// timer.start();
 
 			}
 		}
 	}
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -169,7 +191,8 @@ public class Login extends Activity {
 		etRuoloScelto.setText(ruoloScelto);
 
 		loginMessage.setText("waiting for connection...");
-		new FetchSQL().execute();
+		// new FetchSQL().execute();
+		// new SqlAndroidComm().execute();
 
 	}
 

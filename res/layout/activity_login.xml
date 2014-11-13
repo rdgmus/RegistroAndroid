@@ -29,7 +29,7 @@
         android:ems="10"
         android:hint="@string/emailHint"
         android:inputType="textEmailAddress"
-        android:textSize="25sp" >
+        android:textSize="18sp" >
 
         <requestFocus />
     </EditText>
@@ -42,7 +42,7 @@
         android:ems="10"
         android:hint="@string/passwdHint"
         android:inputType="textPassword"
-        android:textSize="32sp" />
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/tvLoginEmail"
@@ -62,52 +62,51 @@
         android:textStyle="bold"
         android:text="Password:" />
 
-    <TextView
-        android:id="@+id/messageView"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/login_button"
-        android:layout_below="@+id/login_button"
-        android:layout_marginTop="52dp"
-        android:gravity="center"
-        android:text="@string/loginMsg"
-        android:textColor="@color/colorRed"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        android:visibility="visible" />
-
     <Button
         android:id="@+id/bCambiaRuolo"
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/tvLoginPassword"
-        android:layout_below="@+id/etLoginPasswd"
-        android:textStyle="bold"
-        android:text="Cambia Ruolo" />
-
-    <EditText
-        android:id="@+id/etRuoloScelto"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/etLoginPasswd"
-        android:layout_alignTop="@+id/bCambiaRuolo"
-        android:editable="false"
-        android:textStyle="bold"
-        android:text="Ruolo Scelto"
-        android:gravity="center_horizontal"
-        android:textSize="18sp"
-        android:ems="15" />
+        android:layout_alignLeft="@+id/etRuoloScelto"
+        android:layout_below="@+id/etRuoloScelto"
+        android:text="Cambia Ruolo"
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/login_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignRight="@+id/etRuoloScelto"
-        android:layout_below="@+id/etRuoloScelto"
+        android:layout_alignTop="@+id/bCambiaRuolo"
         android:gravity="center"
         android:text="@string/login_button"
         android:textColor="@color/colorBlue"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/messageView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/login_button"
+        android:layout_below="@+id/login_button"
+        android:gravity="center"
+        android:text="@string/loginMsg"
+        android:textColor="@color/colorRed"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:visibility="visible"/>
+
+    <TextView
+        android:id="@+id/etRuoloScelto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/etLoginPasswd"
+        android:layout_below="@+id/etLoginPasswd"
+        android:editable="false"
+        android:ems="15"
+        android:gravity="left"
+        android:text="Ruolo"
+        android:textSize="18sp"
         android:textStyle="bold" />
 
 </RelativeLayout>
