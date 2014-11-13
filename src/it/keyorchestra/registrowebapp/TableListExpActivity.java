@@ -33,14 +33,13 @@ import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.Toast;
 
-
 @SuppressLint("NewApi")
 public class TableListExpActivity extends Activity {
 	ExpandableListAdapter listAdapter;
 	ExpandableListView expListView;
 	List<String> listDataHeader;
 	HashMap<String, List<String>> listDataChild;
-	String activities[] = { "Login", "Iscrizione", "Email", "Camera", "Data",
+	String activities[] = { "Menu","Login", "Iscrizione", "Email", "Camera", "Data",
 			"GFX", "GFXSurface", "SoundStaff", "SQLLiteExample",
 			"ScuolaActivity", "ScuolaTablesMenu", "AdminDatabases" };
 	String tables[] = { "UtentiScuola" };
@@ -54,9 +53,10 @@ public class TableListExpActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.table_list_exp);
 
-		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+				.permitAll().build();
 
-		StrictMode.setThreadPolicy(policy); 
+		StrictMode.setThreadPolicy(policy);
 
 		// get the listview
 		expListView = (ExpandableListView) findViewById(R.id.expandableListView1);
@@ -141,6 +141,9 @@ public class TableListExpActivity extends Activity {
 						path += "sqllite.";
 					} else if (cheese.equals("UtentiScuola")) {
 						path += "scuola.";
+					}else if (cheese.equals("Menu")){
+						openOptionsMenu();
+						return true;
 					}
 					ourClass = Class.forName(path + cheese);
 					Intent ourIntent = new Intent(TableListExpActivity.this,
@@ -221,10 +224,20 @@ public class TableListExpActivity extends Activity {
 	}
 
 	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		// TODO Auto-generated method stub
+		super.onPrepareOptionsMenu(menu);
+		MenuItem aboutUs = menu.findItem(R.id.aboutUs);
+		aboutUs.setVisible(true);
+		return true;
+	}
+
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// TODO Auto-generated method stub
 		super.onCreateOptionsMenu(menu);
 		getMenuInflater().inflate(R.menu.cool_menu, menu);
+
 		return true;
 	}
 
@@ -328,30 +341,31 @@ public class TableListExpActivity extends Activity {
 		return false;
 	}
 
-//	class RetrieveFeedTask<RSSFeed> extends AsyncTask<String, Void, RSSFeed> {
-//
-//		private Exception exception;
-//
-//		protected RSSFeed doInBackground(String... urls) {
-//			try {
-//				URL url = new URL(urls[0]);
-//				SAXParserFactory factory = SAXParserFactory.newInstance();
-//				SAXParser parser = factory.newSAXParser();
-//				XMLReader xmlreader = parser.getXMLReader();
-//				RssHandler theRSSHandler = new RssHandler();
-//				xmlreader.setContentHandler(theRSSHandler);
-//				InputSource is = new InputSource(url.openStream());
-//				xmlreader.parse(is);
-//				return theRSSHandler.getFeed();
-//			} catch (Exception e) {
-//				this.exception = e;
-//				return null;
-//			}
-//		}
-//
-//		protected void onPostExecute(RSSFeed feed) {
-//			// TODO: check this.exception
-//			// TODO: do something with the feed
-//		}
-//	}
+	// class RetrieveFeedTask<RSSFeed> extends AsyncTask<String, Void, RSSFeed>
+	// {
+	//
+	// private Exception exception;
+	//
+	// protected RSSFeed doInBackground(String... urls) {
+	// try {
+	// URL url = new URL(urls[0]);
+	// SAXParserFactory factory = SAXParserFactory.newInstance();
+	// SAXParser parser = factory.newSAXParser();
+	// XMLReader xmlreader = parser.getXMLReader();
+	// RssHandler theRSSHandler = new RssHandler();
+	// xmlreader.setContentHandler(theRSSHandler);
+	// InputSource is = new InputSource(url.openStream());
+	// xmlreader.parse(is);
+	// return theRSSHandler.getFeed();
+	// } catch (Exception e) {
+	// this.exception = e;
+	// return null;
+	// }
+	// }
+	//
+	// protected void onPostExecute(RSSFeed feed) {
+	// // TODO: check this.exception
+	// // TODO: do something with the feed
+	// }
+	// }
 }
