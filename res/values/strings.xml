@@ -62,5 +62,6 @@
     <string name="title_activity_where_clause">WhereClause</string>
     <string name="title_activity_choose_fields_for_select">ChooseFieldsForSelect</string>
     <color android:layout_height="wrap_content" android:id="@+id/color1" android:layout_width="wrap_content" name="colorNavy">#000084</color>
+    <string name="keyorchestra">Key Orchestra</string>
 
 </resources>
