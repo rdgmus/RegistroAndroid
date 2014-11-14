@@ -18,7 +18,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-//@SuppressLint("NewApi")
 public class Login extends Activity {
 
 	Button loginButton, bCambiaRuolo;
@@ -26,30 +25,16 @@ public class Login extends Activity {
 	TextView etRuoloScelto;
 	Thread myThread = null;
 
-//	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
-//
-//		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-//				.permitAll().build();
-//
-//		StrictMode.setThreadPolicy(policy);
 
 		loginMessage = (TextView) findViewById(R.id.messageView);
 		loginMessage.setText("Waiting for connection...");
 
 		loginButton = (Button) findViewById(R.id.login_button);
 		loginButton.setEnabled(false);
-
-//		new FetchSQL().execute();
-		// new SqlAndroidComm().execute();
-		// ArrayList<String> results =
-		// MySqlAndroid.mysqlAndroidTest(getBaseContext());
-		// if(results.size() > 0){
-		// loginMessage.setText("Connessione stabilita!");
-		// }
 
 		loginButton.setOnClickListener(new View.OnClickListener() {
 
@@ -91,7 +76,8 @@ public class Login extends Activity {
 		});
 		
 		ArrayList<String> results = new MySqlAndroid().mysqlAndroidTest(getApplicationContext());
-		
+		if (results.size() > 0)
+			loginMessage.setText("mysqlAndroidTest ok!");
 		new FetchSQL().execute();
 
 	}
@@ -99,15 +85,9 @@ public class Login extends Activity {
 	private class FetchSQL extends AsyncTask<Void, Void, String> {
 		@Override
 		protected String doInBackground(Void... params) {
-
+			
 			 String retval = DatabaseOps.FetchConnection(getBaseContext());
 			 return retval;
-//			ArrayList<String> results =new MySqlAndroid().mysqlAndroidTest(getApplicationContext());
-			 
-//			if (results.size() > 0)
-//				return "1";
-//			else
-//				return "0";
 		}
 
 		@Override
@@ -191,9 +171,12 @@ public class Login extends Activity {
 		etRuoloScelto.setText(ruoloScelto);
 
 		loginMessage.setText("waiting for connection...");
-		// new FetchSQL().execute();
-		// new SqlAndroidComm().execute();
-
+		
+		ArrayList<String> results = new MySqlAndroid().mysqlAndroidTest(getApplicationContext());
+		if (results.size() > 0)
+			loginMessage.setText("mysqlAndroidTest ok!");
+		new FetchSQL().execute();
+	
 	}
 
 }

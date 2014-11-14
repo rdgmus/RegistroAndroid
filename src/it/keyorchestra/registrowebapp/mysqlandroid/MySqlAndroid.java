@@ -39,7 +39,7 @@ public class MySqlAndroid {
 
 			// Why to use 10.0.2.2 http://localhost/mySqlAndroidTest.php
 			HttpPost httppost = new HttpPost(
-					"http://192.168.0.215/mySqlAndroidTest.php");
+					"http://192.168.0.215/PhpMySqlAndroid/mySqlAndroidTest.php");
 			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 			HttpResponse response = httpclient.execute(httppost);
 			HttpEntity entity = response.getEntity();

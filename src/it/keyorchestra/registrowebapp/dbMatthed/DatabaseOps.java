@@ -75,7 +75,7 @@ public class DatabaseOps implements DatabasesInterface{
 		
 		Connection conn;
 		try {
-			DriverManager.setLoginTimeout(15);
+			DriverManager.setLoginTimeout(0);
 			conn = DriverManager.getConnection(url);
 			Statement st = conn.createStatement();
 			String sql;
