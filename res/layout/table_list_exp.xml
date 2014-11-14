@@ -1,14 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/flActivities"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/application_background" >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
 
-    <ExpandableListView
-        android:id="@+id/expandableListView1"
+    <TextView
+        android:id="@+id/activitiesTitle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:gravity="center"
+        android:text="@string/activitiesText"
+        android:textColor="@color/colorNavy" 
+        android:background="@color/colorListItem"
+        android:textSize="25sp"/>
+
+    <FrameLayout
+        android:id="@+id/flActivities"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-    </ExpandableListView>
+        android:layout_height="match_parent"
+        android:background="@drawable/background_color1" >
 
-</FrameLayout>
+        <ExpandableListView
+            android:id="@+id/expandableListView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+        </ExpandableListView>
+    </FrameLayout>
+
+</LinearLayout>

@@ -1,30 +1,32 @@
 package it.keyorchestra.registrowebapp;
 
-import java.util.ArrayList;
-
 import it.keyorchestra.registrowebapp.dbMatthed.DatabaseOps;
 import it.keyorchestra.registrowebapp.mysqlandroid.MySqlAndroid;
+
+import java.util.ArrayList;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
+@SuppressLint("NewApi")
 public class Login extends Activity {
 
-	Button loginButton, bCambiaRuolo;
+	ImageButton loginButton, bCambiaRuolo;
 	TextView loginMessage;
 	TextView etRuoloScelto;
 	Thread myThread = null;
 
+	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -33,7 +35,7 @@ public class Login extends Activity {
 		loginMessage = (TextView) findViewById(R.id.messageView);
 		loginMessage.setText("Waiting for connection...");
 
-		loginButton = (Button) findViewById(R.id.login_button);
+		loginButton = (ImageButton) findViewById(R.id.login_button);
 		loginButton.setEnabled(false);
 
 		loginButton.setOnClickListener(new View.OnClickListener() {
@@ -61,7 +63,7 @@ public class Login extends Activity {
 		String ruoloScelto = getPrefs.getString("ruoloList", "Professore");
 		etRuoloScelto.setText(ruoloScelto);
 
-		bCambiaRuolo = (Button) findViewById(R.id.bCambiaRuolo);
+		bCambiaRuolo = (ImageButton) findViewById(R.id.bCambiaRuolo);
 
 		bCambiaRuolo.setOnClickListener(new View.OnClickListener() {
 

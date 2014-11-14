@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <string name="app_name">Registro Scolastico Android 3.0</string>
+    <string name="app_name">Registro Scolastico Android 0.1 (alpha)</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Roberto Della Grotta vi da il benvenuto su</string>
     <string name="title_activity_login">Login</string>
     <string name="login_button">Login</string>
-    <string name="title">Registro Scolastico Android 0.1(Alpha)</string>
+    <string name="title">Registro Scolastico Android 0.1 (Alpha)</string>
     <string name="programmer">di Roberto Della Grotta</string>
     <string name="registeredUser">Utente Registrato</string>
     <string name="newUser">Registra Nuovo Utente</string>
@@ -15,7 +15,7 @@
 
     <color name="colorBlue">#0000ff</color>
 
-    <string name="loginText">Inserire le credenziali per accedere al Registro Scolastico</string>
+    <string name="loginText">Login</string>
     <string name="emailText">Email:</string>
     <string name="passwdText">Password:</string>
 
@@ -61,7 +61,18 @@
     <string name="rangeSelecionCancel">Cancella Selezione</string>
     <string name="title_activity_where_clause">WhereClause</string>
     <string name="title_activity_choose_fields_for_select">ChooseFieldsForSelect</string>
-    <color android:layout_height="wrap_content" android:id="@+id/color1" android:layout_width="wrap_content" name="colorNavy">#000084</color>
+
+    <color android:id="@+id/color1" name="colorNavy" android:layout_width="wrap_content" android:layout_height="wrap_content">#000084</color>
+
     <string name="keyorchestra">Key Orchestra</string>
 
+    <color android:id="@+id/color1" name="colorListItem" android:layout_width="wrap_content" android:layout_height="wrap_content">#d1cab0</color>
+
+    <string android:id="@+id/string1" name="iconDescription" android:layout_width="wrap_content" android:layout_height="wrap_content">icon</string>
+    <string name="cambiaRuolo" >Scegli Ruolo</string>
+    <string name="ruoloText">Ruolo Utente</string>
+    <string android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/string1" name="activitiesText">Moduli Registro Scolastico</string>
+    <string android:id="@+id/string1" android:layout_height="wrap_content" android:layout_width="wrap_content" name="ruoliUtentiDescription">Ruoli Utenti Registro Scolastico</string>
+    <string android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/string1" name="appVersion">Versione per Android OS 4.4.2</string>
+    
 </resources>

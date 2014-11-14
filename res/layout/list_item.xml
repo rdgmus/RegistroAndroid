@@ -9,13 +9,15 @@
         android:layout_height="wrap_content" >
 
         <ImageView
+            android:contentDescription="@string/iconDescription"
             android:id="@+id/imageViewChild"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_margin="5dp"
-            android:src="@drawable/field" />
+            android:src="@drawable/database_list32"
+            android:background="@android:color/transparent"/>
 
         <TextView
             android:id="@+id/lblListItem"
@@ -25,7 +27,10 @@
             android:paddingBottom="5dp"
             android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft"
             android:paddingTop="5dp"
-            android:textSize="17dip" />
+            android:textSize="17sp" 
+            android:text="@string/app_name"
+            android:textStyle="bold"
+            android:background="@color/colorListItem"/>
     </RelativeLayout>
 
 </LinearLayout>

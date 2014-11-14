@@ -5,11 +5,32 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/tvAbout"
+        android:id="@+id/tvAboutApp"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Versione per Android OS 4.4.2 \ndi\n Roberto Della Grotta \nEmail: rdgmus@live.com" 
+        android:text="@string/app_name" 
         android:gravity="center"
         android:textStyle="bold"/>
-
+     <TextView
+        android:id="@+id/tvAboutVersion"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/appVersion" 
+        android:gravity="center"
+        android:textStyle="bold"/>
+      <TextView
+        android:id="@+id/tvAboutAuthor"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/author" 
+        android:gravity="center"
+        android:textStyle="bold"/>
+      <TextView
+        android:id="@+id/tvAboutAuthorEmail"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/authorEmail" 
+        android:gravity="center"
+        android:textStyle="bold"/>
+      
 </LinearLayout>

@@ -2,10 +2,12 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <ListPreference
+        android:defaultValue="2"
+        android:dialogIcon="@drawable/ruoli_utenti"
         android:entries="@array/ruoloList"
         android:entryValues="@array/ruoloListValues"
         android:key="ruoloList"
         android:summary="Scegli il ruolo con cui accedere al Registro Scolastico"
-        android:title="Ruoli Utenti Registro Scolastico" android:defaultValue="2" android:dialogIcon="@drawable/ruoli_utenti"/>
+        android:title="Ruoli Utenti Registro Scolastico" />
 
 </PreferenceScreen>

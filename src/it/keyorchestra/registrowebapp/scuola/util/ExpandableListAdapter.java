@@ -94,12 +94,13 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 				else if (childText.startsWith("Scuola"))
 					childImg.setImageResource(R.drawable.table);
 				else
-					childImg.setImageResource(R.drawable.activity);
+					childImg.setImageResource(R.drawable.database_list32);
 			}
 
 			txtListChild.setTypeface(null, Typeface.BOLD);
 
 			txtListChild.setText(childText);
+			
 		} else if (_activityMenu.equals("AdminTables")) {
 			// TableLayout tl = (TableLayout) convertView
 			// .findViewById(R.id.tlFieldParameters);
