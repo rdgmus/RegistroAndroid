@@ -18,7 +18,7 @@
         android:gravity="center"
         android:text="@string/authorEmail"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@color/colorOrange"
+        android:textColor="@color/colorListItem"
         android:textSize="15sp"
         android:textStyle="bold" />
 
@@ -32,7 +32,7 @@
         android:gravity="center"
         android:text="@string/author"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@color/colorOrange"
+        android:textColor="@color/colorListItem"
         android:textSize="15sp"
         android:textStyle="bold" />
 
@@ -58,8 +58,8 @@
         android:layout_below="@+id/imageButtonStart"
         android:gravity="center"
         android:text="@string/startNow" 
-        android:textColor="@color/colorOrange"
-        android:textSize="15sp"
+        android:textColor="@color/colorListItem"
+        android:textSize="12sp"
         android:textStyle="bold" />
 
     <ImageButton
@@ -70,8 +70,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
         android:contentDescription="@string/home"
-        android:src="@drawable/ic_registro1" 
-        android:background="@android:color/transparent"/>
+        android:src="@drawable/ic_registro1"
+        android:alpha="0.8"/>
 
     <ImageView
         android:contentDescription="@+string/keyorchestra"
@@ -81,16 +81,16 @@
         android:layout_alignRight="@+id/imageButtonStart"
         android:layout_below="@+id/TextViewAuthorEmail"
         android:layout_marginTop="49dp"
-        android:src="@drawable/cbasso1" />
+        android:src="@drawable/cbasso1"/>
 
     <TextView
         android:id="@+id/tvKeyOrchestra"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewTitle"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="@string/keyorchestra" 
-        android:textColor="@color/colorOrange"
-        android:textSize="25sp"/>
+        android:text="@string/keyorchestra"
+        android:textColor="@color/colorListItem"
+        android:textSize="25sp" />
 
 </RelativeLayout>

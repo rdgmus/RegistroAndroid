@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 @SuppressLint("NewApi")
 public class Login extends Activity {
@@ -76,10 +77,16 @@ public class Login extends Activity {
 
 			}
 		});
-		
-		ArrayList<String> results = new MySqlAndroid().mysqlAndroidTest(getApplicationContext());
-		if (results.size() > 0)
-			loginMessage.setText("mysqlAndroidTest ok!");
+
+		ArrayList<String> results = new MySqlAndroid()
+				.mysqlAndroidTest(getApplicationContext());
+		if (results == null || results.size() == 0) {
+			Toast.makeText(getApplicationContext(),
+					"Nessuna risposta dal server MySQL! ", Toast.LENGTH_LONG).show();
+		} else {
+			Toast.makeText(getApplicationContext(), "Mysql<=>Android Test ok!",
+					Toast.LENGTH_LONG).show();
+		}
 		new FetchSQL().execute();
 
 	}
@@ -87,9 +94,9 @@ public class Login extends Activity {
 	private class FetchSQL extends AsyncTask<Void, Void, String> {
 		@Override
 		protected String doInBackground(Void... params) {
-			
-			 String retval = DatabaseOps.FetchConnection(getBaseContext());
-			 return retval;
+
+			String retval = DatabaseOps.FetchConnection(getBaseContext());
+			return retval;
 		}
 
 		@Override
@@ -97,44 +104,44 @@ public class Login extends Activity {
 			SharedPreferences getPrefs = PreferenceManager
 					.getDefaultSharedPreferences(getBaseContext());
 			String defaultDatabase = getPrefs.getString("databaseList", "1");
-			
+
 			if (value.equals("1")) {
-				loginMessage.setText("Connessione stabilita! con "
-						+ defaultDatabase);
+				loginMessage.setText("Connessione con " + defaultDatabase
+						+ " stabilita! ");
 				loginButton.setEnabled(true);
 			} else {
 				loginMessage
-						.setText("Connessione fallita! con " + defaultDatabase
-								+ ".\n " + "Vai a scelta Database...");
+						.setText("Fallita connessione al Database "
+								+ defaultDatabase + "!\n "
+								+ "Controlla i parametri...");
 				openOptionsMenu();
 				loginButton.setEnabled(false);
 				// SE LA CONNESSIONE FALLISCE RIMANDA ALLE PREFERENZE PER
 				// LA SCELTA DI UN'ALTRO DATABASE
-				Thread timer = new Thread() {
-
-					@Override
-					public void run() {
-						// TODO Auto-generated method stub
-
-						try {
-							sleep(2000);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						} finally {
-
-							Intent d = new Intent(
-									"it.keyorchestra.registrowebapp.DATABASE");
-							startActivity(d);
-						}
-					}
-
-				};
+				// Thread timer = new Thread() {
+				//
+				// @Override
+				// public void run() {
+				// // TODO Auto-generated method stub
+				//
+				// try {
+				// sleep(2000);
+				// } catch (InterruptedException e) {
+				// e.printStackTrace();
+				// } finally {
+				//
+				// Intent d = new Intent(
+				// "it.keyorchestra.registrowebapp.DATABASE");
+				// startActivity(d);
+				// }
+				// }
+				//
+				// };
 				// timer.start();
 
 			}
 		}
 	}
-
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -173,12 +180,18 @@ public class Login extends Activity {
 		etRuoloScelto.setText(ruoloScelto);
 
 		loginMessage.setText("waiting for connection...");
-		
-		ArrayList<String> results = new MySqlAndroid().mysqlAndroidTest(getApplicationContext());
-		if (results.size() > 0)
-			loginMessage.setText("mysqlAndroidTest ok!");
+
+		ArrayList<String> results = new MySqlAndroid()
+				.mysqlAndroidTest(getApplicationContext());
+		if (results == null || results.size() == 0) {
+			Toast.makeText(getApplicationContext(),
+					"Nessuna risposta dal server! ", Toast.LENGTH_LONG).show();
+		} else {
+			Toast.makeText(getApplicationContext(), "Mysql<=>Android Test ok!",
+					Toast.LENGTH_LONG).show();
+		}
 		new FetchSQL().execute();
-	
+
 	}
 
 }

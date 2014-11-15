@@ -1,6 +1,7 @@
 package it.keyorchestra.registrowebapp.mysqlandroid;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -22,8 +23,20 @@ import android.widget.Toast;
 
 public class MySqlAndroid {
 
-	
-	public  ArrayList<String> mysqlAndroidTest(Context context) {
+//	private CloseableHttpClient createHttpClient() {
+//		CloseableHttpClient httpClient;
+//		CommonHelperFunctions helperFunctions = new CommonHelperFunctions();
+//		PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
+//		cm.setMaxTotal(306);
+//		cm.setDefaultMaxPerRoute(108);
+//		RequestConfig requestConfig = RequestConfig.custom()
+//				.setConnectTimeout(15000).setSocketTimeout(15000).build();
+//		httpClient = HttpClients.custom().setConnectionManager(cm)
+//				.setDefaultRequestConfig(requestConfig).build();
+//		return httpClient;
+//	}
+
+	public ArrayList<String> mysqlAndroidTest(final Context context) {
 		JSONArray jArray = null;
 
 		String result = null;
@@ -33,6 +46,7 @@ public class MySqlAndroid {
 		InputStream is = null;
 
 		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+
 		// http post
 		try {
 			HttpClient httpclient = new DefaultHttpClient();
@@ -41,14 +55,17 @@ public class MySqlAndroid {
 			HttpPost httppost = new HttpPost(
 					"http://192.168.0.215/PhpMySqlAndroid/mySqlAndroidTest.php");
 			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
 			HttpResponse response = httpclient.execute(httppost);
+
 			HttpEntity entity = response.getEntity();
 			is = entity.getContent();
-		} catch (Exception e) {
+		} catch (IOException e) {
 			Toast.makeText(context,
 					"Error in http connection: " + e.toString(),
-					Toast.LENGTH_SHORT).show();
+					Toast.LENGTH_LONG).show();
 			// Log.e("log_tag", "Error in http connection"+e.toString());
+			return null;
 		}
 		// convert response to string
 		try {
@@ -64,8 +81,7 @@ public class MySqlAndroid {
 			is.close();
 			result = sb.toString();
 		} catch (Exception e) {
-			Toast.makeText(context,
-					"Error converting result: " + e.toString(),
+			Toast.makeText(context, "Error converting result: " + e.toString(),
 					Toast.LENGTH_SHORT).show();
 			// Log.e("log_tag", "Error converting result "+e.toString());
 		}
@@ -81,13 +97,12 @@ public class MySqlAndroid {
 														// the column
 														// name in
 														// database
-				Toast.makeText(context, "Ruolo: " + ruolo,
-						Toast.LENGTH_SHORT).show();
+				Toast.makeText(context, "Ruolo: " + ruolo, Toast.LENGTH_SHORT)
+						.show();
 				ruoliArray.add(ruolo);
 			}
 		} catch (JSONException e1) {
-			Toast.makeText(null, "No Data Found", Toast.LENGTH_LONG)
-					.show();
+			e1.printStackTrace();
 		} catch (ParseException e1) {
 			e1.printStackTrace();
 		}

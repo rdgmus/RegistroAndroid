@@ -4,10 +4,10 @@
     <item
         android:id="@+id/ruoloUtente"
         android:alphabeticShortcut="r"
-        android:title="Ruolo Utente"/>
+        android:title="@string/ruoloText"/>
     <item
         android:id="@id/databases"
         android:alphabeticShortcut="d"
-        android:title="Database"/>
+        android:title="@string/databaseText"/>
 
 </menu>

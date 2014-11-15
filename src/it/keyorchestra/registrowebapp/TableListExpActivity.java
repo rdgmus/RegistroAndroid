@@ -43,8 +43,8 @@ public class TableListExpActivity extends Activity {
 	ExpandableListView expListView;
 	List<String> listDataHeader;
 	HashMap<String, List<String>> listDataChild;
-	String activities[] = { "Menu","Login", "Iscrizione", "Email", "Camera", "Data",
-			"GFX", "GFXSurface", "SoundStaff", "SQLLiteExample",
+	String activities[] = { "Menu", "Login", "Iscrizione", "Email", "Camera",
+			"Data", "GFX", "GFXSurface", "SoundStaff", "SQLLiteExample",
 			"ScuolaActivity", "ScuolaTablesMenu", "AdminDatabases" };
 	String tables[] = { "UtentiScuola" };
 
@@ -145,7 +145,7 @@ public class TableListExpActivity extends Activity {
 						path += "sqllite.";
 					} else if (cheese.equals("UtentiScuola")) {
 						path += "scuola.";
-					}else if (cheese.equals("Menu")){
+					} else if (cheese.equals("Menu")) {
 						openOptionsMenu();
 						return true;
 					}
@@ -227,6 +227,9 @@ public class TableListExpActivity extends Activity {
 		// data
 	}
 
+	/**
+	 * La funzione dove disabilitare opzioni del menu
+	 */
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		// TODO Auto-generated method stub
@@ -245,7 +248,6 @@ public class TableListExpActivity extends Activity {
 		return true;
 	}
 
-
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// TODO Auto-generated method stub
 		// return super.onOptionsItemSelected(item);
@@ -254,10 +256,26 @@ public class TableListExpActivity extends Activity {
 			Intent i = new Intent("it.keyorchestra.registrowebapp.ABOUT");
 			startActivity(i);
 			break;
-		case R.id.mysqlAndroidTest:
-			Toast.makeText(getApplicationContext(), "mysqlAndroidTest",
+		case R.id.pgsqlAndroidTest:
+			Toast.makeText(getApplicationContext(), "PostgreSql<=>Android",
 					Toast.LENGTH_SHORT).show();
-			new MySqlAndroid().mysqlAndroidTest(getApplicationContext());
+			Toast.makeText(getApplicationContext(), "NOT YET IMPLEMENTED!",
+					Toast.LENGTH_SHORT).show();
+			Toast.makeText(getApplicationContext(), "Nessuna risposta dal server PostgreSql! ", Toast.LENGTH_LONG)
+			.show();
+
+			break;
+		case R.id.mysqlAndroidTest:
+			Toast.makeText(getApplicationContext(), "MySQL<=>Android",
+					Toast.LENGTH_SHORT).show();
+			ArrayList<String> results = new MySqlAndroid().mysqlAndroidTest(getApplicationContext());
+			if(results == null || results.size() == 0){
+				Toast.makeText(getApplicationContext(), "Nessuna risposta dal server MySQL! ", Toast.LENGTH_LONG)
+				.show();
+			}else{
+				Toast.makeText(getApplicationContext(), "MySQL<=>Android Test ok!", Toast.LENGTH_LONG)
+				.show();
+			}
 			break;
 		case R.id.preferences:
 			Intent p = new Intent("it.keyorchestra.registrowebapp.PREFS");

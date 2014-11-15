@@ -200,7 +200,7 @@ public final class R {
         public static final int etTableName=0x7f0c0064;
         public static final int etThings=0x7f0c0081;
         public static final int etWhereClause=0x7f0c0052;
-        public static final int exit=0x7f0c00ed;
+        public static final int exit=0x7f0c00ef;
         public static final int expandableListView1=0x7f0c00dc;
         public static final int expandableListViewTables=0x7f0c000c;
         public static final int fieldCognome=0x7f0c00e3;
@@ -212,6 +212,7 @@ public final class R {
         public static final int flActivities=0x7f0c00db;
         public static final int flCreateTable=0x7f0c0006;
         public static final int flTables=0x7f0c0004;
+        public static final int groupDatabase=0x7f0c00eb;
         public static final int horizontalScrollView1=0x7f0c0037;
         public static final int horizontalScrollView2=0x7f0c0044;
         public static final int horizontalScrollView3=0x7f0c004b;
@@ -235,7 +236,7 @@ public final class R {
         public static final int imageView1=0x7f0c0034;
         public static final int imageViewChild=0x7f0c008d;
         public static final int include1=0x7f0c000d;
-        public static final int itemTypeOfField=0x7f0c00ee;
+        public static final int itemTypeOfField=0x7f0c00f0;
         public static final int ivMyIcon=0x7f0c008a;
         public static final int ivReturnedPic=0x7f0c009e;
         public static final int ivTable=0x7f0c00dd;
@@ -260,9 +261,10 @@ public final class R {
         public static final int lvDatabasesList=0x7f0c005e;
         public static final int messageEsitoRegistrazione=0x7f0c002f;
         public static final int messageView=0x7f0c0024;
-        public static final int mysqlAndroidTest=0x7f0c00ea;
+        public static final int mysqlAndroidTest=0x7f0c00ed;
         public static final int newUser=0x7f0c0028;
-        public static final int preferences=0x7f0c00eb;
+        public static final int pgsqlAndroidTest=0x7f0c00ee;
+        public static final int preferences=0x7f0c00ea;
         public static final int programmer=0x7f0c0026;
         public static final int rBoth=0x7f0c00a6;
         public static final int rCrazy=0x7f0c00a4;
@@ -270,7 +272,7 @@ public final class R {
         public static final int registeredUser=0x7f0c0027;
         public static final int registra_button=0x7f0c002e;
         public static final int rgAnswers=0x7f0c00a3;
-        public static final int ruoloUtente=0x7f0c00ef;
+        public static final int ruoloUtente=0x7f0c00f1;
         public static final int sbSelection=0x7f0c0060;
         public static final int scrollView1=0x7f0c0017;
         public static final int scrollViewVerticalBody=0x7f0c00c4;
@@ -416,6 +418,7 @@ public final class R {
     public static final class string {
         public static final int DATABASE_ASSETS_PATH=0x7f080028;
         public static final int KEY_BACKGROUNDCOLOR_TAG=0x7f080023;
+        public static final int aboutUs=0x7f080035;
         public static final int action_settings=0x7f080001;
         public static final int activitiesText=0x7f080031;
         public static final int appVersion=0x7f080033;
@@ -426,8 +429,10 @@ public final class R {
         public static final int checkSound=0x7f08000a;
         public static final int cognomeHint=0x7f08001b;
         public static final int cognomeText=0x7f080013;
+        public static final int databaseText=0x7f080034;
         public static final int emailHint=0x7f080018;
         public static final int emailText=0x7f08000c;
+        public static final int exit=0x7f080038;
         public static final int hello_world=0x7f080002;
         public static final int home=0x7f08000f;
         public static final int iconDescription=0x7f08002e;
@@ -435,12 +440,15 @@ public final class R {
         public static final int loginMsg=0x7f08000e;
         public static final int loginText=0x7f08000b;
         public static final int login_button=0x7f080004;
+        public static final int mysqlAndroidTest=0x7f080036;
         public static final int newUser=0x7f080008;
         public static final int newuser_button=0x7f080011;
         public static final int nomeHint=0x7f08001a;
         public static final int nomeText=0x7f080014;
         public static final int passwdHint=0x7f080019;
         public static final int passwdText=0x7f08000d;
+        public static final int pgsqlAndroidTest=0x7f080039;
+        public static final int preferences=0x7f080037;
         public static final int programmer=0x7f080006;
         public static final int rangeSelecionCancel=0x7f08002a;
         public static final int rangeSelectionOk=0x7f080029;

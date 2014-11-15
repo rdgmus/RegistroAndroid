@@ -1,25 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/aboutUs"
         android:alphabeticShortcut="a"
-        android:title="About Us"/>
-    <item
-        android:id="@+id/mysqlAndroidTest"
-        android:alphabeticShortcut="m"
-        android:title="mysqlAndroidTest"/>
+        android:menuCategory="system"
+        android:orderInCategory="1"
+        android:title="@string/aboutUs"/>
     <item
         android:id="@+id/preferences"
         android:alphabeticShortcut="p"
-        android:title="Preferences"/>
-    <item
-        android:id="@+id/databases"
-        android:alphabeticShortcut="d"
-        android:title="Database"/>
+        android:menuCategory="system"
+        android:orderInCategory="2"
+        android:title="@string/preferences"/>
+
+    <group
+        android:id="@+id/groupDatabase"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checkableBehavior="single"
+        android:enabled="true"
+        android:menuCategory="system"
+        android:orderInCategory="3"
+        android:visible="true" >
+        <item
+            android:id="@+id/databases"
+            android:alphabeticShortcut="d"
+            android:menuCategory="container"
+            android:orderInCategory="3"
+            android:title="@string/databaseText"/>
+        <item
+            android:id="@+id/mysqlAndroidTest"
+            android:alphabeticShortcut="m"
+            android:menuCategory="container"
+            android:orderInCategory="4"
+            android:title="@string/mysqlAndroidTest"/>
+        <item
+            android:id="@+id/pgsqlAndroidTest"
+            android:alphabeticShortcut="g"
+            android:menuCategory="container"
+            android:orderInCategory="5"
+            android:title="@string/pgsqlAndroidTest"/>
+    </group>
+
     <item
         android:id="@+id/exit"
         android:alphabeticShortcut="x"
-        android:title="Exit"/>
+        android:menuCategory="system"
+        android:orderInCategory="6"
+        android:title="@string/exit"/>
 
 </menu>
