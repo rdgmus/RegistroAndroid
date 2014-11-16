@@ -1,6 +1,7 @@
 package it.keyorchestra.registrowebapp.dbMatthed;
 
 import it.keyorchestra.registrowebapp.interfaces.DatabasesInterface;
+import it.keyorchestra.registrowebapp.mysqlandroid.MySqlAndroid;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -19,7 +20,7 @@ import android.widget.Toast;
 
 public class DatabaseOps implements DatabasesInterface {
 
-	private  String getUrl(Context context) {
+	private String getUrl(Context context) {
 		String ip = null;
 		String userName = null;
 		String userPasswd = null;
@@ -65,14 +66,14 @@ public class DatabaseOps implements DatabasesInterface {
 		return url;
 	}
 
-	public   String FetchConnection(Context context) {
+	public String FetchConnection(Context context) {
 		String retval = "";
 
 		String url = getUrl(context);
 
 		Connection conn;
 		try {
-			DriverManager.setLoginTimeout(0);
+			DriverManager.setLoginTimeout(15);
 			conn = DriverManager.getConnection(url);
 			Statement st = conn.createStatement();
 			String sql;
@@ -91,39 +92,45 @@ public class DatabaseOps implements DatabasesInterface {
 		return retval;
 	}
 
-	public  boolean AuthenticateUser(Context context, String sEmail, String sPasswd) {
+	public boolean AuthenticateUser(Context context, String sEmail,
+			String sPasswd, String ip) {
+
+		boolean isAuthenticated = false;
 		String retval = "";
 
 		String url = getUrl(context);
 
 		Connection conn;
 		try {
-			DriverManager.setLoginTimeout(5);
+			DriverManager.setLoginTimeout(15);
 			conn = DriverManager.getConnection(url);
 			Statement st = conn.createStatement();
 			String sql = null;
 
-			byte[] encodingPasswd = sPasswd.getBytes();
+			String encoded = new MySqlAndroid()
+					.getEncodedStringFromUri(
+							context,
+							"http://"+ip+"/PhpMySqlAndroid/phpEncoder.php?actionEncode=encodePassword&password="+sPasswd);
+
+			Toast.makeText(context, "Password encoded:" + encoded,
+					Toast.LENGTH_LONG).show();
 			
-			sql = "SELECT * FROM utenti_scuola WHERE email= '"+sEmail+
-					"' AND password = '"+ android.util.Base64.encode(
-							android.util.Base64.encode(encodingPasswd, 0),0)+"'";
+			sql = "SELECT * FROM utenti_scuola WHERE email= '" + sEmail
+					+ "' AND password = '" + encoded + "'";
 			ResultSet rs = st.executeQuery(sql);
 			while (rs.next()) {
 				retval = rs.getString(1);
-				Toast.makeText(context,
-						"rs.getString(1): " + retval,
+				Toast.makeText(context, "rs.getString(1): " + retval,
 						Toast.LENGTH_LONG).show();
-
+				isAuthenticated = true;
 			}
 			rs.close();
 			st.close();
 			conn.close();
-			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return false;
+		return isAuthenticated;
 	}
 
 	@Override

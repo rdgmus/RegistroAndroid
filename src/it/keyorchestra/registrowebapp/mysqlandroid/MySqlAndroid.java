@@ -21,27 +21,15 @@ import android.content.Context;
 import android.net.ParseException;
 import android.widget.Toast;
 
+/**
+ * La classe si occupa della comunicazione tra Android e MySql tramite files PHP
+ * depositati nel folder htdocs del server Apache di XAMPP
+ * @author rdgmus
+ *
+ */
 public class MySqlAndroid {
 
-//	private CloseableHttpClient createHttpClient() {
-//		CloseableHttpClient httpClient;
-//		CommonHelperFunctions helperFunctions = new CommonHelperFunctions();
-//		PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
-//		cm.setMaxTotal(306);
-//		cm.setDefaultMaxPerRoute(108);
-//		RequestConfig requestConfig = RequestConfig.custom()
-//				.setConnectTimeout(15000).setSocketTimeout(15000).build();
-//		httpClient = HttpClients.custom().setConnectionManager(cm)
-//				.setDefaultRequestConfig(requestConfig).build();
-//		return httpClient;
-//	}
-
-	public ArrayList<String> mysqlAndroidTest(final Context context) {
-		JSONArray jArray = null;
-
-		String result = null;
-
-		StringBuilder sb = null;
+	private InputStream getInputStreamFromUri( Context context, String uri){
 
 		InputStream is = null;
 
@@ -52,8 +40,7 @@ public class MySqlAndroid {
 			HttpClient httpclient = new DefaultHttpClient();
 
 			// Why to use 10.0.2.2 http://localhost/mySqlAndroidTest.php
-			HttpPost httppost = new HttpPost(
-					"http://192.168.0.215/PhpMySqlAndroid/mySqlAndroidTest.php");
+			HttpPost httppost = new HttpPost(uri);
 			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
 			HttpResponse response = httpclient.execute(httppost);
@@ -65,26 +52,43 @@ public class MySqlAndroid {
 					"Error in http connection: " + e.toString(),
 					Toast.LENGTH_LONG).show();
 			// Log.e("log_tag", "Error in http connection"+e.toString());
-			return null;
 		}
-		// convert response to string
-		try {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(
-					is, "iso-8859-1"), 8);
-			sb = new StringBuilder();
-			sb.append(reader.readLine() + "\n");
+		return is;
+	}
 
-			String line = "0";
-			while ((line = reader.readLine()) != null) {
-				sb.append(line + "\n");
-			}
-			is.close();
-			result = sb.toString();
-		} catch (Exception e) {
-			Toast.makeText(context, "Error converting result: " + e.toString(),
-					Toast.LENGTH_SHORT).show();
-			// Log.e("log_tag", "Error converting result "+e.toString());
-		}
+	private String getResultFromInputStream(Context context,InputStream is){
+		String result = null;
+				// convert response to string
+				try {
+					BufferedReader reader = new BufferedReader(new InputStreamReader(
+							is, "iso-8859-1"), 8);
+					StringBuilder sb = new StringBuilder();
+					sb.append(reader.readLine());
+
+					String line = "0";
+					while ((line = reader.readLine()) != null) {
+						sb.append("\n"+line);
+					}
+					is.close();
+					result = sb.toString();
+				} catch (Exception e) {
+					Toast.makeText(context, "Error converting result: " + e.toString(),
+							Toast.LENGTH_SHORT).show();
+					// Log.e("log_tag", "Error converting result "+e.toString());
+				}
+		return result;
+	}
+	
+	public ArrayList<String> mysqlAndroidTest( Context context, String uri) {
+
+		InputStream is = null;
+		is = getInputStreamFromUri(context,uri);
+		
+		String result = null;
+		result = getResultFromInputStream( context, is);
+
+		
+		JSONArray jArray = null;
 
 		String ruolo;
 		ArrayList<String> ruoliArray = new ArrayList<String>();
@@ -109,4 +113,13 @@ public class MySqlAndroid {
 		return ruoliArray;
 	}
 
+	public String getEncodedStringFromUri(Context context, String uri){
+		InputStream is = null;
+		is = getInputStreamFromUri(context,uri);
+		
+		String result = null;
+		result = getResultFromInputStream( context, is);
+
+		return result;
+	}
 }

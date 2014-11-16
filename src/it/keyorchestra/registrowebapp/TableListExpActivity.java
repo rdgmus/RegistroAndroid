@@ -285,7 +285,9 @@ public class TableListExpActivity extends Activity {
 		case R.id.mysqlAndroidTest:
 			Toast.makeText(getApplicationContext(), "MySQL<=>Android",
 					Toast.LENGTH_SHORT).show();
-			ArrayList<String> results = new MySqlAndroid().mysqlAndroidTest(getApplicationContext());
+			ArrayList<String> results = new MySqlAndroid().
+					mysqlAndroidTest(getApplicationContext(),
+							"http://192.168.0.215/PhpMySqlAndroid/mySqlAndroidTest.php");
 			if(results == null || results.size() == 0){
 				Toast.makeText(getApplicationContext(), "Nessuna risposta dal server MySQL! ", Toast.LENGTH_LONG)
 				.show();

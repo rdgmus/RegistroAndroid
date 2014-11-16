@@ -32,6 +32,7 @@ public class Login extends Activity {
 	Thread myThread = null;
 	ImageView imShowMenu;
 	EditText etLoginEmail, etLoginPasswd;
+	private SharedPreferences getPrefs;
 
 	@SuppressLint("NewApi")
 	@Override
@@ -39,6 +40,9 @@ public class Login extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 		
+		 getPrefs = PreferenceManager
+				.getDefaultSharedPreferences(getBaseContext());
+
 		etLoginEmail=(EditText)findViewById(R.id.etLoginEmail);
 		etLoginPasswd=(EditText)findViewById(R.id.etLoginPasswd);
 		
@@ -71,24 +75,25 @@ public class Login extends Activity {
 						"Email:"+etLoginEmail.getText()+" Passwd:"+etLoginPasswd.getText(),
 						Toast.LENGTH_LONG).show();
 
-				new DatabaseOps();
+				DatabaseOps databaseOptions = new DatabaseOps();
 				// Controlla se le credenziali esistono
-				boolean isAuthenticated = new DatabaseOps().AuthenticateUser(getApplicationContext(), 
-						etLoginEmail.getText().toString(), etLoginPasswd.getText().toString());
+				boolean isAuthenticated = databaseOptions.AuthenticateUser(getApplicationContext(), 
+						etLoginEmail.getText().toString(), etLoginPasswd.getText().toString(), 
+						getDatabaseIpFromPreferences());
 				
 				if (isAuthenticated) {
 					// Va alla pagina principale
 					Toast.makeText(getApplicationContext(),"isAuthenticated!",
 							Toast.LENGTH_LONG).show();
 				} else {
-					loginMessage.setText("Credenziali invalide!");
+					Toast.makeText(getApplicationContext(),"Credenziali invalide!",
+							Toast.LENGTH_LONG).show();
 				}
 			}
 		});
 
 		etRuoloScelto = (TextView) findViewById(R.id.etRuoloScelto);
-		SharedPreferences getPrefs = PreferenceManager
-				.getDefaultSharedPreferences(getBaseContext());
+
 		String ruoloScelto = getPrefs.getString("ruoloList", "Professore");
 		etRuoloScelto.setText(ruoloScelto);
 
@@ -116,19 +121,14 @@ public class Login extends Activity {
 			return retval;
 		}
 
+		
+		
 		@Override
 		protected void onPostExecute(String value) {
-			SharedPreferences getPrefs = PreferenceManager
-					.getDefaultSharedPreferences(getBaseContext());
-			String defaultDatabase = getPrefs.getString("databaseList", "1");
 
-			String ip = null;
+			String ip = getDatabaseIpFromPreferences();
 
-			if (defaultDatabase.contentEquals("MySQL")) {
-				ip = getPrefs.getString("ipMySQL", "");
-			} else if (defaultDatabase.contentEquals("PostgreSQL")) {
-				ip = getPrefs.getString("ipPostgreSQL", "");
-			}
+			String defaultDatabase = getDefaultDatabaseFromPreferences();
 			if (value.equals("1")) {
 				loginMessage.setText("Connessione con " + defaultDatabase
 						+ " stabilita! ip:" + ip);
@@ -166,6 +166,26 @@ public class Login extends Activity {
 			}
 		}
 	}
+	
+	private String getDefaultDatabaseFromPreferences(){
+		String defaultDatabase = getPrefs.getString("databaseList", "1");
+		return defaultDatabase;
+	}
+	
+
+	private String getDatabaseIpFromPreferences(){
+		String defaultDatabase = getDefaultDatabaseFromPreferences();
+
+		String ip = null;
+
+
+		if (defaultDatabase.contentEquals("MySQL")) {
+			ip = getPrefs.getString("ipMySQL", "");
+		} else if (defaultDatabase.contentEquals("PostgreSQL")) {
+			ip = getPrefs.getString("ipPostgreSQL", "");
+		}
+		return ip;
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -198,8 +218,7 @@ public class Login extends Activity {
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		SharedPreferences getPrefs = PreferenceManager
-				.getDefaultSharedPreferences(getBaseContext());
+
 		String ruoloScelto = getPrefs.getString("ruoloList", "1");
 		etRuoloScelto.setText(ruoloScelto);
 
@@ -210,21 +229,9 @@ public class Login extends Activity {
 
 	private void testConnectionToDatabase(Context context) {
 
-		SharedPreferences getPrefs = PreferenceManager
-				.getDefaultSharedPreferences(context);
-
 		String defaultDatabase = getPrefs.getString("databaseList", "1");
 
 		if (defaultDatabase.contentEquals("MySQL")) {
-//			ArrayList<String> results = new MySqlAndroid()
-//					.mysqlAndroidTest(context);
-//			if (results == null || results.size() == 0) {
-//				Toast.makeText(context, "Nessuna risposta dal server MySQL! ",
-//						Toast.LENGTH_LONG).show();
-//			} else {
-//				Toast.makeText(context, "MySQL<=>Android Test ok!",
-//						Toast.LENGTH_LONG).show();
-//			}
 			new FetchSQL().execute();
 		}
 		if (defaultDatabase.contentEquals("PostgreSQL")) {
