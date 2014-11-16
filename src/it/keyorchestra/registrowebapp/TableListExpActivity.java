@@ -24,9 +24,11 @@ import org.json.JSONObject;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ParseException;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,7 +43,7 @@ import android.widget.Toast;
 
 @SuppressLint("NewApi")
 public class TableListExpActivity extends Activity {
-	
+
 	ImageView imShowMenu;
 	ExpandableListAdapter listAdapter;
 	ExpandableListView expListView;
@@ -60,7 +62,7 @@ public class TableListExpActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.table_list_exp);
-		
+
 		imShowMenu = (ImageView) findViewById(R.id.imShowMenu);
 		imShowMenu.setOnClickListener(new OnClickListener() {
 
@@ -278,22 +280,45 @@ public class TableListExpActivity extends Activity {
 					Toast.LENGTH_SHORT).show();
 			Toast.makeText(getApplicationContext(), "NOT YET IMPLEMENTED!",
 					Toast.LENGTH_SHORT).show();
-			Toast.makeText(getApplicationContext(), "Nessuna risposta dal server PostgreSql! ", Toast.LENGTH_LONG)
-			.show();
+			Toast.makeText(getApplicationContext(),
+					"Nessuna risposta dal server PostgreSql! ",
+					Toast.LENGTH_LONG).show();
 
 			break;
 		case R.id.mysqlAndroidTest:
 			Toast.makeText(getApplicationContext(), "MySQL<=>Android",
 					Toast.LENGTH_SHORT).show();
-			ArrayList<String> results = new MySqlAndroid().
-					mysqlAndroidTest(getApplicationContext(),
-							"http://192.168.0.215/PhpMySqlAndroid/mySqlAndroidTest.php");
-			if(results == null || results.size() == 0){
-				Toast.makeText(getApplicationContext(), "Nessuna risposta dal server MySQL! ", Toast.LENGTH_LONG)
-				.show();
-			}else{
-				Toast.makeText(getApplicationContext(), "MySQL<=>Android Test ok!", Toast.LENGTH_LONG)
-				.show();
+
+			SharedPreferences getPrefs = PreferenceManager
+					.getDefaultSharedPreferences(getApplicationContext());
+
+			String mysqltest = getPrefs.getString("mysqltest", null);
+			if (mysqltest == null) {
+				Toast.makeText(
+						getApplicationContext(),
+						"File di test non valorizzato in menù preferenze?",
+						Toast.LENGTH_LONG).show();
+				break;
+			}
+			String defaultDatabase = getPrefs.getString("databaseList", "1");
+			String ip = null;
+			if (defaultDatabase.contentEquals("PostgreSQL")) {
+				Toast.makeText(getApplicationContext(),
+						"PostgreSQL è il database di default! Correggi menù preferenze",
+						Toast.LENGTH_LONG).show();
+				break;
+			} else if (defaultDatabase.contentEquals("MySQL")) {
+				ip = getPrefs.getString("ipMySQL", "");
+			}
+			ArrayList<String> results = new MySqlAndroid().mysqlAndroidTest(
+					getApplicationContext(), "http://" + ip + "/" + mysqltest);
+			if (results == null || results.size() == 0) {
+				Toast.makeText(getApplicationContext(),
+						"Nessuna risposta dal server MySQL! Controlla lo stato di Apache & MySQL server!",
+						Toast.LENGTH_LONG).show();
+			} else {
+				Toast.makeText(getApplicationContext(),
+						"MySQL<=>Android Test ok!", Toast.LENGTH_LONG).show();
 			}
 			break;
 		case R.id.preferences:

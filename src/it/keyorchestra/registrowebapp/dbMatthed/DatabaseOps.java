@@ -93,10 +93,10 @@ public class DatabaseOps implements DatabasesInterface {
 	}
 
 	public boolean AuthenticateUser(Context context, String sEmail,
-			String sPasswd, String ip) {
+			String sPasswd, String ip, String phpencoder) {
 
 		boolean isAuthenticated = false;
-		String retval = "";
+		
 
 		String url = getUrl(context);
 
@@ -107,20 +107,29 @@ public class DatabaseOps implements DatabasesInterface {
 			Statement st = conn.createStatement();
 			String sql = null;
 
-			String encoded = new MySqlAndroid()
-					.getEncodedStringFromUri(
-							context,
-							"http://"+ip+"/PhpMySqlAndroid/phpEncoder.php?actionEncode=encodePassword&password="+sPasswd);
+			String encoded = new MySqlAndroid().getEncodedStringFromUri(
+					context, "http://" + ip + "/" + phpencoder
+							+ "?actionEncode=encodePassword&password="
+							+ sPasswd);
 
-			Toast.makeText(context, "Password encoded:" + encoded,
-					Toast.LENGTH_LONG).show();
-			
-			sql = "SELECT * FROM utenti_scuola WHERE email= '" + sEmail
+//			Toast.makeText(context, "Password encoded:" + encoded,
+//					Toast.LENGTH_LONG).show();
+
+			sql = "SELECT id_utente, cognome, nome, email, password, user_is_admin, has_to_change_password "
+					+ " FROM utenti_scuola WHERE email= '"
+					+ sEmail
 					+ "' AND password = '" + encoded + "'";
 			ResultSet rs = st.executeQuery(sql);
 			while (rs.next()) {
-				retval = rs.getString(1);
-				Toast.makeText(context, "rs.getString(1): " + retval,
+				String id_utente = rs.getString("id_utente");
+				String cognome = rs.getString("cognome");
+				String nome = rs.getString("nome");
+				String email = rs.getString("email");
+				String user_is_admin = rs.getString("user_is_admin");
+				String has_to_change_password = rs.getString("has_to_change_password");
+				
+				
+				Toast.makeText(context, "Benvenuta/o! ["+id_utente+"] " + cognome+" "+nome,
 						Toast.LENGTH_LONG).show();
 				isAuthenticated = true;
 			}

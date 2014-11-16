@@ -83,7 +83,9 @@ public class MySqlAndroid {
 
 		InputStream is = null;
 		is = getInputStreamFromUri(context,uri);
-		
+		if(is == null){
+			return null;			
+		}
 		String result = null;
 		result = getResultFromInputStream( context, is);
 

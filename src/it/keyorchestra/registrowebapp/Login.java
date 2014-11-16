@@ -71,19 +71,28 @@ public class Login extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				// Check formato
-				Toast.makeText(getApplicationContext(), 
-						"Email:"+etLoginEmail.getText()+" Passwd:"+etLoginPasswd.getText(),
-						Toast.LENGTH_LONG).show();
+//				Toast.makeText(getApplicationContext(), 
+//						"Email:"+etLoginEmail.getText()+" Passwd:"+etLoginPasswd.getText(),
+//						Toast.LENGTH_LONG).show();
 
-				DatabaseOps databaseOptions = new DatabaseOps();
+				DatabaseOps databaseOps = new DatabaseOps();
 				// Controlla se le credenziali esistono
-				boolean isAuthenticated = databaseOptions.AuthenticateUser(getApplicationContext(), 
+				String phpencoder = getPrefs.getString("phpencoder", null);
+				if(phpencoder == null){
+					Toast.makeText(
+							getApplicationContext(),
+							"File dell'encoder php non valorizzato in menù preferenze?",
+							Toast.LENGTH_LONG).show();
+					return;
+				}
+				
+				boolean isAuthenticated = databaseOps.AuthenticateUser(getApplicationContext(), 
 						etLoginEmail.getText().toString(), etLoginPasswd.getText().toString(), 
-						getDatabaseIpFromPreferences());
+						getDatabaseIpFromPreferences(), phpencoder);
 				
 				if (isAuthenticated) {
-					// Va alla pagina principale
-					Toast.makeText(getApplicationContext(),"isAuthenticated!",
+					// Va alla pagina principale del menù utente
+					Toast.makeText(getApplicationContext(),"Autenticazione riuscita!",
 							Toast.LENGTH_LONG).show();
 				} else {
 					Toast.makeText(getApplicationContext(),"Credenziali invalide!",
