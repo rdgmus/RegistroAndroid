@@ -1,7 +1,10 @@
 package it.keyorchestra.registrowebapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.view.View;
+import android.widget.ListView;
 
 public class RuoloUtente extends PreferenceActivity{
 
@@ -11,5 +14,4 @@ public class RuoloUtente extends PreferenceActivity{
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.ruolo_utente);
 	}
-
 }

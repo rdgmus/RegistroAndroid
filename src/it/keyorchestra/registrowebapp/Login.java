@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -15,7 +16,10 @@ import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,12 +30,30 @@ public class Login extends Activity {
 	TextView loginMessage;
 	TextView etRuoloScelto;
 	Thread myThread = null;
+	ImageView imShowMenu;
+	EditText etLoginEmail, etLoginPasswd;
 
 	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
+		
+		etLoginEmail=(EditText)findViewById(R.id.etLoginEmail);
+		etLoginPasswd=(EditText)findViewById(R.id.etLoginPasswd);
+		
+		imShowMenu = (ImageView) findViewById(R.id.imShowMenu);
+		imShowMenu.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				// Toast.makeText(getApplicationContext(),
+				// "imShowMenu.OnClickListener()", Toast.LENGTH_SHORT)
+				// .show();
+				openOptionsMenu();
+			}
+		});
 
 		loginMessage = (TextView) findViewById(R.id.messageView);
 		loginMessage.setText("Waiting for connection...");
@@ -44,14 +66,20 @@ public class Login extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Boolean check = false;
-				// Check formati
+				// Check formato
+				Toast.makeText(getApplicationContext(), 
+						"Email:"+etLoginEmail.getText()+" Passwd:"+etLoginPasswd.getText(),
+						Toast.LENGTH_LONG).show();
 
+				new DatabaseOps();
 				// Controlla se le credenziali esistono
-
-				if (check) {
+				boolean isAuthenticated = new DatabaseOps().AuthenticateUser(getApplicationContext(), 
+						etLoginEmail.getText().toString(), etLoginPasswd.getText().toString());
+				
+				if (isAuthenticated) {
 					// Va alla pagina principale
-
+					Toast.makeText(getApplicationContext(),"isAuthenticated!",
+							Toast.LENGTH_LONG).show();
 				} else {
 					loginMessage.setText("Credenziali invalide!");
 				}
@@ -78,24 +106,13 @@ public class Login extends Activity {
 			}
 		});
 
-		ArrayList<String> results = new MySqlAndroid()
-				.mysqlAndroidTest(getApplicationContext());
-		if (results == null || results.size() == 0) {
-			Toast.makeText(getApplicationContext(),
-					"Nessuna risposta dal server MySQL! ", Toast.LENGTH_LONG).show();
-		} else {
-			Toast.makeText(getApplicationContext(), "Mysql<=>Android Test ok!",
-					Toast.LENGTH_LONG).show();
-		}
-		new FetchSQL().execute();
-
 	}
 
 	private class FetchSQL extends AsyncTask<Void, Void, String> {
 		@Override
 		protected String doInBackground(Void... params) {
 
-			String retval = DatabaseOps.FetchConnection(getBaseContext());
+			String retval = new DatabaseOps().FetchConnection(getBaseContext());
 			return retval;
 		}
 
@@ -105,9 +122,16 @@ public class Login extends Activity {
 					.getDefaultSharedPreferences(getBaseContext());
 			String defaultDatabase = getPrefs.getString("databaseList", "1");
 
+			String ip = null;
+
+			if (defaultDatabase.contentEquals("MySQL")) {
+				ip = getPrefs.getString("ipMySQL", "");
+			} else if (defaultDatabase.contentEquals("PostgreSQL")) {
+				ip = getPrefs.getString("ipPostgreSQL", "");
+			}
 			if (value.equals("1")) {
 				loginMessage.setText("Connessione con " + defaultDatabase
-						+ " stabilita! ");
+						+ " stabilita! ip:" + ip);
 				loginButton.setEnabled(true);
 			} else {
 				loginMessage
@@ -181,17 +205,32 @@ public class Login extends Activity {
 
 		loginMessage.setText("waiting for connection...");
 
-		ArrayList<String> results = new MySqlAndroid()
-				.mysqlAndroidTest(getApplicationContext());
-		if (results == null || results.size() == 0) {
-			Toast.makeText(getApplicationContext(),
-					"Nessuna risposta dal server! ", Toast.LENGTH_LONG).show();
-		} else {
-			Toast.makeText(getApplicationContext(), "Mysql<=>Android Test ok!",
-					Toast.LENGTH_LONG).show();
-		}
-		new FetchSQL().execute();
-
+		testConnectionToDatabase(getApplicationContext());
 	}
 
+	private void testConnectionToDatabase(Context context) {
+
+		SharedPreferences getPrefs = PreferenceManager
+				.getDefaultSharedPreferences(context);
+
+		String defaultDatabase = getPrefs.getString("databaseList", "1");
+
+		if (defaultDatabase.contentEquals("MySQL")) {
+//			ArrayList<String> results = new MySqlAndroid()
+//					.mysqlAndroidTest(context);
+//			if (results == null || results.size() == 0) {
+//				Toast.makeText(context, "Nessuna risposta dal server MySQL! ",
+//						Toast.LENGTH_LONG).show();
+//			} else {
+//				Toast.makeText(context, "MySQL<=>Android Test ok!",
+//						Toast.LENGTH_LONG).show();
+//			}
+			new FetchSQL().execute();
+		}
+		if (defaultDatabase.contentEquals("PostgreSQL")) {
+			Toast.makeText(context, "NOT YET IMPLEMENTED!", Toast.LENGTH_LONG)
+					.show();
+		}
+
+	}
 }

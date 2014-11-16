@@ -30,7 +30,9 @@ import android.os.StrictMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
@@ -39,6 +41,8 @@ import android.widget.Toast;
 
 @SuppressLint("NewApi")
 public class TableListExpActivity extends Activity {
+	
+	ImageView imShowMenu;
 	ExpandableListAdapter listAdapter;
 	ExpandableListView expListView;
 	List<String> listDataHeader;
@@ -56,6 +60,19 @@ public class TableListExpActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.table_list_exp);
+		
+		imShowMenu = (ImageView) findViewById(R.id.imShowMenu);
+		imShowMenu.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				// Toast.makeText(getApplicationContext(),
+				// "imShowMenu.OnClickListener()", Toast.LENGTH_SHORT)
+				// .show();
+				openOptionsMenu();
+			}
+		});
 
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
 				.permitAll().build();
