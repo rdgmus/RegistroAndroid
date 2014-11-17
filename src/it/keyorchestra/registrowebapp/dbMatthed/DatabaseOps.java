@@ -96,7 +96,6 @@ public class DatabaseOps implements DatabasesInterface {
 			String sPasswd, String ip, String phpencoder) {
 
 		boolean isAuthenticated = false;
-		
 
 		String url = getUrl(context);
 
@@ -112,25 +111,32 @@ public class DatabaseOps implements DatabasesInterface {
 							+ "?actionEncode=encodePassword&password="
 							+ sPasswd);
 
-//			Toast.makeText(context, "Password encoded:" + encoded,
-//					Toast.LENGTH_LONG).show();
+			// Toast.makeText(context, "Password encoded:" + encoded,
+			// Toast.LENGTH_LONG).show();
 
-			sql = "SELECT id_utente, cognome, nome, email, password, user_is_admin, has_to_change_password "
+			sql = "SELECT id_utente, cognome, nome, email, password, user_is_admin, has_to_change_password, is_locked "
 					+ " FROM utenti_scuola WHERE email= '"
 					+ sEmail
 					+ "' AND password = '" + encoded + "'";
 			ResultSet rs = st.executeQuery(sql);
 			while (rs.next()) {
-				String id_utente = rs.getString("id_utente");
+				int id_utente = rs.getInt("id_utente");
 				String cognome = rs.getString("cognome");
 				String nome = rs.getString("nome");
 				String email = rs.getString("email");
-				String user_is_admin = rs.getString("user_is_admin");
-				String has_to_change_password = rs.getString("has_to_change_password");
+				int user_is_admin = rs.getInt("user_is_admin");
+				int has_to_change_password = rs
+						.getInt("has_to_change_password");
+				int is_locked = rs.getInt("is_locked");
 				
-				
-				Toast.makeText(context, "Benvenuta/o! ["+id_utente+"] " + cognome+" "+nome,
-						Toast.LENGTH_LONG).show();
+				// Valorizzare le preferenze con le informazioni estratte
+				salvaUtenteNellePreferenze(id_utente, cognome, nome, email,
+						user_is_admin, has_to_change_password, is_locked);
+
+				Toast.makeText(
+						context,
+						"Benvenuta/o! [" + id_utente + "] " + cognome + " "
+								+ nome, Toast.LENGTH_LONG).show();
 				isAuthenticated = true;
 			}
 			rs.close();
@@ -140,6 +146,13 @@ public class DatabaseOps implements DatabasesInterface {
 			e.printStackTrace();
 		}
 		return isAuthenticated;
+	}
+
+	private void salvaUtenteNellePreferenze(int id_utente, String cognome,
+			String nome, String email, int user_is_admin,
+			int has_to_change_password, int is_locked) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
@@ -153,5 +166,18 @@ public class DatabaseOps implements DatabasesInterface {
 			ArrayList<String> arrTblNames) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	/**
+	 * Controlla che l'utente che sta tenando il log abbia il ruolo con
+	 * il quale vuole entrare nel registro scolastico.
+	 * Le informazioni sull'utente sono state salvate nelle preferenze in
+	 * AuthenticateUser(){}
+	 * @param ruoloScelto
+	 * @return
+	 */
+	public boolean LoggingUserHasRole(String ruoloScelto) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

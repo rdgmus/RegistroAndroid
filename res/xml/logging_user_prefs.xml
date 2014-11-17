@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="loggingUserPrefs"
+    android:summary="Informazioni sull&apos;utente che sta tentando il Login"
+    android:title="Dati utente in Login" >
+
+    <Preference
+        android:id="@+id/pref_id_utente"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:key="id_utente"
+        android:summary="Id utente"
+        android:title="Id" 
+        android:defaultValue="0"/>
+
+</PreferenceScreen>

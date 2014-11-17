@@ -10,9 +10,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceManager;
+import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,13 +42,13 @@ public class Login extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
-		
-		 getPrefs = PreferenceManager
+
+		getPrefs = PreferenceManager
 				.getDefaultSharedPreferences(getBaseContext());
 
-		etLoginEmail=(EditText)findViewById(R.id.etLoginEmail);
-		etLoginPasswd=(EditText)findViewById(R.id.etLoginPasswd);
-		
+		etLoginEmail = (EditText) findViewById(R.id.etLoginEmail);
+		etLoginPasswd = (EditText) findViewById(R.id.etLoginPasswd);
+
 		imShowMenu = (ImageView) findViewById(R.id.imShowMenu);
 		imShowMenu.setOnClickListener(new OnClickListener() {
 
@@ -71,32 +74,49 @@ public class Login extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				// Check formato
-//				Toast.makeText(getApplicationContext(), 
-//						"Email:"+etLoginEmail.getText()+" Passwd:"+etLoginPasswd.getText(),
-//						Toast.LENGTH_LONG).show();
+				// Toast.makeText(getApplicationContext(),
+				// "Email:"+etLoginEmail.getText()+" Passwd:"+etLoginPasswd.getText(),
+				// Toast.LENGTH_LONG).show();
 
 				DatabaseOps databaseOps = new DatabaseOps();
 				// Controlla se le credenziali esistono
 				String phpencoder = getPrefs.getString("phpencoder", null);
-				if(phpencoder == null){
+				if (phpencoder == null) {
 					Toast.makeText(
 							getApplicationContext(),
 							"File dell'encoder php non valorizzato in menù preferenze?",
 							Toast.LENGTH_LONG).show();
 					return;
 				}
-				
-				boolean isAuthenticated = databaseOps.AuthenticateUser(getApplicationContext(), 
-						etLoginEmail.getText().toString(), etLoginPasswd.getText().toString(), 
+
+				boolean isAuthenticated = databaseOps.AuthenticateUser(
+						getApplicationContext(), etLoginEmail.getText()
+								.toString(),
+						etLoginPasswd.getText().toString(),
 						getDatabaseIpFromPreferences(), phpencoder);
-				
+
 				if (isAuthenticated) {
 					// Va alla pagina principale del menù utente
-					Toast.makeText(getApplicationContext(),"Autenticazione riuscita!",
+					String ruoloScelto = etRuoloScelto.getText().toString();
+					Toast.makeText(
+							getApplicationContext(),
+							"Ora controllo se hai i permessi\n"
+									+ "per il ruolo di " + ruoloScelto,
 							Toast.LENGTH_LONG).show();
+					// Controlla i permessi del ruolo di accesso prescelto
+					// per l'utente salvato nelle preferenze
+					if (databaseOps.LoggingUserHasRole(ruoloScelto)) {
+						Toast.makeText(getApplicationContext(),
+								"Autenticazione riuscita!", Toast.LENGTH_LONG)
+								.show();
+					} else {
+						Toast.makeText(getApplicationContext(),
+								"Non hai i permessi di accesso per il ruolo di " + ruoloScelto, Toast.LENGTH_LONG)
+								.show();
+					}
 				} else {
-					Toast.makeText(getApplicationContext(),"Credenziali invalide!",
-							Toast.LENGTH_LONG).show();
+					Toast.makeText(getApplicationContext(),
+							"Credenziali invalide!", Toast.LENGTH_LONG).show();
 				}
 			}
 		});
@@ -104,6 +124,7 @@ public class Login extends Activity {
 		etRuoloScelto = (TextView) findViewById(R.id.etRuoloScelto);
 
 		String ruoloScelto = getPrefs.getString("ruoloList", "Professore");
+
 		etRuoloScelto.setText(ruoloScelto);
 
 		bCambiaRuolo = (ImageButton) findViewById(R.id.bCambiaRuolo);
@@ -119,7 +140,25 @@ public class Login extends Activity {
 
 			}
 		});
+		setIconRuoloScelto(bCambiaRuolo, ruoloScelto);
 
+	}
+
+	private void setIconRuoloScelto(ImageButton bCambiaRuolo, String ruoloScelto) {
+		// TODO Auto-generated method stub
+		// SET ICON admin, professor, secretary, ata
+		Resources res = getResources();
+		if (ruoloScelto.equals("Amministratore")) {
+			bCambiaRuolo.setImageDrawable(res.getDrawable(R.drawable.admin));
+		} else if (ruoloScelto.equals("Professore")) {
+			bCambiaRuolo
+					.setImageDrawable(res.getDrawable(R.drawable.professor));
+		} else if (ruoloScelto.equals("Segreteria")) {
+			bCambiaRuolo
+					.setImageDrawable(res.getDrawable(R.drawable.secretary));
+		} else if (ruoloScelto.equals("Ata")) {
+			bCambiaRuolo.setImageDrawable(res.getDrawable(R.drawable.ata));
+		}
 	}
 
 	private class FetchSQL extends AsyncTask<Void, Void, String> {
@@ -130,8 +169,6 @@ public class Login extends Activity {
 			return retval;
 		}
 
-		
-		
 		@Override
 		protected void onPostExecute(String value) {
 
@@ -143,10 +180,9 @@ public class Login extends Activity {
 						+ " stabilita! ip:" + ip);
 				loginButton.setEnabled(true);
 			} else {
-				loginMessage
-						.setText("Fallita connessione al Database "
-								+ defaultDatabase + "!\n "
-								+ "Controlla i parametri...");
+				loginMessage.setText("Fallita connessione al Database "
+						+ defaultDatabase + "!\n "
+						+ "Controlla i parametri...e i server MySQL & Apache");
 				openOptionsMenu();
 				loginButton.setEnabled(false);
 				// SE LA CONNESSIONE FALLISCE RIMANDA ALLE PREFERENZE PER
@@ -175,18 +211,16 @@ public class Login extends Activity {
 			}
 		}
 	}
-	
-	private String getDefaultDatabaseFromPreferences(){
+
+	private String getDefaultDatabaseFromPreferences() {
 		String defaultDatabase = getPrefs.getString("databaseList", "1");
 		return defaultDatabase;
 	}
-	
 
-	private String getDatabaseIpFromPreferences(){
+	private String getDatabaseIpFromPreferences() {
 		String defaultDatabase = getDefaultDatabaseFromPreferences();
 
 		String ip = null;
-
 
 		if (defaultDatabase.contentEquals("MySQL")) {
 			ip = getPrefs.getString("ipMySQL", "");
@@ -200,6 +234,7 @@ public class Login extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.login, menu);
+
 		return true;
 	}
 
@@ -230,6 +265,8 @@ public class Login extends Activity {
 
 		String ruoloScelto = getPrefs.getString("ruoloList", "1");
 		etRuoloScelto.setText(ruoloScelto);
+
+		setIconRuoloScelto(bCambiaRuolo, ruoloScelto);
 
 		loginMessage.setText("waiting for connection...");
 
