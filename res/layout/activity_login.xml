@@ -118,13 +118,23 @@
         android:textStyle="bold"
         android:visibility="visible" />
 
-    <ImageView
+    <ImageButton
         android:contentDescription="@string/showMenu"
         android:id="@+id/imShowMenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignRight="@+id/etLoginEmail"
         android:layout_alignTop="@+id/tvLoginTitle"
-        android:src="@drawable/show_menu_icon48" />
+        android:src="@drawable/show_menu_icon48" 
+        android:background="@android:color/transparent"/>
+
+    <ImageButton
+        android:contentDescription="@string/fillFieldsDescription"
+        android:id="@+id/ibFillFields"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/login_button"
+        android:layout_toRightOf="@+id/tvLoginTitle"
+        android:src="@drawable/fill48" />
 
 </RelativeLayout>

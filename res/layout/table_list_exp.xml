@@ -22,13 +22,14 @@
             android:textColor="@color/colorNavy"
             android:textSize="20sp" />
 
-        <ImageView
+        <ImageButton
             android:id="@+id/imShowMenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:contentDescription="@string/showMenu"
-            android:src="@drawable/show_menu_icon48" />
+            android:src="@drawable/show_menu_icon48" 
+            android:background="@android:color/transparent"/>
     </LinearLayout>
 
     <FrameLayout

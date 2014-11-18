@@ -2,14 +2,17 @@ package it.keyorchestra.registrowebapp.dbMatthed;
 
 import it.keyorchestra.registrowebapp.interfaces.DatabasesInterface;
 import it.keyorchestra.registrowebapp.mysqlandroid.MySqlAndroid;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+
 import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.binary.Base64;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -134,8 +137,8 @@ public class DatabaseOps implements DatabasesInterface {
 
 				Toast.makeText(
 						context,
-						"Utente riconosciuto: [" + id_utente + "] " + cognome + " "
-								+ nome, Toast.LENGTH_LONG).show();
+						"Utente riconosciuto: [" + id_utente + "] " + cognome
+								+ " " + nome, Toast.LENGTH_LONG).show();
 				isAuthenticated = true;
 			}
 			rs.close();
@@ -189,7 +192,7 @@ public class DatabaseOps implements DatabasesInterface {
 	 */
 	@SuppressLint("DefaultLocale")
 	public boolean LoggingUserHasRole(String ruoloScelto, Context context,
-			String ip) {
+			String databaseIp) {
 		// TODO Auto-generated method stub
 		String url = getUrl(context);
 
@@ -226,4 +229,67 @@ public class DatabaseOps implements DatabasesInterface {
 		}
 		return false;
 	}
+
+	public void LockUserLogging(Context applicationContext, String databaseIp) {
+		// TODO Auto-generated method stub
+		String url = getUrl(applicationContext);
+
+		SharedPreferences sharedpreferences = PreferenceManager
+				.getDefaultSharedPreferences(applicationContext);
+		Long id_utente = sharedpreferences.getLong("id_utente", -1);
+		if (id_utente >= 0) {
+			Connection conn;
+			try {
+				DriverManager.setLoginTimeout(15);
+				conn = DriverManager.getConnection(url);
+				Statement st = conn.createStatement();
+				String sql = null;
+
+				sql = "UPDATE utenti_scuola SET is_locked=1 WHERE id_utente = "
+						+ id_utente;
+				int result = st.executeUpdate(sql);
+				if (result == 1) {
+					Toast.makeText(
+							applicationContext,
+							"Utente protetto da altri tentativi di accesso\n"
+									+ "con le stesse credenziali!",
+							Toast.LENGTH_LONG).show();
+				}
+				st.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void UnlockUser(Context applicationContext, String databaseIp, Long id_utente) {
+		// TODO Auto-generated method stub
+		String url = getUrl(applicationContext);
+
+		if (id_utente >= 0) {
+			Connection conn;
+			try {
+				DriverManager.setLoginTimeout(15);
+				conn = DriverManager.getConnection(url);
+				Statement st = conn.createStatement();
+				String sql = null;
+
+				sql = "UPDATE utenti_scuola SET is_locked=0 WHERE id_utente = "
+						+ id_utente;
+				int result = st.executeUpdate(sql);
+				while (result == 1) {
+					Toast.makeText(
+							applicationContext,
+							"Utente sbloccato!",
+							Toast.LENGTH_LONG).show();
+				}
+				st.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 }

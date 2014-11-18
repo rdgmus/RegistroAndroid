@@ -83,5 +83,6 @@
     <string name="showMenu">Mostra il Menù</string>
     <string name="ruoloScelto">ruoloScelto</string>
     <string android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/string1" name="reconnect_to_mysql">Riconnetti a MySQL</string>
+    <string name="fillFieldsDescription">Riempie i campi automaticamente</string>
     
 </resources>

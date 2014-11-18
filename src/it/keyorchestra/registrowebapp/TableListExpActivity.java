@@ -34,6 +34,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ExpandableListView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
@@ -44,7 +45,7 @@ import android.widget.Toast;
 @SuppressLint("NewApi")
 public class TableListExpActivity extends Activity {
 
-	ImageView imShowMenu;
+	ImageButton imShowMenu;
 	ExpandableListAdapter listAdapter;
 	ExpandableListView expListView;
 	List<String> listDataHeader;
@@ -63,7 +64,7 @@ public class TableListExpActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.table_list_exp);
 
-		imShowMenu = (ImageView) findViewById(R.id.imShowMenu);
+		imShowMenu = (ImageButton) findViewById(R.id.imShowMenu);
 		imShowMenu.setOnClickListener(new OnClickListener() {
 
 			@Override

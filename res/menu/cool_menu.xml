@@ -29,21 +29,21 @@
             android:id="@+id/databases"
             android:alphabeticShortcut="d"
             android:menuCategory="container"
-            android:orderInCategory="3"
+            android:orderInCategory="4"
             android:title="@string/databaseText"
             android:icon="@drawable/database_list32"/>
         <item
             android:id="@+id/mysqlAndroidTest"
             android:alphabeticShortcut="m"
             android:menuCategory="container"
-            android:orderInCategory="4"
+            android:orderInCategory="5"
             android:title="@string/mysqlAndroidTest"
             android:icon="@drawable/mysql_logo_32"/>
         <item
             android:id="@+id/pgsqlAndroidTest"
             android:alphabeticShortcut="g"
             android:menuCategory="container"
-            android:orderInCategory="5"
+            android:orderInCategory="6"
             android:title="@string/pgsqlAndroidTest"
             android:icon="@drawable/postgresql_logo_32"/>
     </group>
@@ -52,7 +52,7 @@
         android:id="@+id/exit"
         android:alphabeticShortcut="x"
         android:menuCategory="system"
-        android:orderInCategory="6"
+        android:orderInCategory="7"
         android:title="@string/exit"
         android:icon="@drawable/log_out32"/>
 

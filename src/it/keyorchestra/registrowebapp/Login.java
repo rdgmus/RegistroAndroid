@@ -29,7 +29,7 @@ import android.widget.Toast;
 @SuppressLint("NewApi")
 public class Login extends Activity {
 
-	ImageButton loginButton, bCambiaRuolo;
+	ImageButton loginButton, bCambiaRuolo, ibFillFields;
 	TextView loginMessage;
 	TextView etRuoloScelto;
 	Thread myThread = null;
@@ -107,7 +107,7 @@ public class Login extends Activity {
 								"L'utente ha già effettuato il login da un altro IP!\n"
 										+ "Permesso di accesso NEGATO!",
 								Toast.LENGTH_LONG).show();
-						
+
 					} else {
 
 						// Controlla i permessi del ruolo di accesso prescelto
@@ -124,12 +124,24 @@ public class Login extends Activity {
 								getDatabaseIpFromPreferences())) {
 							Toast.makeText(
 									getApplicationContext(),
-									"Autenticazione riuscita!\n"+
-									"Permessi accordati per il ruolo di "
+									"Permessi accordati!\n"
+											+ "Autenticazione riuscita per il ruolo di "
 											+ ruoloScelto, Toast.LENGTH_LONG)
 									.show();
-							// Lancia un nuovo Intent per andare allo userMenu
+							// Loccare l'id dell'utente: is_locked = 1
+							databaseOps.LockUserLogging(
+									getApplicationContext(),
+									getDatabaseIpFromPreferences());
 
+							// Lancia un nuovo Intent per andare allo userMenu
+							// del ruolo prescelto. All'interno dello user menù
+							// verranno mostrate opzioni in base al ruolo e se
+							// l'utente è un admin avrà anche la possibilità di
+							// accedere
+							// al database con tutti i permessi
+							Toast.makeText(getApplicationContext(),
+									"Ora accediamo al suo menù!",
+									Toast.LENGTH_LONG).show();
 						} else {
 							Toast.makeText(
 									getApplicationContext(),
@@ -166,6 +178,21 @@ public class Login extends Activity {
 		});
 		setIconRuoloScelto(bCambiaRuolo, ruoloScelto);
 
+		//FILL FIELDS
+		ibFillFields = (ImageButton)findViewById(R.id.ibFillFields);
+		ibFillFields.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				String adminEmail = getPrefs.getString("adminEmail", "");
+				String adminPasswd = getPrefs.getString("adminPasswd", "");
+//				String adminNome = getPrefs.getString("adminNome", "");
+//				String adminCognome = getPrefs.getString("adminCognome", "");
+				etLoginEmail.setText(adminEmail);
+				etLoginPasswd.setText(adminPasswd);
+			}
+		});
 	}
 
 	private void setIconRuoloScelto(ImageButton bCambiaRuolo, String ruoloScelto) {
