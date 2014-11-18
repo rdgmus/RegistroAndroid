@@ -4,10 +4,17 @@
     <item
         android:id="@+id/ruoloUtente"
         android:alphabeticShortcut="r"
-        android:title="@string/ruoloText"/>
+        android:title="@string/ruoloText"
+        android:icon="@drawable/ruoli_utenti48"/>
     <item
         android:id="@id/databases"
         android:alphabeticShortcut="d"
-        android:title="@string/databaseText"/>
-
+        android:title="@string/databaseText"
+        android:icon="@drawable/database_list48"/>
+	<item
+	    android:id="@+id/reconnectToMySQL"
+	    android:alphabeticShortcut="r"
+	    android:title="@string/reconnect_to_mysql"
+	    android:icon="@drawable/connect_to_mysql48"
+	    />
 </menu>

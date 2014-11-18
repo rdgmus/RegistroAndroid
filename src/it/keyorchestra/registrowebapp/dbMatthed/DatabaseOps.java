@@ -2,17 +2,15 @@ package it.keyorchestra.registrowebapp.dbMatthed;
 
 import it.keyorchestra.registrowebapp.interfaces.DatabasesInterface;
 import it.keyorchestra.registrowebapp.mysqlandroid.MySqlAndroid;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-
 import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.binary.Base64;
-
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -128,14 +126,15 @@ public class DatabaseOps implements DatabasesInterface {
 				int has_to_change_password = rs
 						.getInt("has_to_change_password");
 				int is_locked = rs.getInt("is_locked");
-				
+
 				// Valorizzare le preferenze con le informazioni estratte
 				salvaUtenteNellePreferenze(id_utente, cognome, nome, email,
-						user_is_admin, has_to_change_password, is_locked);
+						user_is_admin, has_to_change_password, is_locked,
+						context);
 
 				Toast.makeText(
 						context,
-						"Benvenuta/o! [" + id_utente + "] " + cognome + " "
+						"Utente riconosciuto: [" + id_utente + "] " + cognome + " "
 								+ nome, Toast.LENGTH_LONG).show();
 				isAuthenticated = true;
 			}
@@ -148,11 +147,23 @@ public class DatabaseOps implements DatabasesInterface {
 		return isAuthenticated;
 	}
 
+	@SuppressLint("NewApi")
 	private void salvaUtenteNellePreferenze(int id_utente, String cognome,
 			String nome, String email, int user_is_admin,
-			int has_to_change_password, int is_locked) {
+			int has_to_change_password, int is_locked, Context context) {
 		// TODO Auto-generated method stub
-		
+		SharedPreferences sharedpreferences = PreferenceManager
+				.getDefaultSharedPreferences(context);
+		SharedPreferences.Editor editor = sharedpreferences.edit();
+		editor.putLong("id_utente", id_utente);
+		editor.putString("cognome", cognome);
+		editor.putString("nome", nome);
+		editor.putString("email", email);
+		editor.putLong("user_is_admin", user_is_admin);
+		editor.putLong("has_to_change_password", has_to_change_password);
+		editor.putLong("is_locked", is_locked);
+		editor.apply();
+
 	}
 
 	@Override
@@ -169,15 +180,50 @@ public class DatabaseOps implements DatabasesInterface {
 	}
 
 	/**
-	 * Controlla che l'utente che sta tenando il log abbia il ruolo con
-	 * il quale vuole entrare nel registro scolastico.
-	 * Le informazioni sull'utente sono state salvate nelle preferenze in
-	 * AuthenticateUser(){}
+	 * Controlla che l'utente che sta tenando il log abbia il ruolo con il quale
+	 * vuole entrare nel registro scolastico. Le informazioni sull'utente sono
+	 * state salvate nelle preferenze in AuthenticateUser(){}
+	 * 
 	 * @param ruoloScelto
 	 * @return
 	 */
-	public boolean LoggingUserHasRole(String ruoloScelto) {
+	@SuppressLint("DefaultLocale")
+	public boolean LoggingUserHasRole(String ruoloScelto, Context context,
+			String ip) {
 		// TODO Auto-generated method stub
+		String url = getUrl(context);
+
+		SharedPreferences sharedpreferences = PreferenceManager
+				.getDefaultSharedPreferences(context);
+		Long id_utente = sharedpreferences.getLong("id_utente", -1);
+		if (id_utente >= 0) {
+			Connection conn;
+			try {
+				DriverManager.setLoginTimeout(15);
+				conn = DriverManager.getConnection(url);
+				Statement st = conn.createStatement();
+				String sql = null;
+
+				sql = "SELECT id_ruoli_granted, id_utente, id_ruolo, ruolo FROM ruoli_granted_to_utenti"
+						+ " WHERE id_utente = " + id_utente;
+				ResultSet rs = st.executeQuery(sql);
+				while (rs.next()) {
+					// Valorizzare le preferenze con le informazioni estratte
+					String ruolo = rs.getString("ruolo");
+					if (ruolo.equals(ruoloScelto.toUpperCase())) {
+						rs.close();
+						st.close();
+						conn.close();
+						return true;
+					}
+				}
+				rs.close();
+				st.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 		return false;
 	}
 }

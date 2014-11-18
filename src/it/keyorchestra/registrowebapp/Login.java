@@ -84,35 +84,59 @@ public class Login extends Activity {
 				if (phpencoder == null) {
 					Toast.makeText(
 							getApplicationContext(),
-							"File dell'encoder php non valorizzato in menù preferenze?",
+							"Login fallito! File dell'encoder php non valorizzato in menù preferenze?",
 							Toast.LENGTH_LONG).show();
 					return;
 				}
 
+				// Controlla le credenziali dell'utente
 				boolean isAuthenticated = databaseOps.AuthenticateUser(
 						getApplicationContext(), etLoginEmail.getText()
 								.toString(),
 						etLoginPasswd.getText().toString(),
 						getDatabaseIpFromPreferences(), phpencoder);
 
-				if (isAuthenticated) {
-					// Va alla pagina principale del menù utente
-					String ruoloScelto = etRuoloScelto.getText().toString();
-					Toast.makeText(
-							getApplicationContext(),
-							"Ora controllo se hai i permessi\n"
-									+ "per il ruolo di " + ruoloScelto,
-							Toast.LENGTH_LONG).show();
-					// Controlla i permessi del ruolo di accesso prescelto
-					// per l'utente salvato nelle preferenze
-					if (databaseOps.LoggingUserHasRole(ruoloScelto)) {
-						Toast.makeText(getApplicationContext(),
-								"Autenticazione riuscita!", Toast.LENGTH_LONG)
-								.show();
+				if (isAuthenticated) {// Credenziali esistenti
+					// Controlla se l'utente è locked
+					SharedPreferences sharedpreferences = PreferenceManager
+							.getDefaultSharedPreferences(getApplicationContext());
+					Long is_locked = sharedpreferences.getLong("is_locked", -1);
+					if (is_locked == 1) {
+						Toast.makeText(
+								getApplicationContext(),
+								"L'utente ha già effettuato il login da un altro IP!\n"
+										+ "Permesso di accesso NEGATO!",
+								Toast.LENGTH_LONG).show();
+						
 					} else {
-						Toast.makeText(getApplicationContext(),
-								"Non hai i permessi di accesso per il ruolo di " + ruoloScelto, Toast.LENGTH_LONG)
-								.show();
+
+						// Controlla i permessi del ruolo di accesso prescelto
+						// per l'utente salvato nelle preferenze
+						String ruoloScelto = etRuoloScelto.getText().toString();
+						Toast.makeText(
+								getApplicationContext(),
+								"Ora controllo se hai i permessi\n"
+										+ "per il ruolo di " + ruoloScelto,
+								Toast.LENGTH_LONG).show();
+
+						if (databaseOps.LoggingUserHasRole(ruoloScelto,
+								getApplicationContext(),
+								getDatabaseIpFromPreferences())) {
+							Toast.makeText(
+									getApplicationContext(),
+									"Autenticazione riuscita!\n"+
+									"Permessi accordati per il ruolo di "
+											+ ruoloScelto, Toast.LENGTH_LONG)
+									.show();
+							// Lancia un nuovo Intent per andare allo userMenu
+
+						} else {
+							Toast.makeText(
+									getApplicationContext(),
+									"Non hai i permessi di accesso per il ruolo di "
+											+ ruoloScelto, Toast.LENGTH_LONG)
+									.show();
+						}
 					}
 				} else {
 					Toast.makeText(getApplicationContext(),
@@ -251,6 +275,9 @@ public class Login extends Activity {
 			Intent d = new Intent("it.keyorchestra.registrowebapp.DATABASE");
 			startActivity(d);
 			break;
+		case R.id.reconnectToMySQL:
+			testConnectionToDatabase(getApplicationContext());
+			break;
 		default:
 			break;
 		}
@@ -268,13 +295,11 @@ public class Login extends Activity {
 
 		setIconRuoloScelto(bCambiaRuolo, ruoloScelto);
 
-		loginMessage.setText("waiting for connection...");
-
 		testConnectionToDatabase(getApplicationContext());
 	}
 
 	private void testConnectionToDatabase(Context context) {
-
+		loginMessage.setText("waiting for connection...");
 		String defaultDatabase = getPrefs.getString("databaseList", "1");
 
 		if (defaultDatabase.contentEquals("MySQL")) {
