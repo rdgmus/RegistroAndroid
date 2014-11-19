@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:background="@drawable/background_color1"
     android:padding="25dp"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -10,131 +10,166 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".Login" >
 
-    <TextView
-        android:id="@+id/tvLoginTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:gravity="center"
-        android:text="@string/loginText"
-        android:textColor="@color/colorOrange"
-        android:textSize="25sp"
-        android:textStyle="bold" />
-
-    <EditText
-        android:id="@+id/etLoginEmail"
+    <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvLoginEmail"
-        android:ems="10"
-        android:hint="@string/emailHint"
-        android:inputType="textEmailAddress"
-        android:textSize="18sp" >
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
 
-        <requestFocus />
-    </EditText>
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
 
-    <EditText
-        android:id="@+id/etLoginPasswd"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvLoginPassword"
-        android:ems="10"
-        android:hint="@string/passwdHint"
-        android:inputType="textPassword"
-        android:textSize="18sp" />
+            <ImageButton
+                android:id="@+id/ibHome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/home"
+                android:src="@drawable/goto_login"
+                android:background="@android:color/transparent" />
 
-    <TextView
-        android:id="@+id/tvLoginEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvLoginTitle"
-        android:text="@string/emailText"
-        android:textColor="@color/colorOrange"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+            <TextView
+                android:id="@+id/tvLoginTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/imShowMenu"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:text="@string/loginText"
+                android:textColor="@color/colorOrange"
+                android:textSize="25sp"
+                android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/tvLoginPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/etLoginEmail"
-        android:text="@string/passwdText"
-        android:textColor="@color/colorOrange"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+            <ImageButton
+                android:id="@+id/imShowMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:background="@color/colorListItem"
+                android:contentDescription="@string/showMenu"
+                android:src="@drawable/menu64" />
 
-    <ImageButton
-        android:id="@+id/login_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/etRuoloScelto"
-        android:layout_alignTop="@+id/bCambiaRuolo"
-        android:gravity="center"
-        android:text="@string/login_button"
-        android:textColor="@color/colorBlue"
-        android:textStyle="bold" 
-        android:src="@drawable/log_in" />
+        </RelativeLayout>
 
-    <TextView
-        android:id="@+id/etRuoloScelto"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/etLoginPasswd"
-        android:layout_below="@+id/etLoginPasswd"
-        android:ems="15"
-        android:gravity="left"
-        android:text="@string/ruoloText"
-        android:textColor="@android:color/background_light"
-        android:textSize="18sp"
-        android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/tvLoginEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/emailText"
+            android:textColor="@color/colorOrange"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-    <ImageButton
-        android:contentDescription="@string/ruoliUtentiDescription"
-        android:id="@+id/bCambiaRuolo"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/etRuoloScelto"
-        android:layout_below="@+id/etRuoloScelto"
-        android:text="@string/cambiaRuolo"
-        android:textColor="@color/colorBlue"
-        android:textStyle="bold" 
-        android:src="@drawable/ruoli_utenti" />
+        <EditText
+            android:id="@+id/etLoginEmail"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvLoginEmail"
+            android:ems="10"
+            android:hint="@string/emailHint"
+            android:inputType="textEmailAddress"
+            android:textSize="18sp" >
 
-    <TextView
-        android:id="@+id/messageView"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/bCambiaRuolo"
-        android:layout_below="@+id/bCambiaRuolo"
-        android:layout_marginTop="18dp"
-        android:background="@color/colorListItem"
-        android:gravity="center"
-        android:text="@string/loginMsg"
-        android:textColor="@color/colorRed"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:visibility="visible" />
+            <requestFocus />
+        </EditText>
 
-    <ImageButton
-        android:contentDescription="@string/showMenu"
-        android:id="@+id/imShowMenu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/etLoginEmail"
-        android:layout_alignTop="@+id/tvLoginTitle"
-        android:src="@drawable/show_menu_icon48" 
-        android:background="@android:color/transparent"/>
+        <TextView
+            android:id="@+id/tvLoginPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/passwdText"
+            android:textColor="@color/colorOrange"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-    <ImageButton
-        android:contentDescription="@string/fillFieldsDescription"
-        android:id="@+id/ibFillFields"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/login_button"
-        android:layout_toRightOf="@+id/tvLoginTitle"
-        android:src="@drawable/fill48" />
+        <EditText
+            android:id="@+id/etLoginPasswd"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvLoginPassword"
+            android:ems="10"
+            android:hint="@string/passwdHint"
+            android:inputType="textPassword"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" >
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ruoloScelto"
+                android:textColor="@color/colorOrange"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/etRuoloScelto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="15"
+                android:gravity="left"
+                android:paddingLeft="10sp"
+                android:text="@string/ruoloText"
+                android:textColor="@android:color/background_light"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <ImageButton
+                android:id="@+id/bCambiaRuolo"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/ruoliUtentiDescription"
+                android:src="@drawable/ruoli_utenti"
+                android:text="@string/cambiaRuolo"
+                android:textColor="@color/colorBlue"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/login_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/loginButtonDescription"
+                android:src="@drawable/log_in"
+                android:text="@string/login_button"
+                android:textColor="@color/colorBlue"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/ibFillFields"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/fillFieldsDescription"
+                android:src="@drawable/fill48" />
+
+            <ImageButton
+                android:id="@+id/ibGotoRegister"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/gotoRegisterDescription"
+                android:src="@drawable/user_add" />
+        </LinearLayout>
+    </LinearLayout>
 
 </RelativeLayout>

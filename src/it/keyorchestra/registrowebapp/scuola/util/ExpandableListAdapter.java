@@ -31,6 +31,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 	private TextView lblListItemNome, lblListItemTipo, lblListItemNotNull,
 			lblListItemDfltValue, lblListItemPK;
 	private ImageView childImg;
+
 	private LinearLayout llListFields;
 
 	// private HashMap<String, TableLayout> _listTableChild;
@@ -86,21 +87,22 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 			String headerTitle = (String) getGroup(groupPosition);
 
 			if (headerTitle.equals("Scuola.Tables")) {
-				childImg.setImageResource(R.drawable.table);
-			} else {
-				if (childText.startsWith("Admin"))
-					childImg.setImageResource(R.drawable.database_list32);
+				childImg.setImageResource(R.drawable.tables_list_ok48);
+			} else if (headerTitle.equals("Activity List")) {
+				if (childText.equals("Login")) {
+					childImg.setImageResource(R.drawable.goto_login48);
+				} else if (childText.equals("Iscrizione")) {
+					childImg.setImageResource(R.drawable.user_add48);
+				}else
+					childImg.setImageResource(R.drawable.database_list48);
 
-				else if (childText.startsWith("Scuola"))
-					childImg.setImageResource(R.drawable.table);
-				else
-					childImg.setImageResource(R.drawable.database_list32);
-			}
+			} else
+				childImg.setImageResource(R.drawable.database_list48);
 
 			txtListChild.setTypeface(null, Typeface.BOLD);
 
 			txtListChild.setText(childText);
-			
+
 		} else if (_activityMenu.equals("AdminTables")) {
 			// TableLayout tl = (TableLayout) convertView
 			// .findViewById(R.id.tlFieldParameters);

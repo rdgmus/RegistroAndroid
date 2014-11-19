@@ -1,6 +1,7 @@
 package it.keyorchestra.registrowebapp;
 
 import it.keyorchestra.registrowebapp.dbMatthed.DatabaseOps;
+import it.keyorchestra.registrowebapp.interfaces.ActivitiesCommonFunctions;
 import it.keyorchestra.registrowebapp.mysqlandroid.MySqlAndroid;
 
 import java.util.ArrayList;
@@ -13,24 +14,29 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.view.ActionMode;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 @SuppressLint("NewApi")
-public class Login extends Activity {
+public class Login extends Activity implements ActivitiesCommonFunctions {
 
-	ImageButton loginButton, bCambiaRuolo, ibFillFields;
-	TextView loginMessage;
+	ImageButton loginButton, bCambiaRuolo, ibFillFields, ibGotoRegister,
+			ibHome;
 	TextView etRuoloScelto;
 	Thread myThread = null;
 	ImageView imShowMenu;
@@ -42,6 +48,38 @@ public class Login extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
+
+		ibHome = (ImageButton) findViewById(R.id.ibHome);
+		ibHome.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				// Va alla pagina di login
+				Intent ourStartingPoint = new Intent(
+						"it.keyorchestra.registrowebapp.LIST_ACTIVITY");
+				startActivity(ourStartingPoint);
+				finish();
+			}
+
+		});
+		registerToolTipFor(ibHome);
+
+		ibGotoRegister = (ImageButton) findViewById(R.id.ibGotoRegister);
+		ibGotoRegister.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				// Va alla pagina di login
+				Intent loginUserActivity = new Intent(
+						"android.intent.action.REGISTER_USER");
+				startActivity(loginUserActivity);
+				finish();
+			}
+
+		});
+		registerToolTipFor(ibGotoRegister);
 
 		getPrefs = PreferenceManager
 				.getDefaultSharedPreferences(getBaseContext());
@@ -62,21 +100,14 @@ public class Login extends Activity {
 			}
 		});
 
-		loginMessage = (TextView) findViewById(R.id.messageView);
-		loginMessage.setText("Waiting for connection...");
-
 		loginButton = (ImageButton) findViewById(R.id.login_button);
 		loginButton.setEnabled(false);
-
+		registerToolTipFor(loginButton);
 		loginButton.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				// Check formato
-				// Toast.makeText(getApplicationContext(),
-				// "Email:"+etLoginEmail.getText()+" Passwd:"+etLoginPasswd.getText(),
-				// Toast.LENGTH_LONG).show();
 
 				DatabaseOps databaseOps = new DatabaseOps();
 				// Controlla se le credenziali esistono
@@ -98,6 +129,7 @@ public class Login extends Activity {
 
 				if (isAuthenticated) {// Credenziali esistenti
 					// Controlla se l'utente è locked
+
 					SharedPreferences sharedpreferences = PreferenceManager
 							.getDefaultSharedPreferences(getApplicationContext());
 					Long is_locked = sharedpreferences.getLong("is_locked", -1);
@@ -122,6 +154,7 @@ public class Login extends Activity {
 						if (databaseOps.LoggingUserHasRole(ruoloScelto,
 								getApplicationContext(),
 								getDatabaseIpFromPreferences())) {
+
 							Toast.makeText(
 									getApplicationContext(),
 									"Permessi accordati!\n"
@@ -165,6 +198,8 @@ public class Login extends Activity {
 
 		bCambiaRuolo = (ImageButton) findViewById(R.id.bCambiaRuolo);
 
+		registerToolTipFor(bCambiaRuolo);
+
 		bCambiaRuolo.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -178,8 +213,9 @@ public class Login extends Activity {
 		});
 		setIconRuoloScelto(bCambiaRuolo, ruoloScelto);
 
-		//FILL FIELDS
-		ibFillFields = (ImageButton)findViewById(R.id.ibFillFields);
+		// FILL FIELDS
+		ibFillFields = (ImageButton) findViewById(R.id.ibFillFields);
+		registerToolTipFor(ibFillFields);
 		ibFillFields.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -187,12 +223,13 @@ public class Login extends Activity {
 				// TODO Auto-generated method stub
 				String adminEmail = getPrefs.getString("adminEmail", "");
 				String adminPasswd = getPrefs.getString("adminPasswd", "");
-//				String adminNome = getPrefs.getString("adminNome", "");
-//				String adminCognome = getPrefs.getString("adminCognome", "");
+				// String adminNome = getPrefs.getString("adminNome", "");
+				// String adminCognome = getPrefs.getString("adminCognome", "");
 				etLoginEmail.setText(adminEmail);
 				etLoginPasswd.setText(adminPasswd);
 			}
 		});
+
 	}
 
 	private void setIconRuoloScelto(ImageButton bCambiaRuolo, String ruoloScelto) {
@@ -227,11 +264,11 @@ public class Login extends Activity {
 
 			String defaultDatabase = getDefaultDatabaseFromPreferences();
 			if (value.equals("1")) {
-				loginMessage.setText("Connessione con " + defaultDatabase
+				loginMessage("Connessione con " + defaultDatabase
 						+ " stabilita! ip:" + ip);
 				loginButton.setEnabled(true);
 			} else {
-				loginMessage.setText("Fallita connessione al Database "
+				loginMessage("Fallita connessione al Database "
 						+ defaultDatabase + "!\n "
 						+ "Controlla i parametri...e i server MySQL & Apache");
 				openOptionsMenu();
@@ -326,10 +363,12 @@ public class Login extends Activity {
 	}
 
 	private void testConnectionToDatabase(Context context) {
-		loginMessage.setText("waiting for connection...");
+		loginMessage("Verifica della connessione al database!");
+
 		String defaultDatabase = getPrefs.getString("databaseList", "1");
 
 		if (defaultDatabase.contentEquals("MySQL")) {
+
 			new FetchSQL().execute();
 		}
 		if (defaultDatabase.contentEquals("PostgreSQL")) {
@@ -338,4 +377,51 @@ public class Login extends Activity {
 		}
 
 	}
+
+	private void loginMessage(String msg) {
+		// TODO Auto-generated method stub
+		String defaultDatabase = getDefaultDatabaseFromPreferences();
+		Resources res = getResources();
+
+		LayoutInflater inflater = getLayoutInflater();
+		View layout = inflater.inflate(R.layout.toast_connect_layout,
+				(ViewGroup) findViewById(R.id.toast_layout_root));
+
+		TextView tvToastConnect = (TextView) layout
+				.findViewById(R.id.tvToastConnect);
+		tvToastConnect.setText(msg);
+
+		ImageView ivToastConnect = (ImageView) layout
+				.findViewById(R.id.ivToastConnect);
+		if (defaultDatabase.contentEquals("MySQL")) {
+			ivToastConnect.setImageDrawable(res
+					.getDrawable(R.drawable.logo_mysql));
+		}
+		if (defaultDatabase.contentEquals("PostgreSQL")) {
+			ivToastConnect.setImageDrawable(res
+					.getDrawable(R.drawable.logo_postgresql));
+		}
+
+		Toast toast = new Toast(getApplicationContext());
+		toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+		toast.setDuration(Toast.LENGTH_LONG);
+		toast.setView(layout);
+		toast.show();
+	}
+
+	@Override
+	public void registerToolTipFor(ImageButton ib) {
+		// TODO Auto-generated method stub
+		ib.setOnLongClickListener(new View.OnLongClickListener() {
+
+			@Override
+			public boolean onLongClick(View view) {
+				Toast.makeText(getApplicationContext(),
+						view.getContentDescription(), Toast.LENGTH_SHORT)
+						.show();
+				return true;
+			}
+		});
+	}
+
 }

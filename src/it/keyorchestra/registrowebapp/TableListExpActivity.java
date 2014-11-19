@@ -3,29 +3,14 @@ package it.keyorchestra.registrowebapp;
 import it.keyorchestra.registrowebapp.mysqlandroid.MySqlAndroid;
 import it.keyorchestra.registrowebapp.scuola.util.ExpandableListAdapter;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ParseException;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
@@ -34,12 +19,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ExpandableListView;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 @SuppressLint("NewApi")
@@ -50,8 +34,8 @@ public class TableListExpActivity extends Activity {
 	ExpandableListView expListView;
 	List<String> listDataHeader;
 	HashMap<String, List<String>> listDataChild;
-	String activities[] = { "Menu", "Login", "Iscrizione", "Email", "Camera",
-			"Data", "GFX", "GFXSurface", "SoundStaff", "SQLLiteExample",
+	String activities[] = { "Login", "Iscrizione", "Email", "Camera", "Data",
+			"GFX", "GFXSurface", "SoundStaff", "SQLLiteExample",
 			"ScuolaActivity", "ScuolaTablesMenu", "AdminDatabases" };
 	String tables[] = { "UtentiScuola" };
 
@@ -165,14 +149,16 @@ public class TableListExpActivity extends Activity {
 						path += "sqllite.";
 					} else if (cheese.equals("UtentiScuola")) {
 						path += "scuola.";
-					} else if (cheese.equals("Menu")) {
-						openOptionsMenu();
-						return true;
 					}
+					// else if (cheese.equals("Menu")) {
+					// openOptionsMenu();
+					// return true;
+					// }
 					ourClass = Class.forName(path + cheese);
 					Intent ourIntent = new Intent(TableListExpActivity.this,
 							ourClass);
 					startActivity(ourIntent);
+					finish();
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -183,6 +169,8 @@ public class TableListExpActivity extends Activity {
 		});
 
 	}
+
+	
 
 	/*
 	 * Preparing the list data
@@ -295,8 +283,7 @@ public class TableListExpActivity extends Activity {
 
 			String mysqltest = getPrefs.getString("mysqltest", null);
 			if (mysqltest == null) {
-				Toast.makeText(
-						getApplicationContext(),
+				Toast.makeText(getApplicationContext(),
 						"File di test non valorizzato in menù preferenze?",
 						Toast.LENGTH_LONG).show();
 				break;
@@ -304,7 +291,8 @@ public class TableListExpActivity extends Activity {
 			String defaultDatabase = getPrefs.getString("databaseList", "1");
 			String ip = null;
 			if (defaultDatabase.contentEquals("PostgreSQL")) {
-				Toast.makeText(getApplicationContext(),
+				Toast.makeText(
+						getApplicationContext(),
 						"PostgreSQL è il database di default! Correggi menù preferenze",
 						Toast.LENGTH_LONG).show();
 				break;
@@ -314,7 +302,8 @@ public class TableListExpActivity extends Activity {
 			ArrayList<String> results = new MySqlAndroid().mysqlAndroidTest(
 					getApplicationContext(), "http://" + ip + "/" + mysqltest);
 			if (results == null || results.size() == 0) {
-				Toast.makeText(getApplicationContext(),
+				Toast.makeText(
+						getApplicationContext(),
 						"Nessuna risposta dal server MySQL! Controlla lo stato di Apache & MySQL server!",
 						Toast.LENGTH_LONG).show();
 			} else {

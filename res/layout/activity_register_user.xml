@@ -2,102 +2,137 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/application_background"
+    android:background="@drawable/background_color1"
+    android:padding="25dp"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:padding="25dp"
     tools:context=".Login" >
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/editTextPassword"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="12dp"
-        android:text="@string/registerUserText"
-        android:textSize="25sp"
-        android:gravity="center"
-        android:textStyle="bold" />
-
-    <EditText
-        android:id="@+id/editTextNome"
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/editTextRepeatPassword"
-        android:layout_below="@+id/textView2"
-        android:ems="10"
-        android:hint="@string/nomeHint"
-        android:inputType="textPersonName" >
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="15dp"
+        android:orientation="vertical" >
 
-        <requestFocus />
-    </EditText>
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
 
-    <EditText
-        android:id="@+id/editTextCognome"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/textView2"
-        android:layout_below="@+id/editTextNome"
-        android:ems="10"
-        android:hint="@string/cognomeHint"
-        android:inputType="textPersonName" />
+            <ImageButton
+                android:id="@+id/ibHome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/user_add" 
+                android:contentDescription="@string/home"
+                android:background="@android:color/transparent"/>
 
-    <EditText
-        android:id="@+id/editTextEmail"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/editTextCognome"
-        android:ems="10"
-        android:hint="@string/emailHint"
-        android:inputType="textEmailAddress"
-        android:textSize="25sp" />
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/imShowMenu"
+                android:layout_toRightOf="@+id/ibHome"
+                android:gravity="center"
+                android:text="@string/registerUserText"
+                android:textColor="@color/colorOrange"
+                android:textSize="25sp"
+                android:textStyle="bold" />
 
-    <EditText
-        android:id="@+id/editTextPassword"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/editTextEmail"
-        android:layout_below="@+id/editTextEmail"
-        android:ems="10"
-        android:hint="@string/passwdHint"
-        android:inputType="textPassword" />
+            <ImageButton
+                android:id="@+id/imShowMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:background="@color/colorListItem"
+                android:contentDescription="@string/showMenu"
+                android:src="@drawable/menu64" />
 
-    <EditText
-        android:id="@+id/editTextRepeatPassword"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/editTextPassword"
-        android:layout_below="@+id/editTextPassword"
-        android:ems="10"
-        android:hint="@string/repeatPasswdHint"
-        android:inputType="textPassword"
-        android:textSize="32sp" />
+        </RelativeLayout>
 
-    <Button
-        android:id="@+id/registra_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/editTextRepeatPassword"
-        android:layout_below="@+id/editTextRepeatPassword"
-        android:gravity="center"
-        android:text="@string/newuser_button"
-        android:textColor="@color/colorBlue"
-        android:textStyle="bold" />
+        <EditText
+            android:id="@+id/editTextNome"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/nomeHint"
+            android:inputType="textPersonName"
+            android:textSize="18sp" />
 
-    <TextView
-        android:id="@+id/messageEsitoRegistrazione"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/editTextRepeatPassword"
-        android:layout_below="@+id/registra_button"
-        android:text="@string/registerMessage"
-        android:textColor="@color/colorRed"
-        android:textSize="25sp"
-        android:gravity="center"
-        android:textStyle="bold" />
+        <EditText
+            android:id="@+id/editTextCognome"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/cognomeHint"
+            android:inputType="textPersonName"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/editTextEmail"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/emailHint"
+            android:inputType="textEmailAddress"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/editTextPassword"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/passwdHint"
+            android:inputType="textPassword" />
+
+        <EditText
+            android:id="@+id/editTextRepeatPassword"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/repeatPasswdHint"
+            android:inputType="textPassword"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right" >
+
+            <ImageButton
+                android:id="@+id/registra_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:src="@drawable/log_in"
+                android:textColor="@color/colorBlue"
+                android:textStyle="bold" 
+                 android:background="@android:color/transparent"
+                 android:contentDescription="Esegue l\'iscrizione al Registro Scolastico"/>
+
+            <ImageButton
+                android:id="@+id/pulisci_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:src="@drawable/clear_64"
+                android:textColor="@color/colorBlue"
+                android:textStyle="bold" 
+                 android:background="@android:color/transparent"
+                 android:contentDescription="Cancella tutti i dati inseriti"/>
+
+            <ImageButton
+                android:id="@+id/ibGotoLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/goto_login" 
+                android:background="@android:color/transparent"
+                 android:contentDescription="Vai alla pagina di Login"/>
+        </LinearLayout>
+    </LinearLayout>
 
 </RelativeLayout>

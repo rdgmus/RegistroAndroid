@@ -5,10 +5,9 @@
     android:orientation="vertical" >
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="@color/colorListItem"
+        android:layout_width="fill_parent"
+        android:layout_height="64dp"
+        android:background="@drawable/background_color1"
         android:orientation="horizontal" >
 
         <TextView
@@ -16,20 +15,20 @@
             android:layout_width="266dp"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
-            android:background="@color/colorListItem"
             android:gravity="center"
             android:text="@string/activitiesText"
-            android:textColor="@color/colorNavy"
-            android:textSize="20sp" />
+            android:textColor="@color/colorOrange"
+            android:textSize="25sp" 
+            android:textStyle="bold"/>
 
         <ImageButton
             android:id="@+id/imShowMenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
+            android:background="@color/colorListItem"
             android:contentDescription="@string/showMenu"
-            android:src="@drawable/show_menu_icon48" 
-            android:background="@android:color/transparent"/>
+            android:src="@drawable/menu64" />
+
     </LinearLayout>
 
     <FrameLayout
