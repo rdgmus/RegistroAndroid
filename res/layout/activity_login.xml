@@ -24,9 +24,9 @@
                 android:id="@+id/ibHome"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
                 android:contentDescription="@string/home"
-                android:src="@drawable/goto_login"
-                android:background="@android:color/transparent" />
+                android:src="@drawable/goto_login" />
 
             <TextView
                 android:id="@+id/tvLoginTitle"
@@ -49,7 +49,6 @@
                 android:background="@color/colorListItem"
                 android:contentDescription="@string/showMenu"
                 android:src="@drawable/menu64" />
-
         </RelativeLayout>
 
         <TextView
@@ -65,7 +64,6 @@
             android:id="@+id/etLoginEmail"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tvLoginEmail"
             android:ems="10"
             android:hint="@string/emailHint"
             android:inputType="textEmailAddress"
@@ -87,7 +85,6 @@
             android:id="@+id/etLoginPasswd"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tvLoginPassword"
             android:ems="10"
             android:hint="@string/passwdHint"
             android:inputType="textPassword"
@@ -95,12 +92,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent" >
-            </LinearLayout>
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
             <TextView
                 android:id="@+id/textView1"
@@ -117,7 +110,6 @@
                 android:layout_height="wrap_content"
                 android:ems="15"
                 android:gravity="left"
-                android:paddingLeft="10sp"
                 android:text="@string/ruoloText"
                 android:textColor="@android:color/background_light"
                 android:textSize="18sp"
@@ -143,33 +135,39 @@
                 android:textStyle="bold" />
 
             <ImageButton
-                android:id="@+id/login_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:contentDescription="@string/loginButtonDescription"
-                android:src="@drawable/log_in"
-                android:text="@string/login_button"
-                android:textColor="@color/colorBlue"
-                android:textStyle="bold" />
-
-            <ImageButton
                 android:id="@+id/ibFillFields"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/fillFieldsDescription"
-                android:src="@drawable/fill48" />
+                android:src="@drawable/fill" />
+
+            <ImageButton
+                android:id="@+id/login_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/loginButtonDescription"
+                android:src="@drawable/exec"
+                android:text="@string/login_button"
+                android:textColor="@color/colorBlue"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
 
             <ImageButton
                 android:id="@+id/ibGotoRegister"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="top"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/gotoRegisterDescription"
-                android:src="@drawable/user_add" />
-        </LinearLayout>
+                android:src="@drawable/user_add96" />
+        </RelativeLayout>
     </LinearLayout>
 
 </RelativeLayout>

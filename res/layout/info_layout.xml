@@ -1,0 +1,26 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" 
+    android:id="@+id/toast_layout_root"
+    android:background="@color/colorBlack"
+    android:gravity="center">
+
+    <ImageView
+        android:contentDescription="@string/mysql"
+        android:id="@+id/ivToastConnect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/help32" />
+
+    <TextView
+        android:id="@+id/tvToastConnect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/connection_wait"
+        android:textColor="@color/colorOrange"
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
+</LinearLayout>

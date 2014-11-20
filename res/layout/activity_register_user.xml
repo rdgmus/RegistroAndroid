@@ -12,9 +12,10 @@
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="15dp"
         android:orientation="vertical" >
 
         <RelativeLayout
@@ -26,9 +27,9 @@
                 android:id="@+id/ibHome"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/user_add" 
+                android:background="@android:color/transparent"
                 android:contentDescription="@string/home"
-                android:background="@android:color/transparent"/>
+                android:src="@drawable/user_add" />
 
             <TextView
                 android:id="@+id/textView2"
@@ -51,7 +52,6 @@
                 android:background="@color/colorListItem"
                 android:contentDescription="@string/showMenu"
                 android:src="@drawable/menu64" />
-
         </RelativeLayout>
 
         <EditText
@@ -99,40 +99,46 @@
             android:textSize="18sp" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="right" >
-
-            <ImageButton
-                android:id="@+id/registra_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:src="@drawable/log_in"
-                android:textColor="@color/colorBlue"
-                android:textStyle="bold" 
-                 android:background="@android:color/transparent"
-                 android:contentDescription="Esegue l\'iscrizione al Registro Scolastico"/>
+            android:orientation="horizontal" >
 
             <ImageButton
                 android:id="@+id/pulisci_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:src="@drawable/clear_64"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/wipeOutDescription"
+                android:src="@drawable/edit_delete"
                 android:textColor="@color/colorBlue"
-                android:textStyle="bold" 
-                 android:background="@android:color/transparent"
-                 android:contentDescription="Cancella tutti i dati inseriti"/>
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/registra_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/registraDescription"
+                android:src="@drawable/exec"
+                android:textColor="@color/colorBlue"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
 
             <ImageButton
                 android:id="@+id/ibGotoLogin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/goto_login" 
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
                 android:background="@android:color/transparent"
-                 android:contentDescription="Vai alla pagina di Login"/>
-        </LinearLayout>
+                android:contentDescription="@string/gotoLoginDescription"
+                android:src="@drawable/goto_login96" />
+        </RelativeLayout>
     </LinearLayout>
 
 </RelativeLayout>

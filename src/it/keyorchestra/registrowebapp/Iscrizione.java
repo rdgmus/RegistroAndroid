@@ -4,11 +4,16 @@ import it.keyorchestra.registrowebapp.interfaces.ActivitiesCommonFunctions;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -118,13 +123,35 @@ public class Iscrizione extends Activity implements ActivitiesCommonFunctions {
 
 			@Override
 			public boolean onLongClick(View view) {
-				Toast.makeText(getApplicationContext(),
-						view.getContentDescription(), Toast.LENGTH_SHORT)
-						.show();
+				customToast(view.getContentDescription(), R.drawable.help32,
+						R.layout.info_layout);
 				return true;
 			}
 		});
 	}
 
-	
+	@Override
+	public boolean customToast(CharSequence charSequence, int iconId,
+			int layoutId) {
+		// TODO Auto-generated method stub
+		Resources res = getResources();
+		LayoutInflater inflater = getLayoutInflater();
+		View layout = inflater.inflate(layoutId,
+				(ViewGroup) findViewById(R.id.toast_layout_root));
+		TextView tvToastConnect = (TextView) layout
+				.findViewById(R.id.tvToastConnect);
+		tvToastConnect.setText(charSequence);
+
+		ImageView ivToastConnect = (ImageView) layout
+				.findViewById(R.id.ivToastConnect);
+		ivToastConnect.setImageDrawable(res.getDrawable(iconId));
+
+		Toast toast = new Toast(getApplicationContext());
+		toast.setGravity(Gravity.BOTTOM, 0, 0);
+		toast.setDuration(Toast.LENGTH_LONG);
+		toast.setView(layout);
+		toast.show();
+		return true;
+	}
+
 }

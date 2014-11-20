@@ -101,7 +101,7 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 		});
 
 		loginButton = (ImageButton) findViewById(R.id.login_button);
-		loginButton.setEnabled(false);
+		setLoginState(false);
 		registerToolTipFor(loginButton);
 		loginButton.setOnClickListener(new View.OnClickListener() {
 
@@ -232,6 +232,16 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 
 	}
 
+	private void setLoginState(boolean b) {
+		// TODO Auto-generated method stub
+		loginButton.setEnabled(b);
+		Resources res = getResources();
+		if (b) {
+			loginButton.setImageDrawable(res.getDrawable(R.drawable.exec));
+		} else
+			loginButton.setImageDrawable(res.getDrawable(R.drawable.pause));
+	}
+
 	private void setIconRuoloScelto(ImageButton bCambiaRuolo, String ruoloScelto) {
 		// TODO Auto-generated method stub
 		// SET ICON admin, professor, secretary, ata
@@ -266,13 +276,14 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 			if (value.equals("1")) {
 				loginMessage("Connessione con " + defaultDatabase
 						+ " stabilita! ip:" + ip);
-				loginButton.setEnabled(true);
+
+				setLoginState(true);
 			} else {
 				loginMessage("Fallita connessione al Database "
 						+ defaultDatabase + "!\n "
 						+ "Controlla i parametri...e i server MySQL & Apache");
 				openOptionsMenu();
-				loginButton.setEnabled(false);
+				setLoginState(false);
 				// SE LA CONNESSIONE FALLISCE RIMANDA ALLE PREFERENZE PER
 				// LA SCELTA DI UN'ALTRO DATABASE
 				// Thread timer = new Thread() {
@@ -298,6 +309,7 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 
 			}
 		}
+
 	}
 
 	private String getDefaultDatabaseFromPreferences() {
@@ -381,32 +393,14 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 	private void loginMessage(String msg) {
 		// TODO Auto-generated method stub
 		String defaultDatabase = getDefaultDatabaseFromPreferences();
-		Resources res = getResources();
-
-		LayoutInflater inflater = getLayoutInflater();
-		View layout = inflater.inflate(R.layout.toast_connect_layout,
-				(ViewGroup) findViewById(R.id.toast_layout_root));
-
-		TextView tvToastConnect = (TextView) layout
-				.findViewById(R.id.tvToastConnect);
-		tvToastConnect.setText(msg);
-
-		ImageView ivToastConnect = (ImageView) layout
-				.findViewById(R.id.ivToastConnect);
 		if (defaultDatabase.contentEquals("MySQL")) {
-			ivToastConnect.setImageDrawable(res
-					.getDrawable(R.drawable.logo_mysql));
+			customToast(msg, R.drawable.logo_mysql,
+					R.layout.toast_connect_layout);
 		}
 		if (defaultDatabase.contentEquals("PostgreSQL")) {
-			ivToastConnect.setImageDrawable(res
-					.getDrawable(R.drawable.logo_postgresql));
+			customToast(msg, R.drawable.logo_postgresql,
+					R.layout.toast_connect_layout);
 		}
-
-		Toast toast = new Toast(getApplicationContext());
-		toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-		toast.setDuration(Toast.LENGTH_LONG);
-		toast.setView(layout);
-		toast.show();
 	}
 
 	@Override
@@ -416,12 +410,37 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 
 			@Override
 			public boolean onLongClick(View view) {
-				Toast.makeText(getApplicationContext(),
-						view.getContentDescription(), Toast.LENGTH_SHORT)
-						.show();
+
+				customToast(view.getContentDescription(), R.drawable.help32,
+						R.layout.info_layout);
+
 				return true;
 			}
 		});
+	}
+
+	@Override
+	public boolean customToast(CharSequence charSequence, int iconId,
+			int layoutId) {
+		// TODO Auto-generated method stub
+		Resources res = getResources();
+		LayoutInflater inflater = getLayoutInflater();
+		View layout = inflater.inflate(layoutId,
+				(ViewGroup) findViewById(R.id.toast_layout_root));
+		TextView tvToastConnect = (TextView) layout
+				.findViewById(R.id.tvToastConnect);
+		tvToastConnect.setText(charSequence);
+
+		ImageView ivToastConnect = (ImageView) layout
+				.findViewById(R.id.ivToastConnect);
+		ivToastConnect.setImageDrawable(res.getDrawable(iconId));
+
+		Toast toast = new Toast(getApplicationContext());
+		toast.setGravity(Gravity.BOTTOM, 0, 0);
+		toast.setDuration(Toast.LENGTH_LONG);
+		toast.setView(layout);
+		toast.show();
+		return true;
 	}
 
 }

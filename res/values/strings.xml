@@ -31,10 +31,10 @@
     <string name="registerMessage">Esito Registrazione</string>
     <string name="vaiAlLogin">Vai al Login</string>
     <string name="title_activity_splash">Splash</string>
-    <string name="emailHint">Email utente</string>
-    <string name="passwdHint">Password utente</string>
-    <string name="nomeHint">Nome dell\'utente</string>
-    <string name="cognomeHint">Cognome dell\'utente</string>
+    <string name="emailHint">Email</string>
+    <string name="passwdHint">Password</string>
+    <string name="nomeHint">Nome</string>
+    <string name="cognomeHint">Cognome</string>
     <string name="repeatPasswdHint">Ripeti Password</string>
     <string name="author">di Roberto Della Grotta</string>
     <string name="authorEmail">keyorchestra2014@gmail.com</string>
@@ -94,5 +94,8 @@
     <string name="connection_fail">Connessione fallita!</string>
     <string name="connection_success">Connessione stabilita con il database!</string>
     <string android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/string1" name="gotoRegisterDescription">Vai alla pagina di Iscrizione</string>
+    <string android:layout_width="wrap_content" android:id="@+id/string1" android:layout_height="wrap_content" name="wipeOutDescription">Cancella tutti i dati inseriti</string>
+    <string android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/string1" name="registraDescription">Esegue l\'iscrizione al Registro Scolastico</string>
+    <string android:layout_width="wrap_content" android:id="@+id/string1" android:layout_height="wrap_content" name="gotoLoginDescription">Vai alla pagina di Login</string>
     
 </resources>

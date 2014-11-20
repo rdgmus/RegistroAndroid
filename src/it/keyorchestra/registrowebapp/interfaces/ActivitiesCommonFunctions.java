@@ -9,4 +9,8 @@ public interface ActivitiesCommonFunctions {
 	 * @param ib
 	 */
 	public void registerToolTipFor(ImageButton ib);
+	
+	public boolean customToast(CharSequence charSequence, int iconId, int layoutId);
+
+
 }
