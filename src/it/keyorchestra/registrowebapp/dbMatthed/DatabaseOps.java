@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.binary.Base64;
@@ -262,8 +263,9 @@ public class DatabaseOps implements DatabasesInterface {
 			}
 		}
 	}
-	
-	public void UnlockUser(Context applicationContext, String databaseIp, Long id_utente) {
+
+	public void UnlockUser(Context applicationContext, String databaseIp,
+			Long id_utente) {
 		// TODO Auto-generated method stub
 		String url = getUrl(applicationContext);
 
@@ -279,9 +281,7 @@ public class DatabaseOps implements DatabasesInterface {
 						+ id_utente;
 				int result = st.executeUpdate(sql);
 				while (result == 1) {
-					Toast.makeText(
-							applicationContext,
-							"Utente sbloccato!",
+					Toast.makeText(applicationContext, "Utente sbloccato!",
 							Toast.LENGTH_LONG).show();
 				}
 				st.close();
@@ -290,6 +290,63 @@ public class DatabaseOps implements DatabasesInterface {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public boolean RegisterNewUser(Context applicationContext, String nome,
+			String cognome, String email, String passwd, String ip,
+			String phpencoder) {
+		// TODO Auto-generated method stub
+		boolean hasBeenRegistered = false;
+
+		String url = getUrl(applicationContext);
+
+		Connection conn;
+		try {
+			DriverManager.setLoginTimeout(15);
+			conn = DriverManager.getConnection(url);
+			Statement st = conn.createStatement();
+			String sql = null;
+
+			String encoded = new MySqlAndroid()
+					.getEncodedStringFromUri(applicationContext, "http://" + ip
+							+ "/" + phpencoder
+							+ "?actionEncode=encodePassword&password=" + passwd);
+
+			Toast.makeText(applicationContext, "Password encoded:" + encoded,
+					Toast.LENGTH_LONG).show();
+
+			sql = String
+					.format("INSERT INTO utenti_scuola(cognome, nome, email, password, user_is_admin, has_to_change_password, is_locked) "
+							+ " VALUES ('%s','%s','%s','%s',0,1,1)",
+							cognome.toUpperCase(Locale.getDefault()), 
+							nome.toUpperCase(Locale.getDefault()), email,
+							encoded);
+			int rs = st.executeUpdate(sql);
+			if (rs == 1) {
+
+				Toast.makeText(
+						applicationContext,
+						"E' stato registrato un nuovo account per:"
+								+ nome
+								+ " "
+								+ cognome
+								+ "!\n"
+								+ "Non ha ancora alcun ruolo accreditato !\n"
+								+ "Riceverà un email all'indirizzo: "
+								+ email+"\n"
+								+ "per la conferma dell'iscrizione,\n"
+								+ "e quando un ADMIN effettuerà lo sblocco\n"
+								+ "del suo account fornendole un Ruolo.\n"
+								+ "Grazie della sua iscrizione!",
+						Toast.LENGTH_LONG).show();
+				hasBeenRegistered = true;
+			}
+			st.close();
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return hasBeenRegistered;
 	}
 
 }

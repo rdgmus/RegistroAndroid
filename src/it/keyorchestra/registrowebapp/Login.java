@@ -39,7 +39,7 @@ import android.widget.Toast;
 public class Login extends Activity implements ActivitiesCommonFunctions {
 
 	ImageButton loginButton, bCambiaRuolo, ibFillFields, ibGotoRegister,
-			ibHome,pulisciButton;
+			ibHome, pulisciButton;
 	TextView etRuoloScelto;
 	Thread myThread = null;
 	ImageView imShowMenu;
@@ -103,7 +103,7 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 				.getDefaultSharedPreferences(getBaseContext());
 
 		etLoginEmail = (EditText) findViewById(R.id.etLoginEmail);
-		
+
 		etLoginPasswd = (EditText) findViewById(R.id.etLoginPasswd);
 
 		imShowMenu = (ImageView) findViewById(R.id.imShowMenu);
@@ -127,16 +127,16 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				if(!FieldsValidator.Is_Valid_Email(etLoginEmail)){
+				if (!FieldsValidator.Is_Valid_Email(etLoginEmail)) {
 					etLoginEmail.requestFocus();
 					return;
 				}
 
-				if(!FieldsValidator.Is_Valid_Password(etLoginPasswd)){
+				if (!FieldsValidator.Is_Valid_Password(etLoginPasswd)) {
 					etLoginPasswd.requestFocus();
 					return;
 				}
-				
+
 				DatabaseOps databaseOps = new DatabaseOps();
 				// Controlla se le credenziali esistono
 				String phpencoder = getPrefs.getString("phpencoder", null);
@@ -165,6 +165,7 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 						Toast.makeText(
 								getApplicationContext(),
 								"L'utente ha già effettuato il login da un altro IP!\n"
+										+ "Oppure non ha alcun ruolo accreditato.\n"
 										+ "Permesso di accesso NEGATO!",
 								Toast.LENGTH_LONG).show();
 
@@ -339,12 +340,14 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 
 	}
 
-	private String getDefaultDatabaseFromPreferences() {
+	@Override
+	public String getDefaultDatabaseFromPreferences() {
 		String defaultDatabase = getPrefs.getString("databaseList", "1");
 		return defaultDatabase;
 	}
 
-	private String getDatabaseIpFromPreferences() {
+	@Override
+	public String getDatabaseIpFromPreferences() {
 		String defaultDatabase = getDefaultDatabaseFromPreferences();
 
 		String ip = null;

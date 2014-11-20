@@ -1,10 +1,13 @@
 package it.keyorchestra.registrowebapp;
 
+import it.keyorchestra.registrowebapp.dbMatthed.DatabaseOps;
 import it.keyorchestra.registrowebapp.interfaces.ActivitiesCommonFunctions;
 import it.keyorchestra.registrowebapp.scuola.util.FieldsValidator;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -22,11 +25,15 @@ public class Iscrizione extends Activity implements ActivitiesCommonFunctions {
 
 	ImageButton registraButton, pulisciButton, ibGotoLogin, ibHome;
 	EditText nome, cognome, email, passwd, repeatPasswd;
+	private SharedPreferences getPrefs;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_register_user);
+
+		getPrefs = PreferenceManager
+				.getDefaultSharedPreferences(getBaseContext());
 
 		ibHome = (ImageButton) findViewById(R.id.ibHome);
 		ibHome.setOnClickListener(new View.OnClickListener() {
@@ -74,39 +81,53 @@ public class Iscrizione extends Activity implements ActivitiesCommonFunctions {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				if(!FieldsValidator.Is_Valid_Person_Name(nome)){
+				if (!FieldsValidator.Is_Valid_Person_Name(nome)) {
 					nome.requestFocus();
 					return;
 				}
-				
-				if(!FieldsValidator.Is_Valid_Person_Name(cognome)){
+
+				if (!FieldsValidator.Is_Valid_Person_Name(cognome)) {
 					cognome.requestFocus();
 					return;
 				}
-				
-				if(!FieldsValidator.Is_Valid_Email(email)){
+
+				if (!FieldsValidator.Is_Valid_Email(email)) {
 					email.requestFocus();
 					return;
 				}
 
-				if(!FieldsValidator.Is_Valid_Password(passwd)){
+				if (!FieldsValidator.Is_Valid_Password(passwd)) {
 					passwd.requestFocus();
 					return;
 				}
 
-				if(!FieldsValidator.Is_Valid_RetypedPassword(repeatPasswd,passwd.getText())){
+				if (!FieldsValidator.Is_Valid_RetypedPassword(repeatPasswd,
+						passwd.getText())) {
 					repeatPasswd.requestFocus();
 					return;
 				}
 
-				Boolean check = false;
-				// Controlla se le due password sono uguali
+				// Salva dati nel database con password criptata
 
-				// Check formati
+				DatabaseOps databaseOps = new DatabaseOps();
+				// Controlla se le credenziali esistono
+				String phpencoder = getPrefs.getString("phpencoder", null);
+				if (phpencoder == null) {
+					Toast.makeText(
+							getApplicationContext(),
+							"Login fallito! File dell'encoder php non valorizzato in menù preferenze?",
+							Toast.LENGTH_LONG).show();
+					return;
+				}
 
-				if (check) {
-					// Salva dati nel database con password criptata
+				// Controlla le credenziali dell'utente
+				boolean hasBeenRegistered = databaseOps.RegisterNewUser(
+						getApplicationContext(), nome.getText().toString(),
+						cognome.getText().toString(), email.getText()
+								.toString(), passwd.getText().toString(),
+						getDatabaseIpFromPreferences(), phpencoder);
 
+				if (hasBeenRegistered) {
 					// Va alla pagina di login
 					Intent loginUserActivity = new Intent(
 							"android.intent.action.LOGIN");
@@ -138,6 +159,26 @@ public class Iscrizione extends Activity implements ActivitiesCommonFunctions {
 			}
 
 		});
+	}
+
+	@Override
+	public String getDefaultDatabaseFromPreferences() {
+		String defaultDatabase = getPrefs.getString("databaseList", "1");
+		return defaultDatabase;
+	}
+
+	@Override
+	public String getDatabaseIpFromPreferences() {
+		String defaultDatabase = getDefaultDatabaseFromPreferences();
+
+		String ip = null;
+
+		if (defaultDatabase.contentEquals("MySQL")) {
+			ip = getPrefs.getString("ipMySQL", "");
+		} else if (defaultDatabase.contentEquals("PostgreSQL")) {
+			ip = getPrefs.getString("ipPostgreSQL", "");
+		}
+		return ip;
 	}
 
 	@Override
