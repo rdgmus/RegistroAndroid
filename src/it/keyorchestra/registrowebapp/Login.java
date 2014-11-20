@@ -3,6 +3,7 @@ package it.keyorchestra.registrowebapp;
 import it.keyorchestra.registrowebapp.dbMatthed.DatabaseOps;
 import it.keyorchestra.registrowebapp.interfaces.ActivitiesCommonFunctions;
 import it.keyorchestra.registrowebapp.mysqlandroid.MySqlAndroid;
+import it.keyorchestra.registrowebapp.scuola.util.FieldsValidator;
 
 import java.util.ArrayList;
 
@@ -19,11 +20,13 @@ import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.view.ActionMode;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -36,7 +39,7 @@ import android.widget.Toast;
 public class Login extends Activity implements ActivitiesCommonFunctions {
 
 	ImageButton loginButton, bCambiaRuolo, ibFillFields, ibGotoRegister,
-			ibHome;
+			ibHome,pulisciButton;
 	TextView etRuoloScelto;
 	Thread myThread = null;
 	ImageView imShowMenu;
@@ -48,6 +51,19 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
+
+		pulisciButton = (ImageButton) findViewById(R.id.pulisci_campi);
+		registerToolTipFor(pulisciButton);
+		pulisciButton.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				etLoginEmail.setText("");
+				etLoginPasswd.setText("");
+			}
+
+		});
 
 		ibHome = (ImageButton) findViewById(R.id.ibHome);
 		ibHome.setOnClickListener(new View.OnClickListener() {
@@ -85,6 +101,7 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 				.getDefaultSharedPreferences(getBaseContext());
 
 		etLoginEmail = (EditText) findViewById(R.id.etLoginEmail);
+		
 		etLoginPasswd = (EditText) findViewById(R.id.etLoginPasswd);
 
 		imShowMenu = (ImageView) findViewById(R.id.imShowMenu);
@@ -108,7 +125,14 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				if(!FieldsValidator.Is_Valid_Email(etLoginEmail)){
+					return;
+				}
 
+				if(!FieldsValidator.Is_Valid_Password(etLoginPasswd)){
+					return;
+				}
+				
 				DatabaseOps databaseOps = new DatabaseOps();
 				// Controlla se le credenziali esistono
 				String phpencoder = getPrefs.getString("phpencoder", null);
@@ -262,7 +286,6 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 	private class FetchSQL extends AsyncTask<Void, Void, String> {
 		@Override
 		protected String doInBackground(Void... params) {
-
 			String retval = new DatabaseOps().FetchConnection(getBaseContext());
 			return retval;
 		}
@@ -376,6 +399,7 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 
 	private void testConnectionToDatabase(Context context) {
 		loginMessage("Verifica della connessione al database!");
+		setLoginState(false);
 
 		String defaultDatabase = getPrefs.getString("databaseList", "1");
 

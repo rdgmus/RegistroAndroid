@@ -104,17 +104,6 @@
             android:orientation="horizontal" >
 
             <ImageButton
-                android:id="@+id/pulisci_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:background="@android:color/transparent"
-                android:contentDescription="@string/wipeOutDescription"
-                android:src="@drawable/edit_delete"
-                android:textColor="@color/colorBlue"
-                android:textStyle="bold" />
-
-            <ImageButton
                 android:id="@+id/registra_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -138,6 +127,19 @@
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/gotoLoginDescription"
                 android:src="@drawable/goto_login96" />
+
+            <ImageButton
+                android:id="@+id/pulisci_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/wipeOutDescription"
+                android:src="@drawable/cestino128"
+                android:textColor="@color/colorBlue"
+                android:textStyle="bold" />
+
         </RelativeLayout>
     </LinearLayout>
 

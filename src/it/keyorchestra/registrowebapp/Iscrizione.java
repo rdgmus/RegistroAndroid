@@ -1,6 +1,7 @@
 package it.keyorchestra.registrowebapp;
 
 import it.keyorchestra.registrowebapp.interfaces.ActivitiesCommonFunctions;
+import it.keyorchestra.registrowebapp.scuola.util.FieldsValidator;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -73,6 +74,26 @@ public class Iscrizione extends Activity implements ActivitiesCommonFunctions {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				if(!FieldsValidator.Is_Valid_Person_Name(nome)){
+					return;
+				}
+				
+				if(!FieldsValidator.Is_Valid_Person_Name(cognome)){
+					return;
+				}
+				
+				if(!FieldsValidator.Is_Valid_Email(email)){
+					return;
+				}
+
+				if(!FieldsValidator.Is_Valid_Password(passwd)){
+					return;
+				}
+
+				if(!FieldsValidator.Is_Valid_RetypedPassword(repeatPasswd,passwd.getText())){
+					return;
+				}
+
 				Boolean check = false;
 				// Controlla se le due password sono uguali
 

@@ -167,6 +167,19 @@
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/gotoRegisterDescription"
                 android:src="@drawable/user_add96" />
+
+            <ImageButton
+                android:id="@+id/pulisci_campi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/wipeOutDescription"
+                android:src="@drawable/cestino128"
+                android:textColor="@color/colorBlue"
+                android:textStyle="bold" />
+
         </RelativeLayout>
     </LinearLayout>
 
