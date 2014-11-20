@@ -61,6 +61,8 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 				// TODO Auto-generated method stub
 				etLoginEmail.setText("");
 				etLoginPasswd.setText("");
+				etLoginEmail.setError(null);
+				etLoginPasswd.setError(null);
 			}
 
 		});
@@ -126,10 +128,12 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				if(!FieldsValidator.Is_Valid_Email(etLoginEmail)){
+					etLoginEmail.requestFocus();
 					return;
 				}
 
 				if(!FieldsValidator.Is_Valid_Password(etLoginPasswd)){
+					etLoginPasswd.requestFocus();
 					return;
 				}
 				

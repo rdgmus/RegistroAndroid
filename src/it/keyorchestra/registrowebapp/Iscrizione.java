@@ -75,22 +75,27 @@ public class Iscrizione extends Activity implements ActivitiesCommonFunctions {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				if(!FieldsValidator.Is_Valid_Person_Name(nome)){
+					nome.requestFocus();
 					return;
 				}
 				
 				if(!FieldsValidator.Is_Valid_Person_Name(cognome)){
+					cognome.requestFocus();
 					return;
 				}
 				
 				if(!FieldsValidator.Is_Valid_Email(email)){
+					email.requestFocus();
 					return;
 				}
 
 				if(!FieldsValidator.Is_Valid_Password(passwd)){
+					passwd.requestFocus();
 					return;
 				}
 
 				if(!FieldsValidator.Is_Valid_RetypedPassword(repeatPasswd,passwd.getText())){
+					repeatPasswd.requestFocus();
 					return;
 				}
 
@@ -125,6 +130,11 @@ public class Iscrizione extends Activity implements ActivitiesCommonFunctions {
 				email.setText("");
 				passwd.setText("");
 				repeatPasswd.setText("");
+				nome.setError(null);
+				cognome.setError(null);
+				email.setError(null);
+				passwd.setError(null);
+				repeatPasswd.setError(null);
 			}
 
 		});
