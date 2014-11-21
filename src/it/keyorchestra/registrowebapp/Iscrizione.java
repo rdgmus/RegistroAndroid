@@ -137,25 +137,7 @@ public class Iscrizione extends Activity implements ActivitiesCommonFunctions {
 						getDatabaseIpFromPreferences(), phpencoder);
 
 				if (hasBeenRegistered) {
-					/**
-					 * Prepare Email
-					 */
-					Toast.makeText(getApplicationContext(),
-							"Invio email per richiesta conferma all'utente!",
-							Toast.LENGTH_LONG).show();
 
-					String emailaddress[] = { email.getText().toString() };
-					String message = "Lei ha effettuato la registrazione al Registro Scolastico Android!\n"
-							+ "Qui trova un link per rispondere e confermare la sua email.";
-					String subject = "Conferma email per iscrizione al Registro Scolastico";
-
-					/**
-					 * Invia email TODO: rivedere modalità di invio
-					 */
-					// databaseOps.SendEmailToUser(Iscrizione.this,
-					// emailaddress,
-					// message, subject);
-					databaseOps.GMailSenderEmail(Iscrizione.this, emailaddress, subject, message);
 					/**
 					 * Va alla pagina di login
 					 */

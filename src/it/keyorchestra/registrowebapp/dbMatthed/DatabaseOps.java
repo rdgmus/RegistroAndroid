@@ -100,12 +100,12 @@ public class DatabaseOps implements DatabasesInterface {
 		return retval;
 	}
 
-	public boolean AuthenticateUser(Context context, String sEmail,
+	public boolean AuthenticateUser(Context applicationContext, String sEmail,
 			String sPasswd, String ip, String phpencoder) {
 
 		boolean isAuthenticated = false;
 
-		String url = getUrl(context);
+		String url = getUrl(applicationContext);
 
 		Connection conn;
 		try {
@@ -114,10 +114,7 @@ public class DatabaseOps implements DatabasesInterface {
 			Statement st = conn.createStatement();
 			String sql = null;
 
-			String encoded = new MySqlAndroid().getEncodedStringFromUri(
-					context, "http://" + ip + "/" + phpencoder
-							+ "?actionEncode=encodePassword&password="
-							+ sPasswd);
+			String encoded = encodePassword( applicationContext,  ip,  phpencoder,  sPasswd);
 
 			// Toast.makeText(context, "Password encoded:" + encoded,
 			// Toast.LENGTH_LONG).show();
@@ -140,10 +137,10 @@ public class DatabaseOps implements DatabasesInterface {
 				// Valorizzare le preferenze con le informazioni estratte
 				salvaUtenteNellePreferenze(id_utente, cognome, nome, email,
 						user_is_admin, has_to_change_password, is_locked,
-						context);
+						applicationContext);
 
 				Toast.makeText(
-						context,
+						applicationContext,
 						"Utente riconosciuto: [" + id_utente + "] " + cognome
 								+ " " + nome, Toast.LENGTH_LONG).show();
 				isAuthenticated = true;
@@ -313,29 +310,36 @@ public class DatabaseOps implements DatabasesInterface {
 			Statement st = conn.createStatement();
 			String sql = null;
 
-			String encoded = new MySqlAndroid()
-					.getEncodedStringFromUri(applicationContext, "http://" + ip
-							+ "/" + phpencoder
-							+ "?actionEncode=encodePassword&password=" + passwd);
+			//Encode password
+			String encoded = encodePassword(applicationContext,ip,phpencoder,passwd);
 
 			Toast.makeText(applicationContext, "Password encoded:" + encoded,
 					Toast.LENGTH_LONG).show();
-
+			
+			//Generate HASH per conferma email
+			String hash = generateHash(applicationContext, ip, phpencoder);
+			Toast.makeText(applicationContext, "Hash generata:" + hash,
+					Toast.LENGTH_LONG).show();
+			//SQL
 			sql = String
-					.format("INSERT INTO utenti_scuola(cognome, nome, email, password, user_is_admin, has_to_change_password, is_locked) "
-							+ " VALUES ('%s','%s','%s','%s',0,0,1)",
+					.format("INSERT INTO utenti_scuola(cognome, nome, email, password, "
+							+ "hash, register_date, user_is_admin, has_to_change_password, is_locked) "
+							+ " VALUES ('%s','%s','%s','%s','%s',NOW(),0,0,1)",
 							cognome.toUpperCase(Locale.getDefault()),
 							nome.toUpperCase(Locale.getDefault()), email,
-							encoded);
+							encoded, hash);
 			int rs = st.executeUpdate(sql);
 			if (rs == 1) {
-
+				
+				sendRequestConfirmEmail(applicationContext, cognome.toUpperCase(Locale.getDefault()), 
+						nome.toUpperCase(Locale.getDefault()), email, hash);
+				
 				Toast.makeText(
 						applicationContext,
-						"E' stato registrato un nuovo account per:" + nome
-								+ " " + cognome + "!\n"
+						"E' stato registrato un nuovo account per:" + nome.toUpperCase(Locale.getDefault())
+								+ " " + cognome.toUpperCase(Locale.getDefault()) + "!\n"
 								+ "Non ha ancora alcun ruolo accreditato !\n"
-								+ "Riceverà un email all'indirizzo: " + email
+								+ "Riceverà un email all'indirizzo Email: " + email
 								+ "\n" + "per la conferma dell'iscrizione,\n"
 								+ "e quando un ADMIN effettuerà lo sblocco\n"
 								+ "del suo account fornendole un Ruolo.\n"
@@ -351,10 +355,59 @@ public class DatabaseOps implements DatabasesInterface {
 		return hasBeenRegistered;
 	}
 
+	private void sendRequestConfirmEmail(Context applicationContext, 
+			String cognome, String nome, String email, String hash) {
+		// TODO Auto-generated method stub
+		/**
+		 * Prepare Email
+		 */
+		Toast.makeText(applicationContext,
+				"Invio email per richiesta conferma all'utente!",
+				Toast.LENGTH_LONG).show();
+
+		String emailaddress[] = { email };
+		String message = "<h2>Lei ha effettuato la registrazione al Registro Scolastico Android!\n"
+				+ "a nome di: "
+				+ cognome
+				+ " "
+				+ nome
+				+ "\n"
+				+ "Qui trova un link per rispondere e confermare la sua email.</h2>";
+		String subject = "<h1>Conferma email per iscrizione al Registro Scolastico</h1>";
+
+		/**
+		 * Invia email TODO: rivedere modalità di invio
+		 */
+		// databaseOps.SendEmailToUser(Iscrizione.this,
+		// emailaddress,
+		// message, subject);
+		GMailSenderEmail(applicationContext, emailaddress,
+				subject, message);
+	}
+
+	private String generateHash(Context applicationContext, String ip, String phpencoder) {
+		// TODO Auto-generated method stub
+		// Genera hash tramite php
+		String hash = new MySqlAndroid().getEncodedStringFromUri(applicationContext,
+				"http://" + ip + "/" + phpencoder
+						+ "?actionEncode=generateHash");
+		return hash;
+	}
+
+	private String encodePassword(Context applicationContext, String ip, String phpencoder, String passwd) {
+		String encoded = new MySqlAndroid()
+		.getEncodedStringFromUri(applicationContext, "http://" + ip
+				+ "/" + phpencoder
+				+ "?actionEncode=encodePassword&password=" + passwd);
+
+		return encoded;
+
+	}
+
 	/**
-	 * Invia email all'utente aprendo l'attività android.email
-	 * in modo che l'utente possa cambiare i parametri (subject, message, etc..)
-	 * della email e poi inviarla cliccando aul bottone Invia Email in alto a destra.
+	 * Invia email all'utente aprendo l'attività android.email in modo che
+	 * l'utente possa cambiare i parametri (subject, message, etc..) della email
+	 * e poi inviarla cliccando aul bottone Invia Email in alto a destra.
 	 * 
 	 * @param callingActivity
 	 * @param emailaddress
@@ -362,8 +415,8 @@ public class DatabaseOps implements DatabasesInterface {
 	 * @param subject
 	 * @return
 	 */
-	public void AndroidEmail(Activity callingActivity,
-			String emailaddress[], String message, String subject) {
+	public void AndroidEmail(Activity callingActivity, String emailaddress[],
+			String message, String subject) {
 		// TODO Auto-generated method stub
 		Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
 		emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, emailaddress);
@@ -390,15 +443,15 @@ public class DatabaseOps implements DatabasesInterface {
 		}
 	}
 
-	public void GMailSenderEmail(Context context, String emailaddress[], String subject, String body) {
+	public void GMailSenderEmail(Context context, String emailaddress[],
+			String subject, String body) {
 		// TODO Auto-generated method stub
 		GMailSender mailsender = new GMailSender("keyorchestra2014@gmail.com",
 				"diavgek@");
 
 		mailsender.set_to(emailaddress);
 		mailsender.set_from("keyorchestra2014@gmail.com");
-		mailsender
-				.set_subject(subject);
+		mailsender.set_subject(subject);
 		mailsender.setBody(body);
 
 		try {
@@ -412,9 +465,8 @@ public class DatabaseOps implements DatabasesInterface {
 						Toast.LENGTH_LONG).show();
 			}
 		} catch (Exception e) {
-			Toast.makeText(context,
-					"Could not send email:" + e.getMessage(), Toast.LENGTH_LONG)
-					.show();
+			Toast.makeText(context, "Could not send email:" + e.getMessage(),
+					Toast.LENGTH_LONG).show();
 		}
 	}
 }
