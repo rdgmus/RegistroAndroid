@@ -1,7 +1,9 @@
 package it.keyorchestra.registrowebapp.dbMatthed;
 
+import it.keyorchestra.registrowebapp.Iscrizione;
 import it.keyorchestra.registrowebapp.interfaces.DatabasesInterface;
 import it.keyorchestra.registrowebapp.mysqlandroid.MySqlAndroid;
+import it.keyorchestra.registrowebapp.scuola.util.GMailSender;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,14 +11,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
-import org.apache.commons.codec.EncoderException;
-import org.apache.commons.codec.binary.Base64;
-
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
 
@@ -317,8 +323,8 @@ public class DatabaseOps implements DatabasesInterface {
 
 			sql = String
 					.format("INSERT INTO utenti_scuola(cognome, nome, email, password, user_is_admin, has_to_change_password, is_locked) "
-							+ " VALUES ('%s','%s','%s','%s',0,1,1)",
-							cognome.toUpperCase(Locale.getDefault()), 
+							+ " VALUES ('%s','%s','%s','%s',0,0,1)",
+							cognome.toUpperCase(Locale.getDefault()),
 							nome.toUpperCase(Locale.getDefault()), email,
 							encoded);
 			int rs = st.executeUpdate(sql);
@@ -326,15 +332,11 @@ public class DatabaseOps implements DatabasesInterface {
 
 				Toast.makeText(
 						applicationContext,
-						"E' stato registrato un nuovo account per:"
-								+ nome
-								+ " "
-								+ cognome
-								+ "!\n"
+						"E' stato registrato un nuovo account per:" + nome
+								+ " " + cognome + "!\n"
 								+ "Non ha ancora alcun ruolo accreditato !\n"
-								+ "Riceverà un email all'indirizzo: "
-								+ email+"\n"
-								+ "per la conferma dell'iscrizione,\n"
+								+ "Riceverà un email all'indirizzo: " + email
+								+ "\n" + "per la conferma dell'iscrizione,\n"
 								+ "e quando un ADMIN effettuerà lo sblocco\n"
 								+ "del suo account fornendole un Ruolo.\n"
 								+ "Grazie della sua iscrizione!",
@@ -349,4 +351,70 @@ public class DatabaseOps implements DatabasesInterface {
 		return hasBeenRegistered;
 	}
 
+	/**
+	 * Invia email all'utente aprendo l'attività android.email
+	 * in modo che l'utente possa cambiare i parametri (subject, message, etc..)
+	 * della email e poi inviarla cliccando aul bottone Invia Email in alto a destra.
+	 * 
+	 * @param callingActivity
+	 * @param emailaddress
+	 * @param message
+	 * @param subject
+	 * @return
+	 */
+	public void AndroidEmail(Activity callingActivity,
+			String emailaddress[], String message, String subject) {
+		// TODO Auto-generated method stub
+		Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+		emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, emailaddress);
+		emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, subject);
+		emailIntent.setType("html/text");
+		emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, message);
+		// callingActivity.startActivity(emailIntent);
+		PackageManager pm = callingActivity.getBaseContext()
+				.getPackageManager();
+		List<ResolveInfo> activityList = pm.queryIntentActivities(emailIntent,
+				0);
+		for (final ResolveInfo app : activityList) {
+			if ((app.activityInfo.name).contains("android.email")) {
+				final ActivityInfo activity = app.activityInfo;
+				final ComponentName name = new ComponentName(
+						activity.applicationInfo.packageName, activity.name);
+				emailIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+				emailIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+						| Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+				emailIntent.setComponent(name);
+				callingActivity.getBaseContext().startActivity(emailIntent);
+				break;
+			}
+		}
+	}
+
+	public void GMailSenderEmail(Context context, String emailaddress[], String subject, String body) {
+		// TODO Auto-generated method stub
+		GMailSender mailsender = new GMailSender("keyorchestra2014@gmail.com",
+				"diavgek@");
+
+		mailsender.set_to(emailaddress);
+		mailsender.set_from("keyorchestra2014@gmail.com");
+		mailsender
+				.set_subject(subject);
+		mailsender.setBody(body);
+
+		try {
+			// mailsender.addAttachment("/sdcard/filelocation");
+
+			if (mailsender.send()) {
+				Toast.makeText(context, "Email was sent successfully.",
+						Toast.LENGTH_LONG).show();
+			} else {
+				Toast.makeText(context, "Email was not sent.",
+						Toast.LENGTH_LONG).show();
+			}
+		} catch (Exception e) {
+			Toast.makeText(context,
+					"Could not send email:" + e.getMessage(), Toast.LENGTH_LONG)
+					.show();
+		}
+	}
 }

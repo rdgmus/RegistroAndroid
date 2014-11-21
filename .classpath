@@ -12,5 +12,8 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/RegistroAndroid/javadoc/commons-codec-1.8-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="libs/backgroundEmail/activation.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/backgroundEmail/additionnal.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/backgroundEmail/mail.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

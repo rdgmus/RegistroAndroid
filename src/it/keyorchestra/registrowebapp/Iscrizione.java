@@ -3,9 +3,11 @@ package it.keyorchestra.registrowebapp;
 import it.keyorchestra.registrowebapp.dbMatthed.DatabaseOps;
 import it.keyorchestra.registrowebapp.interfaces.ActivitiesCommonFunctions;
 import it.keyorchestra.registrowebapp.scuola.util.FieldsValidator;
+import it.keyorchestra.registrowebapp.scuola.util.GMailSender;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -14,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -30,6 +33,7 @@ public class Iscrizione extends Activity implements ActivitiesCommonFunctions {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_register_user);
 
 		getPrefs = PreferenceManager
@@ -121,6 +125,11 @@ public class Iscrizione extends Activity implements ActivitiesCommonFunctions {
 				}
 
 				// Controlla le credenziali dell'utente
+				Toast.makeText(
+						getApplicationContext(),
+						"Registrazione Nuovo Utente del Registro Scolastico in corso...",
+						Toast.LENGTH_LONG).show();
+
 				boolean hasBeenRegistered = databaseOps.RegisterNewUser(
 						getApplicationContext(), nome.getText().toString(),
 						cognome.getText().toString(), email.getText()
@@ -128,7 +137,28 @@ public class Iscrizione extends Activity implements ActivitiesCommonFunctions {
 						getDatabaseIpFromPreferences(), phpencoder);
 
 				if (hasBeenRegistered) {
-					// Va alla pagina di login
+					/**
+					 * Prepare Email
+					 */
+					Toast.makeText(getApplicationContext(),
+							"Invio email per richiesta conferma all'utente!",
+							Toast.LENGTH_LONG).show();
+
+					String emailaddress[] = { email.getText().toString() };
+					String message = "Lei ha effettuato la registrazione al Registro Scolastico Android!\n"
+							+ "Qui trova un link per rispondere e confermare la sua email.";
+					String subject = "Conferma email per iscrizione al Registro Scolastico";
+
+					/**
+					 * Invia email TODO: rivedere modalità di invio
+					 */
+					// databaseOps.SendEmailToUser(Iscrizione.this,
+					// emailaddress,
+					// message, subject);
+					databaseOps.GMailSenderEmail(Iscrizione.this, emailaddress, subject, message);
+					/**
+					 * Va alla pagina di login
+					 */
 					Intent loginUserActivity = new Intent(
 							"android.intent.action.LOGIN");
 					startActivity(loginUserActivity);
@@ -138,6 +168,7 @@ public class Iscrizione extends Activity implements ActivitiesCommonFunctions {
 							Toast.LENGTH_LONG).show();
 				}
 			}
+
 		});
 
 		registerToolTipFor(pulisciButton);
