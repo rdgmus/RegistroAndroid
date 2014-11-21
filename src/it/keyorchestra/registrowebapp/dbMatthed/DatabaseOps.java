@@ -1,9 +1,9 @@
 package it.keyorchestra.registrowebapp.dbMatthed;
 
-import it.keyorchestra.registrowebapp.Iscrizione;
 import it.keyorchestra.registrowebapp.interfaces.DatabasesInterface;
 import it.keyorchestra.registrowebapp.mysqlandroid.MySqlAndroid;
 import it.keyorchestra.registrowebapp.scuola.util.GMailSender;
+import it.keyorchestra.registrowebapp.scuola.util.SimpleMail2;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -114,7 +114,8 @@ public class DatabaseOps implements DatabasesInterface {
 			Statement st = conn.createStatement();
 			String sql = null;
 
-			String encoded = encodePassword( applicationContext,  ip,  phpencoder,  sPasswd);
+			String encoded = encodePassword(applicationContext, ip, phpencoder,
+					sPasswd);
 
 			// Toast.makeText(context, "Password encoded:" + encoded,
 			// Toast.LENGTH_LONG).show();
@@ -310,17 +311,18 @@ public class DatabaseOps implements DatabasesInterface {
 			Statement st = conn.createStatement();
 			String sql = null;
 
-			//Encode password
-			String encoded = encodePassword(applicationContext,ip,phpencoder,passwd);
+			// Encode password
+			String encoded = encodePassword(applicationContext, ip, phpencoder,
+					passwd);
 
 			Toast.makeText(applicationContext, "Password encoded:" + encoded,
 					Toast.LENGTH_LONG).show();
-			
-			//Generate HASH per conferma email
+
+			// Generate HASH per conferma email
 			String hash = generateHash(applicationContext, ip, phpencoder);
 			Toast.makeText(applicationContext, "Hash generata:" + hash,
 					Toast.LENGTH_LONG).show();
-			//SQL
+			// SQL
 			sql = String
 					.format("INSERT INTO utenti_scuola(cognome, nome, email, password, "
 							+ "hash, register_date, user_is_admin, has_to_change_password, is_locked) "
@@ -330,17 +332,21 @@ public class DatabaseOps implements DatabasesInterface {
 							encoded, hash);
 			int rs = st.executeUpdate(sql);
 			if (rs == 1) {
-				
-				sendRequestConfirmEmail(applicationContext, cognome.toUpperCase(Locale.getDefault()), 
+
+				sendRequestConfirmEmail(applicationContext, ip, phpencoder,
+						cognome.toUpperCase(Locale.getDefault()),
 						nome.toUpperCase(Locale.getDefault()), email, hash);
-				
+
 				Toast.makeText(
 						applicationContext,
-						"E' stato registrato un nuovo account per:" + nome.toUpperCase(Locale.getDefault())
-								+ " " + cognome.toUpperCase(Locale.getDefault()) + "!\n"
+						"E' stato registrato un nuovo account per:"
+								+ nome.toUpperCase(Locale.getDefault()) + " "
+								+ cognome.toUpperCase(Locale.getDefault())
+								+ "!\n"
 								+ "Non ha ancora alcun ruolo accreditato !\n"
-								+ "Riceverà un email all'indirizzo Email: " + email
-								+ "\n" + "per la conferma dell'iscrizione,\n"
+								+ "Riceverà un email all'indirizzo Email: "
+								+ email + "\n"
+								+ "per la conferma dell'iscrizione,\n"
 								+ "e quando un ADMIN effettuerà lo sblocco\n"
 								+ "del suo account fornendole un Ruolo.\n"
 								+ "Grazie della sua iscrizione!",
@@ -355,8 +361,9 @@ public class DatabaseOps implements DatabasesInterface {
 		return hasBeenRegistered;
 	}
 
-	private void sendRequestConfirmEmail(Context applicationContext, 
-			String cognome, String nome, String email, String hash) {
+	private void sendRequestConfirmEmail(Context applicationContext, String ip,
+			String phpencoder, String cognome, String nome, String email,
+			String hash) {
 		// TODO Auto-generated method stub
 		/**
 		 * Prepare Email
@@ -366,42 +373,46 @@ public class DatabaseOps implements DatabasesInterface {
 				Toast.LENGTH_LONG).show();
 
 		String emailaddress[] = { email };
-		String message = "<h2>Lei ha effettuato la registrazione al Registro Scolastico Android!\n"
-				+ "a nome di: "
-				+ cognome
-				+ " "
-				+ nome
-				+ "\n"
-				+ "Qui trova un link per rispondere e confermare la sua email.</h2>";
-		String subject = "<h1>Conferma email per iscrizione al Registro Scolastico</h1>";
+		String body = requestConfirmEmailBody(applicationContext, ip,
+				phpencoder, cognome, nome, email);
+		String subject = "Conferma email per iscrizione al Registro Scolastico";
 
 		/**
 		 * Invia email TODO: rivedere modalità di invio
 		 */
-		// databaseOps.SendEmailToUser(Iscrizione.this,
-		// emailaddress,
-		// message, subject);
-		GMailSenderEmail(applicationContext, emailaddress,
-				subject, message);
+		GMailSenderHtmlEmail(applicationContext, emailaddress, subject, body);
+		
+//		SimpleMail2Email(applicationContext,  email,
+//				 subject,  body,  "file:///android_res/drawable/cbasso1.png",  "<cbasso1>" );
 	}
 
-	private String generateHash(Context applicationContext, String ip, String phpencoder) {
+	private String generateHash(Context applicationContext, String ip,
+			String phpencoder) {
 		// TODO Auto-generated method stub
 		// Genera hash tramite php
-		String hash = new MySqlAndroid().getEncodedStringFromUri(applicationContext,
-				"http://" + ip + "/" + phpencoder
+		String hash = new MySqlAndroid().getEncodedStringFromUri(
+				applicationContext, "http://" + ip + "/" + phpencoder
 						+ "?actionEncode=generateHash");
 		return hash;
 	}
 
-	private String encodePassword(Context applicationContext, String ip, String phpencoder, String passwd) {
-		String encoded = new MySqlAndroid()
-		.getEncodedStringFromUri(applicationContext, "http://" + ip
-				+ "/" + phpencoder
-				+ "?actionEncode=encodePassword&password=" + passwd);
+	private String encodePassword(Context applicationContext, String ip,
+			String phpencoder, String passwd) {
+		String encoded = new MySqlAndroid().getEncodedStringFromUri(
+				applicationContext, "http://" + ip + "/" + phpencoder
+						+ "?actionEncode=encodePassword&password=" + passwd);
 
 		return encoded;
 
+	}
+
+	private String requestConfirmEmailBody(Context applicationContext,
+			String ip, String phpencoder, String cognome, String nome,
+			String email) {
+		String body = new MySqlAndroid().getEncodedStringFromUri(
+				applicationContext, "http://" + ip + "/" + phpencoder
+						+ "?actionLoadHtmlPage=requestConfirmEmail");
+		return body;
 	}
 
 	/**
@@ -442,7 +453,28 @@ public class DatabaseOps implements DatabasesInterface {
 			}
 		}
 	}
+	
+	public void SimpleMail2Email(Context context, String emailTo,
+			String subject, String body, String imgPath, String contentId ) {
+		SimpleMail2 simpleMail2 = new SimpleMail2();
+		simpleMail2.send( emailTo,  subject,  body, 
+				 imgPath,  contentId);
+	}
 
+	public void GMailSenderHtmlEmail(Context context, String emailaddress[],
+			String subject, String body) {
+		GMailSender mailsender = new GMailSender("keyorchestra2014@gmail.com",
+				"diavgek@");
+		//Aggiunge il LOGO
+		
+		try {
+			
+			mailsender.sendMail( subject,  body,  "keyorchestra2014@gmail.com",  emailaddress);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	public void GMailSenderEmail(Context context, String emailaddress[],
 			String subject, String body) {
 		// TODO Auto-generated method stub
@@ -456,7 +488,7 @@ public class DatabaseOps implements DatabasesInterface {
 
 		try {
 			// mailsender.addAttachment("/sdcard/filelocation");
-
+			
 			if (mailsender.send()) {
 				Toast.makeText(context, "Email was sent successfully.",
 						Toast.LENGTH_LONG).show();

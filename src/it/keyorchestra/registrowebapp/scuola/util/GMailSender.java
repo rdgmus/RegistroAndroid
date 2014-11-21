@@ -10,6 +10,7 @@ import javax.activation.FileDataSource;
 import javax.activation.MailcapCommandMap;
 import javax.mail.Authenticator;
 import javax.mail.BodyPart;
+import javax.mail.Message;
 import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.Transport;
@@ -17,6 +18,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.mail.util.ByteArrayDataSource;
 
 public class GMailSender extends Authenticator {
 	private String _user;
@@ -72,6 +74,30 @@ public class GMailSender extends Authenticator {
 
 		_user = user;
 		_pass = pass;
+	}
+
+	public synchronized boolean sendMail(String subject, String body,
+			String sender, String recipients[]) throws Exception {
+		try {
+			Properties props = _setProperties();
+			Session session = Session.getInstance(props, this);
+			MimeMessage message = new MimeMessage(session);
+			DataHandler handler = new DataHandler(new ByteArrayDataSource(
+					body.getBytes(), "text/html"));
+			message.setSender(new InternetAddress(sender));
+			message.setSubject(subject);
+			message.setDataHandler(handler);
+
+			for (String recip : recipients) {
+				message.setRecipient(Message.RecipientType.TO,
+						new InternetAddress(recip));
+			}
+			Transport.send(message);
+			return true;
+		} catch (Exception e) {
+
+		}
+		return false;
 	}
 
 	public boolean send() throws Exception {
