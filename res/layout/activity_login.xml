@@ -151,7 +151,7 @@
                 android:src="@drawable/exec"
                 android:text="@string/login_button"
                 android:textColor="@color/colorBlue"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
         </LinearLayout>
 
         <RelativeLayout

@@ -46,6 +46,11 @@ public class Iscrizione extends Activity implements ActivitiesCommonFunctions {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				// Va alla pagina di login
+				Toast.makeText(
+						getApplicationContext(),
+						"Re-indirizzamento a pagina iniziale in corso...",
+						Toast.LENGTH_LONG).show();
+
 				Intent ourStartingPoint = new Intent(
 						"it.keyorchestra.registrowebapp.LIST_ACTIVITY");
 				startActivity(ourStartingPoint);
@@ -63,6 +68,11 @@ public class Iscrizione extends Activity implements ActivitiesCommonFunctions {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				// Va alla pagina di login
+				Toast.makeText(
+						getApplicationContext(),
+						"Re-indirizzamento a pagina di Login in corso...",
+						Toast.LENGTH_LONG).show();
+
 				Intent loginUserActivity = new Intent(
 						"android.intent.action.LOGIN");
 				startActivity(loginUserActivity);
@@ -85,6 +95,11 @@ public class Iscrizione extends Activity implements ActivitiesCommonFunctions {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				Toast.makeText(
+						getApplicationContext(),
+						"Registrazione nuovo utente in corso...",
+						Toast.LENGTH_LONG).show();
+
 				if (!FieldsValidator.Is_Valid_Person_Name(nome)) {
 					nome.requestFocus();
 					return;
@@ -159,6 +174,11 @@ public class Iscrizione extends Activity implements ActivitiesCommonFunctions {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				Toast.makeText(
+						getApplicationContext(),
+						"Pulizia campi in corso...",
+						Toast.LENGTH_LONG).show();
+
 				nome.setText("");
 				cognome.setText("");
 				email.setText("");

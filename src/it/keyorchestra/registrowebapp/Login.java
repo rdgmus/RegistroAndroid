@@ -2,11 +2,7 @@ package it.keyorchestra.registrowebapp;
 
 import it.keyorchestra.registrowebapp.dbMatthed.DatabaseOps;
 import it.keyorchestra.registrowebapp.interfaces.ActivitiesCommonFunctions;
-import it.keyorchestra.registrowebapp.mysqlandroid.MySqlAndroid;
 import it.keyorchestra.registrowebapp.scuola.util.FieldsValidator;
-
-import java.util.ArrayList;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -16,17 +12,13 @@ import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
-import android.view.ActionMode;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -46,12 +38,15 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 	EditText etLoginEmail, etLoginPasswd;
 	private SharedPreferences getPrefs;
 
+
 	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 
+
+		
 		pulisciButton = (ImageButton) findViewById(R.id.pulisci_campi);
 		registerToolTipFor(pulisciButton);
 		pulisciButton.setOnClickListener(new View.OnClickListener() {
@@ -59,6 +54,11 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				Toast.makeText(
+						getApplicationContext(),
+						"Pulizia campi in corso...",
+						Toast.LENGTH_LONG).show();
+
 				etLoginEmail.setText("");
 				etLoginPasswd.setText("");
 				etLoginEmail.setError(null);
@@ -74,6 +74,11 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				// Va alla pagina di login
+				Toast.makeText(
+						getApplicationContext(),
+						"Re-indirizzamento a pagina iniziale in corso...",
+						Toast.LENGTH_LONG).show();
+
 				Intent ourStartingPoint = new Intent(
 						"it.keyorchestra.registrowebapp.LIST_ACTIVITY");
 				startActivity(ourStartingPoint);
@@ -90,6 +95,11 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				// Va alla pagina di login
+				Toast.makeText(
+						getApplicationContext(),
+						"Re-indirizzamento a Iscrizione in corso...",
+						Toast.LENGTH_LONG).show();
+
 				Intent loginUserActivity = new Intent(
 						"android.intent.action.REGISTER_USER");
 				startActivity(loginUserActivity);
@@ -115,6 +125,11 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 				// Toast.makeText(getApplicationContext(),
 				// "imShowMenu.OnClickListener()", Toast.LENGTH_SHORT)
 				// .show();
+				Toast.makeText(
+						getApplicationContext(),
+						"Richiesta menù in corso...",
+						Toast.LENGTH_LONG).show();
+
 				openOptionsMenu();
 			}
 		});
@@ -127,6 +142,10 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				Toast.makeText(
+						getApplicationContext(),
+						"Autenticazione credenziali in corso...",
+						Toast.LENGTH_LONG).show();
 				if (!FieldsValidator.Is_Valid_Email(etLoginEmail)) {
 					etLoginEmail.requestFocus();
 					return;
@@ -234,6 +253,11 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				Toast.makeText(
+						getApplicationContext(),
+						"Cambio Ruolo in corso...",
+						Toast.LENGTH_LONG).show();
+
 				Intent i = new Intent(
 						"it.keyorchestra.registrowebapp.RUOLO_UTENTE");
 				startActivity(i);
@@ -250,6 +274,11 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				Toast.makeText(
+						getApplicationContext(),
+						"Inserimento credenziali amministratore in corso...",
+						Toast.LENGTH_LONG).show();
+
 				String adminEmail = getPrefs.getString("adminEmail", "");
 				String adminPasswd = getPrefs.getString("adminPasswd", "");
 				// String adminNome = getPrefs.getString("adminNome", "");
