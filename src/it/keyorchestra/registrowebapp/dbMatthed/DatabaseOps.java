@@ -296,6 +296,7 @@ public class DatabaseOps implements DatabasesInterface {
 		}
 	}
 
+	@SuppressLint("DefaultLocale")
 	public boolean RegisterNewUser(Context applicationContext, String nome,
 			String cognome, String email, String passwd, String ip,
 			String phpencoder) {
@@ -325,10 +326,11 @@ public class DatabaseOps implements DatabasesInterface {
 			// SQL
 			sql = String
 					.format("INSERT INTO utenti_scuola(cognome, nome, email, password, "
-							+ "hash, register_date, user_is_admin, has_to_change_password, is_locked) "
-							+ " VALUES ('%s','%s','%s','%s','%s',NOW(),0,0,1)",
-							cognome.toUpperCase(Locale.getDefault()),
-							nome.toUpperCase(Locale.getDefault()), email,
+							+ "hash, register_date, user_is_admin, has_to_change_password, is_locked,"
+							+ "email_confirmed) "
+							+ " VALUES ('%s','%s','%s','%s','%s',NOW(),0,0,1,0)",
+							cognome.toUpperCase(),
+							nome.toUpperCase(), email,
 							encoded, hash);
 			int rs = st.executeUpdate(sql);
 			if (rs == 1) {
@@ -374,7 +376,7 @@ public class DatabaseOps implements DatabasesInterface {
 
 		String emailaddress[] = { email };
 		String body = requestConfirmEmailBody(applicationContext, ip,
-				phpencoder, cognome, nome, email);
+				phpencoder, cognome, nome, email, hash);
 		String subject = "Conferma email per iscrizione al Registro Scolastico";
 
 		/**
@@ -408,10 +410,15 @@ public class DatabaseOps implements DatabasesInterface {
 
 	private String requestConfirmEmailBody(Context applicationContext,
 			String ip, String phpencoder, String cognome, String nome,
-			String email) {
+			String email, String hash) {
 		String body = new MySqlAndroid().getEncodedStringFromUri(
 				applicationContext, "http://" + ip + "/" + phpencoder
-						+ "?actionLoadHtmlPage=requestConfirmEmail");
+						+ "?actionEncode=requestConfirmEmail"+
+						"&cognome="+cognome+
+						"&nome="+nome+
+						"&email="+email+
+						"&hash="+hash+
+						"&ip="+ip);
 		return body;
 	}
 
