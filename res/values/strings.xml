@@ -98,5 +98,9 @@
     <string name="userMenuText">Menù</string>
     <string name="ibLogoutDescription">Effettua il Logout dal Registro Scolastico</string>
     <string name="ibIsAdminDescription">Mostra l\'icona dell\'ADMIN o di un semplice utente</string>
+    <string android:layout_width="wrap_content" android:id="@+id/string1" android:layout_height="wrap_content" name="ibEmailDescription">Pagina per le Email</string>
+    <string android:id="@+id/string1" android:layout_width="wrap_content" android:layout_height="wrap_content" name="ibChangePasswordDescription">Cambio Password</string>
+    <string android:layout_width="wrap_content" android:id="@+id/string1" android:layout_height="wrap_content" name="ibUsersPasswordDescription">Cambio password altri utenti</string>
+    <string android:layout_width="wrap_content" android:id="@+id/string1" android:layout_height="wrap_content" name="gestisciDatiUtenti">Gestione informazioni altri utenti</string>
 
 </resources>

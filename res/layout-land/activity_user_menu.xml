@@ -9,55 +9,70 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
-        <ImageButton
-            android:id="@+id/ibLogout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:src="@drawable/logout96" 
-            android:contentDescription="@string/ibLogoutDescription"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="88dp" >
 
-        <TextView
-            android:id="@+id/tvUserMenuTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/userMenuText"
-            android:textColor="@color/colorOrange"
-            android:textSize="25sp"
-            android:textStyle="bold" />
+            <ImageButton
+                android:id="@+id/ivRuoloUtente"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/ruoliUtentiDescription"
+                android:src="@drawable/admin" />
 
-        <ImageButton
-            android:id="@+id/ibIsAdmin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:src="@drawable/administrator64" 
-            android:contentDescription="@string/ibIsAdminDescription"/>
+            <ImageButton
+                android:id="@+id/ibIsAdmin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_toRightOf="@+id/tvUserMenuTitle"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/ibIsAdminDescription"
+                android:src="@drawable/administrator64" />
 
-        <ImageButton
-            android:id="@+id/ivRuoloUtente"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:src="@drawable/admin" 
-            android:contentDescription="@string/ruoliUtentiDescription"/>
+            <ImageButton
+                android:id="@+id/ibLogout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/ibLogoutDescription"
+                android:src="@drawable/logout96" />
 
-        <TextView
-            android:id="@+id/tvUserData"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="User Name"
-            android:textColor="@color/colorOrange"
-            android:textSize="15sp"
-            android:textStyle="bold" />
+            <TextView
+                android:id="@+id/tvUserData"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/ibIsAdmin"
+                android:layout_alignParentTop="true"
+                android:gravity="center"
+                android:text="User Name"
+                android:textColor="@color/colorOrange"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvUserMenuTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:gravity="center"
+                android:text="@string/userMenuText"
+                android:textColor="@color/colorOrange"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
 
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/llUserCommonOptions"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
 
         <ImageButton
@@ -65,14 +80,32 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/mail" 
-            android:background="@android:color/transparent"/>
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/ibEmailDescription"/>
 
         <ImageButton
-            android:id="@+id/imageButton1"
+            android:id="@+id/ibChangePassword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/user_password" 
-            android:background="@android:color/transparent"/>
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/ibChangePasswordDescription"/>
+
+        <ImageButton
+            android:id="@+id/ibUsersPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/users_password"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/ibUsersPasswordDescription"/>
+
+        <ImageButton
+            android:id="@+id/ibDatiUtenti"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ruoli_utenti" 
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/gestisciDatiUtenti"/>
         
     </LinearLayout>
 

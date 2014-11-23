@@ -24,7 +24,8 @@ public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 	private SharedPreferences getPrefs;
 	private DatabaseOps databaseOps;
 	TextView tvUserData;
-	ImageButton ibLogout, ivRuoloUtente, ibIsAdmin;
+	ImageButton ibLogout, ivRuoloUtente, ibIsAdmin, ibEmail, ibChangePassword,
+			ibUsersPassword, ibDatiUtenti;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,28 +42,29 @@ public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 		String cognome = databaseOps.getCognome();
 		String nome = databaseOps.getNome();
 
-		Toast.makeText(getApplicationContext(),
+		Toast.makeText(
+				getApplicationContext(),
 				"Menù dell'Utente: [" + id_utente + "] " + cognome + " " + nome,
 				Toast.LENGTH_SHORT).show();
-		//RUOLO SCELTO
-		ivRuoloUtente = (ImageButton)findViewById(R.id.ivRuoloUtente);
+		// RUOLO SCELTO
+		ivRuoloUtente = (ImageButton) findViewById(R.id.ivRuoloUtente);
 		String ruoloScelto = getPrefs.getString("ruoloList", "1");
 		setIconRuoloScelto(ivRuoloUtente, ruoloScelto);
 		registerToolTipFor(ivRuoloUtente);
-		
-		//IS ADMIN 
-		ibIsAdmin = (ImageButton)findViewById(R.id.ibIsAdmin);
+
+		// IS ADMIN
+		ibIsAdmin = (ImageButton) findViewById(R.id.ibIsAdmin);
 		Long user_is_admin = getPrefs.getLong("user_is_admin", -1);
 		setIconIsAdmin(ibIsAdmin, user_is_admin);
 		registerToolTipFor(ibIsAdmin);
-		
-		//DATI UTENTE SULLO SCHERMO
-		tvUserData = (TextView)findViewById(R.id.tvUserData);
+
+		// DATI UTENTE SULLO SCHERMO
+		tvUserData = (TextView) findViewById(R.id.tvUserData);
 		tvUserData.setText("User: [" + id_utente + "] " + cognome + " " + nome);
 
-		ibLogout = (ImageButton)findViewById(R.id.ibLogout);
+		ibLogout = (ImageButton) findViewById(R.id.ibLogout);
 		registerToolTipFor(ibLogout);
-		ibLogout.setOnClickListener(new OnClickListener(){
+		ibLogout.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -70,35 +72,47 @@ public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 				Toast.makeText(getApplicationContext(),
 						"Logout dal Registro Scolastico in corso...",
 						Toast.LENGTH_SHORT).show();
-				
-				//SBLOCCA UTENTE 
-				databaseOps.UnlockUser( getApplicationContext(),  null,
-						 id_utente);
-				//CANCELLA UTENTE DALLE PREFERENZE
+
+				// SBLOCCA UTENTE
+				databaseOps
+						.UnlockUser(getApplicationContext(), null, id_utente);
+				// CANCELLA UTENTE DALLE PREFERENZE
 				databaseOps.DeleteUserFromPreferences(id_utente);
-				//REGISTRA LOGOUT EVENT
-				
-				//LANCIA TableListExpActivity
+				// REGISTRA LOGOUT EVENT
+
+				// LANCIA TableListExpActivity
 				Intent ourStartingPoint = new Intent(UserMenu.this,
 						TableListExpActivity.class);
 				startActivity(ourStartingPoint);
 
-				//FINISH
+				// FINISH
 				finish();
 			}
-			
+
 		});
 		
+		ibEmail = (ImageButton) findViewById(R.id.ibEmail);
+		registerToolTipFor(ibEmail); 
+		
+		ibChangePassword = (ImageButton) findViewById(R.id.ibChangePassword);
+		registerToolTipFor(ibChangePassword);
+		
+		ibUsersPassword = (ImageButton) findViewById(R.id.ibUsersPassword);
+		registerToolTipFor(ibUsersPassword);
+		
+		ibDatiUtenti = (ImageButton) findViewById(R.id.ibDatiUtenti);
+		registerToolTipFor(ibDatiUtenti);
 	}
 
 	private void setIconIsAdmin(ImageButton ibIsAdmin, Long user_is_admin) {
 		// TODO Auto-generated method stub
 		Resources res = getResources();
 		if (user_is_admin == 1) {
-			ibIsAdmin.setImageDrawable(res.getDrawable(R.drawable.administrator64));
-		} else 
-			ibIsAdmin
-					.setImageDrawable(res.getDrawable(R.drawable.ruolo_utente64));
+			ibIsAdmin.setImageDrawable(res
+					.getDrawable(R.drawable.administrator64));
+		} else
+			ibIsAdmin.setImageDrawable(res
+					.getDrawable(R.drawable.ruolo_utente64));
 
 	}
 
