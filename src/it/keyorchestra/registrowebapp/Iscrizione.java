@@ -49,7 +49,7 @@ public class Iscrizione extends Activity implements ActivitiesCommonFunctions {
 				Toast.makeText(
 						getApplicationContext(),
 						"Re-indirizzamento a pagina iniziale in corso...",
-						Toast.LENGTH_LONG).show();
+						Toast.LENGTH_SHORT).show();
 
 				Intent ourStartingPoint = new Intent(
 						"it.keyorchestra.registrowebapp.LIST_ACTIVITY");
@@ -71,7 +71,7 @@ public class Iscrizione extends Activity implements ActivitiesCommonFunctions {
 				Toast.makeText(
 						getApplicationContext(),
 						"Re-indirizzamento a pagina di Login in corso...",
-						Toast.LENGTH_LONG).show();
+						Toast.LENGTH_SHORT).show();
 
 				Intent loginUserActivity = new Intent(
 						"android.intent.action.LOGIN");
@@ -98,7 +98,7 @@ public class Iscrizione extends Activity implements ActivitiesCommonFunctions {
 				Toast.makeText(
 						getApplicationContext(),
 						"Registrazione nuovo utente in corso...",
-						Toast.LENGTH_LONG).show();
+						Toast.LENGTH_SHORT).show();
 
 				if (!FieldsValidator.Is_Valid_Person_Name(nome)) {
 					nome.requestFocus();
@@ -135,7 +135,7 @@ public class Iscrizione extends Activity implements ActivitiesCommonFunctions {
 					Toast.makeText(
 							getApplicationContext(),
 							"Login fallito! File dell'encoder php non valorizzato in menù preferenze?",
-							Toast.LENGTH_LONG).show();
+							Toast.LENGTH_SHORT).show();
 					return;
 				}
 
@@ -143,7 +143,7 @@ public class Iscrizione extends Activity implements ActivitiesCommonFunctions {
 				Toast.makeText(
 						getApplicationContext(),
 						"Registrazione Nuovo Utente del Registro Scolastico in corso...",
-						Toast.LENGTH_LONG).show();
+						Toast.LENGTH_SHORT).show();
 
 				boolean hasBeenRegistered = databaseOps.RegisterNewUser(
 						getApplicationContext(), nome.getText().toString(),
@@ -162,7 +162,7 @@ public class Iscrizione extends Activity implements ActivitiesCommonFunctions {
 				} else {
 					Toast.makeText(getApplicationContext(),
 							"Iscrizione fallita! Correggi i dati inseriti!",
-							Toast.LENGTH_LONG).show();
+							Toast.LENGTH_SHORT).show();
 				}
 			}
 
@@ -177,7 +177,7 @@ public class Iscrizione extends Activity implements ActivitiesCommonFunctions {
 				Toast.makeText(
 						getApplicationContext(),
 						"Pulizia campi in corso...",
-						Toast.LENGTH_LONG).show();
+						Toast.LENGTH_SHORT).show();
 
 				nome.setText("");
 				cognome.setText("");
@@ -253,7 +253,7 @@ public class Iscrizione extends Activity implements ActivitiesCommonFunctions {
 
 		Toast toast = new Toast(getApplicationContext());
 		toast.setGravity(Gravity.BOTTOM, 0, 0);
-		toast.setDuration(Toast.LENGTH_LONG);
+		toast.setDuration(Toast.LENGTH_SHORT);
 		toast.setView(layout);
 		toast.show();
 		return true;

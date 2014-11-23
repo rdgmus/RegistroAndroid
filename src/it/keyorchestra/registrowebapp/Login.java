@@ -38,15 +38,12 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 	EditText etLoginEmail, etLoginPasswd;
 	private SharedPreferences getPrefs;
 
-
 	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 
-
-		
 		pulisciButton = (ImageButton) findViewById(R.id.pulisci_campi);
 		registerToolTipFor(pulisciButton);
 		pulisciButton.setOnClickListener(new View.OnClickListener() {
@@ -54,10 +51,8 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Toast.makeText(
-						getApplicationContext(),
-						"Pulizia campi in corso...",
-						Toast.LENGTH_LONG).show();
+				Toast.makeText(getApplicationContext(),
+						"Pulizia campi in corso...", Toast.LENGTH_SHORT).show();
 
 				etLoginEmail.setText("");
 				etLoginPasswd.setText("");
@@ -74,10 +69,9 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				// Va alla pagina di login
-				Toast.makeText(
-						getApplicationContext(),
+				Toast.makeText(getApplicationContext(),
 						"Re-indirizzamento a pagina iniziale in corso...",
-						Toast.LENGTH_LONG).show();
+						Toast.LENGTH_SHORT).show();
 
 				Intent ourStartingPoint = new Intent(
 						"it.keyorchestra.registrowebapp.LIST_ACTIVITY");
@@ -95,10 +89,9 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				// Va alla pagina di login
-				Toast.makeText(
-						getApplicationContext(),
+				Toast.makeText(getApplicationContext(),
 						"Re-indirizzamento a Iscrizione in corso...",
-						Toast.LENGTH_LONG).show();
+						Toast.LENGTH_SHORT).show();
 
 				Intent loginUserActivity = new Intent(
 						"android.intent.action.REGISTER_USER");
@@ -125,10 +118,8 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 				// Toast.makeText(getApplicationContext(),
 				// "imShowMenu.OnClickListener()", Toast.LENGTH_SHORT)
 				// .show();
-				Toast.makeText(
-						getApplicationContext(),
-						"Richiesta menù in corso...",
-						Toast.LENGTH_LONG).show();
+				Toast.makeText(getApplicationContext(),
+						"Richiesta menù in corso...", Toast.LENGTH_SHORT).show();
 
 				openOptionsMenu();
 			}
@@ -142,10 +133,9 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Toast.makeText(
-						getApplicationContext(),
+				Toast.makeText(getApplicationContext(),
 						"Autenticazione credenziali in corso...",
-						Toast.LENGTH_LONG).show();
+						Toast.LENGTH_SHORT).show();
 				if (!FieldsValidator.Is_Valid_Email(etLoginEmail)) {
 					etLoginEmail.requestFocus();
 					return;
@@ -163,7 +153,7 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 					Toast.makeText(
 							getApplicationContext(),
 							"Login fallito! File dell'encoder php non valorizzato in menù preferenze?",
-							Toast.LENGTH_LONG).show();
+							Toast.LENGTH_SHORT).show();
 					return;
 				}
 
@@ -186,7 +176,7 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 								"L'utente ha già effettuato il login da un altro IP!\n"
 										+ "Oppure non ha alcun ruolo accreditato.\n"
 										+ "Permesso di accesso NEGATO!",
-								Toast.LENGTH_LONG).show();
+								Toast.LENGTH_SHORT).show();
 
 					} else {
 
@@ -197,7 +187,7 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 								getApplicationContext(),
 								"Ora controllo se hai i permessi\n"
 										+ "per il ruolo di " + ruoloScelto,
-								Toast.LENGTH_LONG).show();
+								Toast.LENGTH_SHORT).show();
 
 						if (databaseOps.LoggingUserHasRole(ruoloScelto,
 								getApplicationContext(),
@@ -207,7 +197,7 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 									getApplicationContext(),
 									"Permessi accordati!\n"
 											+ "Autenticazione riuscita per il ruolo di "
-											+ ruoloScelto, Toast.LENGTH_LONG)
+											+ ruoloScelto, Toast.LENGTH_SHORT)
 									.show();
 							// Loccare l'id dell'utente: is_locked = 1
 							databaseOps.LockUserLogging(
@@ -222,18 +212,19 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 							// al database con tutti i permessi
 							Toast.makeText(getApplicationContext(),
 									"Ora accediamo al suo menù!",
-									Toast.LENGTH_LONG).show();
+									Toast.LENGTH_SHORT).show();
 						} else {
 							Toast.makeText(
 									getApplicationContext(),
 									"Non hai i permessi di accesso per il ruolo di "
-											+ ruoloScelto, Toast.LENGTH_LONG)
-									.show();
+											+ ruoloScelto
+											+ "\nPermesso di accesso NEGATO!",
+									Toast.LENGTH_SHORT).show();
 						}
 					}
-				} else {
+				} else {	
 					Toast.makeText(getApplicationContext(),
-							"Credenziali invalide!", Toast.LENGTH_LONG).show();
+							"Credenziali invalide!", Toast.LENGTH_SHORT).show();
 				}
 			}
 		});
@@ -253,10 +244,8 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Toast.makeText(
-						getApplicationContext(),
-						"Cambio Ruolo in corso...",
-						Toast.LENGTH_LONG).show();
+				Toast.makeText(getApplicationContext(),
+						"Cambio Ruolo in corso...", Toast.LENGTH_SHORT).show();
 
 				Intent i = new Intent(
 						"it.keyorchestra.registrowebapp.RUOLO_UTENTE");
@@ -274,10 +263,9 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Toast.makeText(
-						getApplicationContext(),
+				Toast.makeText(getApplicationContext(),
 						"Inserimento credenziali amministratore in corso...",
-						Toast.LENGTH_LONG).show();
+						Toast.LENGTH_SHORT).show();
 
 				String adminEmail = getPrefs.getString("adminEmail", "");
 				String adminPasswd = getPrefs.getString("adminPasswd", "");
@@ -444,7 +432,7 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 			new FetchSQL().execute();
 		}
 		if (defaultDatabase.contentEquals("PostgreSQL")) {
-			Toast.makeText(context, "NOT YET IMPLEMENTED!", Toast.LENGTH_LONG)
+			Toast.makeText(context, "NOT YET IMPLEMENTED!", Toast.LENGTH_SHORT)
 					.show();
 		}
 
@@ -497,7 +485,7 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 
 		Toast toast = new Toast(getApplicationContext());
 		toast.setGravity(Gravity.BOTTOM, 0, 0);
-		toast.setDuration(Toast.LENGTH_LONG);
+		toast.setDuration(Toast.LENGTH_SHORT);
 		toast.setView(layout);
 		toast.show();
 		return true;
