@@ -15,6 +15,5 @@
 	<classpathentry exported="true" kind="lib" path="libs/backgroundEmail/activation.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/backgroundEmail/additionnal.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/backgroundEmail/mail.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/GraphView-3.1.3.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
