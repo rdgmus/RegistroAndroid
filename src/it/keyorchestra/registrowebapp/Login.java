@@ -11,7 +11,6 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -23,7 +22,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,10 +29,9 @@ import android.widget.Toast;
 public class Login extends Activity implements ActivitiesCommonFunctions {
 
 	ImageButton loginButton, bCambiaRuolo, ibFillFields, ibGotoRegister,
-			ibHome, pulisciButton;
+			ibHome, pulisciButton, imShowMenu;
 	TextView etRuoloScelto;
 	Thread myThread = null;
-	ImageView imShowMenu;
 	EditText etLoginEmail, etLoginPasswd;
 	private SharedPreferences getPrefs;
 
@@ -109,7 +106,7 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 
 		etLoginPasswd = (EditText) findViewById(R.id.etLoginPasswd);
 
-		imShowMenu = (ImageView) findViewById(R.id.imShowMenu);
+		imShowMenu = (ImageButton) findViewById(R.id.imShowMenu);
 		imShowMenu.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -119,7 +116,8 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 				// "imShowMenu.OnClickListener()", Toast.LENGTH_SHORT)
 				// .show();
 				Toast.makeText(getApplicationContext(),
-						"Richiesta menù in corso...", Toast.LENGTH_SHORT).show();
+						"Richiesta menù in corso...", Toast.LENGTH_SHORT)
+						.show();
 
 				openOptionsMenu();
 			}
@@ -146,7 +144,7 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 					return;
 				}
 
-				DatabaseOps databaseOps = new DatabaseOps();
+				DatabaseOps databaseOps = new DatabaseOps(getApplicationContext());
 				// Controlla se le credenziali esistono
 				String phpencoder = getPrefs.getString("phpencoder", null);
 				if (phpencoder == null) {
@@ -204,6 +202,8 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 									getApplicationContext(),
 									getDatabaseIpFromPreferences());
 
+							//REGISTRA LOGIN EVENT
+							
 							// Lancia un nuovo Intent per andare allo userMenu
 							// del ruolo prescelto. All'interno dello user menù
 							// verranno mostrate opzioni in base al ruolo e se
@@ -213,6 +213,11 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 							Toast.makeText(getApplicationContext(),
 									"Ora accediamo al suo menù!",
 									Toast.LENGTH_SHORT).show();
+
+							Intent ourStartingPoint = new Intent(Login.this,
+									UserMenu.class);
+							startActivity(ourStartingPoint);
+							finish();
 						} else {
 							Toast.makeText(
 									getApplicationContext(),
@@ -222,7 +227,7 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 									Toast.LENGTH_SHORT).show();
 						}
 					}
-				} else {	
+				} else {
 					Toast.makeText(getApplicationContext(),
 							"Credenziali invalide!", Toast.LENGTH_SHORT).show();
 				}
@@ -308,7 +313,7 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 	private class FetchSQL extends AsyncTask<Void, Void, String> {
 		@Override
 		protected String doInBackground(Void... params) {
-			String retval = new DatabaseOps().FetchConnection(getBaseContext());
+			String retval = new DatabaseOps(getApplicationContext()).FetchConnection(getBaseContext());
 			return retval;
 		}
 

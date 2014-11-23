@@ -85,17 +85,18 @@
     <string android:id="@+id/string1" name="reconnect_to_mysql" android:layout_width="wrap_content" android:layout_height="wrap_content">Riconnetti a MySQL</string>
     <string name="fillFieldsDescription">Riempi i campi con i dati dell\'amministratore</string>
     <string name="loginButtonDescription">Effettua il Login</string>
-
-        <string name="mysql">MySQL</string>
-        <string name="postgresql">PostgreSql</string>
-        <string name="sqlite">SqLite</string>
-        
+    <string name="mysql">MySQL</string>
+    <string name="postgresql">PostgreSql</string>
+    <string name="sqlite">SqLite</string>
     <string name="connection_wait">In attesa di connessione al database!</string>
     <string name="connection_fail">Connessione fallita!</string>
     <string name="connection_success">Connessione stabilita con il database!</string>
-    <string android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/string1" name="gotoRegisterDescription">Vai alla pagina di Iscrizione</string>
-    <string android:layout_width="wrap_content" android:id="@+id/string1" android:layout_height="wrap_content" name="wipeOutDescription">Cancella tutti i dati inseriti</string>
-    <string android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/string1" name="registraDescription">Esegue l\'iscrizione al Registro Scolastico</string>
-    <string android:layout_width="wrap_content" android:id="@+id/string1" android:layout_height="wrap_content" name="gotoLoginDescription">Vai alla pagina di Login</string>
-    
+    <string android:id="@+id/string1" name="gotoRegisterDescription" android:layout_width="wrap_content" android:layout_height="wrap_content">Vai alla pagina di Iscrizione</string>
+    <string android:id="@+id/string1" name="wipeOutDescription" android:layout_width="wrap_content" android:layout_height="wrap_content">Cancella tutti i dati inseriti</string>
+    <string android:id="@+id/string1" name="registraDescription" android:layout_width="wrap_content" android:layout_height="wrap_content">Esegue l\'iscrizione al Registro Scolastico</string>
+    <string android:id="@+id/string1" name="gotoLoginDescription" android:layout_width="wrap_content" android:layout_height="wrap_content">Vai alla pagina di Login</string>
+    <string name="userMenuText">Menù</string>
+    <string name="ibLogoutDescription">Effettua il Logout dal Registro Scolastico</string>
+    <string name="ibIsAdminDescription">Mostra l\'icona dell\'ADMIN o di un semplice utente</string>
+
 </resources>

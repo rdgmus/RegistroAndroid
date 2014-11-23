@@ -128,7 +128,7 @@ public class Iscrizione extends Activity implements ActivitiesCommonFunctions {
 
 				// Salva dati nel database con password criptata
 
-				DatabaseOps databaseOps = new DatabaseOps();
+				DatabaseOps databaseOps = new DatabaseOps(getApplicationContext());
 				// Controlla se le credenziali esistono
 				String phpencoder = getPrefs.getString("phpencoder", null);
 				if (phpencoder == null) {

@@ -27,6 +27,19 @@ import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 public class DatabaseOps implements DatabasesInterface {
+	SharedPreferences getPrefs;
+	Long id_utente;
+	String cognome;
+	String nome;
+	String email;
+	Long user_is_admin;
+	Long has_to_change_password;
+	Long is_locked;
+
+	public DatabaseOps(Context context) {
+		super();
+		getPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+	}
 
 	private String getUrl(Context context) {
 		String ip = null;
@@ -36,8 +49,8 @@ public class DatabaseOps implements DatabasesInterface {
 		String schema = null;
 		String url = "";
 
-		SharedPreferences getPrefs = PreferenceManager
-				.getDefaultSharedPreferences(context);
+		// SharedPreferences getPrefs = PreferenceManager
+		// .getDefaultSharedPreferences(context);
 
 		String defaultDatabase = getPrefs.getString("databaseList", "1");
 
@@ -156,13 +169,11 @@ public class DatabaseOps implements DatabasesInterface {
 	}
 
 	@SuppressLint("NewApi")
-	private void salvaUtenteNellePreferenze(int id_utente, String cognome,
-			String nome, String email, int user_is_admin,
-			int has_to_change_password, int is_locked, Context context) {
+	private void salvaUtenteNellePreferenze(long id_utente, String cognome,
+			String nome, String email, long user_is_admin,
+			long has_to_change_password, long is_locked, Context context) {
 		// TODO Auto-generated method stub
-		SharedPreferences sharedpreferences = PreferenceManager
-				.getDefaultSharedPreferences(context);
-		SharedPreferences.Editor editor = sharedpreferences.edit();
+		SharedPreferences.Editor editor = getPrefs.edit();
 		editor.putLong("id_utente", id_utente);
 		editor.putString("cognome", cognome);
 		editor.putString("nome", nome);
@@ -201,9 +212,7 @@ public class DatabaseOps implements DatabasesInterface {
 		// TODO Auto-generated method stub
 		String url = getUrl(context);
 
-		SharedPreferences sharedpreferences = PreferenceManager
-				.getDefaultSharedPreferences(context);
-		Long id_utente = sharedpreferences.getLong("id_utente", -1);
+		Long id_utente = getPrefs.getLong("id_utente", -1);
 		if (id_utente >= 0) {
 			Connection conn;
 			try {
@@ -239,9 +248,7 @@ public class DatabaseOps implements DatabasesInterface {
 		// TODO Auto-generated method stub
 		String url = getUrl(applicationContext);
 
-		SharedPreferences sharedpreferences = PreferenceManager
-				.getDefaultSharedPreferences(applicationContext);
-		Long id_utente = sharedpreferences.getLong("id_utente", -1);
+		Long id_utente = getPrefs.getLong("id_utente", -1);
 		if (id_utente >= 0) {
 			Connection conn;
 			try {
@@ -284,7 +291,7 @@ public class DatabaseOps implements DatabasesInterface {
 				sql = "UPDATE utenti_scuola SET is_locked=0 WHERE id_utente = "
 						+ id_utente;
 				int result = st.executeUpdate(sql);
-				while (result == 1) {
+				if (result == 1) {
 					Toast.makeText(applicationContext, "Utente sbloccato!",
 							Toast.LENGTH_LONG).show();
 				}
@@ -329,8 +336,7 @@ public class DatabaseOps implements DatabasesInterface {
 							+ "hash, register_date, user_is_admin, has_to_change_password, is_locked,"
 							+ "email_confirmed) "
 							+ " VALUES ('%s','%s','%s','%s','%s',NOW(),0,0,1,0)",
-							cognome.toUpperCase(),
-							nome.toUpperCase(), email,
+							cognome.toUpperCase(), nome.toUpperCase(), email,
 							encoded, hash);
 			int rs = st.executeUpdate(sql);
 			if (rs == 1) {
@@ -383,9 +389,10 @@ public class DatabaseOps implements DatabasesInterface {
 		 * Invia email TODO: rivedere modalità di invio
 		 */
 		GMailSenderHtmlEmail(applicationContext, emailaddress, subject, body);
-		
-//		SimpleMail2Email(applicationContext,  email,
-//				 subject,  body,  "file:///android_res/drawable/cbasso1.png",  "<cbasso1>" );
+
+		// SimpleMail2Email(applicationContext, email,
+		// subject, body, "file:///android_res/drawable/cbasso1.png",
+		// "<cbasso1>" );
 	}
 
 	private String generateHash(Context applicationContext, String ip,
@@ -413,12 +420,9 @@ public class DatabaseOps implements DatabasesInterface {
 			String email, String hash) {
 		String body = new MySqlAndroid().getEncodedStringFromUri(
 				applicationContext, "http://" + ip + "/" + phpencoder
-						+ "?actionEncode=requestConfirmEmail"+
-						"&cognome="+cognome+
-						"&nome="+nome+
-						"&email="+email+
-						"&hash="+hash+
-						"&ip="+ip);
+						+ "?actionEncode=requestConfirmEmail" + "&cognome="
+						+ cognome + "&nome=" + nome + "&email=" + email
+						+ "&hash=" + hash + "&ip=" + ip);
 		return body;
 	}
 
@@ -460,28 +464,29 @@ public class DatabaseOps implements DatabasesInterface {
 			}
 		}
 	}
-	
+
 	public void SimpleMail2Email(Context context, String emailTo,
-			String subject, String body, String imgPath, String contentId ) {
+			String subject, String body, String imgPath, String contentId) {
 		SimpleMail2 simpleMail2 = new SimpleMail2();
-		simpleMail2.send( emailTo,  subject,  body, 
-				 imgPath,  contentId);
+		simpleMail2.send(emailTo, subject, body, imgPath, contentId);
 	}
 
 	public void GMailSenderHtmlEmail(Context context, String emailaddress[],
 			String subject, String body) {
 		GMailSender mailsender = new GMailSender("keyorchestra2014@gmail.com",
 				"diavgek@");
-		//Aggiunge il LOGO
-		
+		// Aggiunge il LOGO
+
 		try {
-			
-			mailsender.sendMail( subject,  body,  "keyorchestra2014@gmail.com",  emailaddress);
+
+			mailsender.sendMail(subject, body, "keyorchestra2014@gmail.com",
+					emailaddress);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+
 	public void GMailSenderEmail(Context context, String emailaddress[],
 			String subject, String body) {
 		// TODO Auto-generated method stub
@@ -495,7 +500,7 @@ public class DatabaseOps implements DatabasesInterface {
 
 		try {
 			// mailsender.addAttachment("/sdcard/filelocation");
-			
+
 			if (mailsender.send()) {
 				Toast.makeText(context, "Email was sent successfully.",
 						Toast.LENGTH_LONG).show();
@@ -508,4 +513,54 @@ public class DatabaseOps implements DatabasesInterface {
 					Toast.LENGTH_LONG).show();
 		}
 	}
+
+	public SharedPreferences getGetPrefs() {
+		return getPrefs;
+	}
+
+	public Long getId_utente() {
+		return getPrefs.getLong("id_utente", -1);
+	}
+
+	public String getCognome() {
+		return getPrefs.getString("cognome", null);
+	}
+
+	public String getNome() {
+		return getPrefs.getString("nome", null);
+	}
+
+	public String getEmail() {
+		return getPrefs.getString("email", null);
+	}
+
+	public Long getUser_is_admin() {
+		return getPrefs.getLong("user_is_admin", -1);
+	}
+
+	public Long getHas_to_change_password() {
+		return getPrefs.getLong("has_to_change_password", -1);
+	}
+
+	public Long getIs_locked() {
+		return getPrefs.getLong("is_locked", -1);
+	}
+
+	@SuppressLint("NewApi")
+	public void DeleteUserFromPreferences(long id_utente) {
+		// TODO Auto-generated method stub
+		if (getId_utente() == id_utente) {
+			SharedPreferences.Editor editor = getPrefs.edit();
+			editor.putLong("id_utente", -1);
+			editor.putString("cognome", null);
+			editor.putString("nome", null);
+			editor.putString("email", null);
+			editor.putLong("user_is_admin", -1);
+			editor.putLong("has_to_change_password", -1);
+			editor.putLong("is_locked", -1);
+			editor.apply();
+		}
+
+	}
+
 }
