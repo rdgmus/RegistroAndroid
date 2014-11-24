@@ -41,7 +41,7 @@
                 android:text="@string/registerUserText"
                 android:textColor="@color/colorOrange"
                 android:textSize="25sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
 
             <ImageButton
                 android:id="@+id/imShowMenu"
@@ -49,9 +49,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
-                android:background="@color/colorListItem"
                 android:contentDescription="@string/showMenu"
-                android:src="@drawable/menu64" />
+                android:src="@drawable/activity_menu"
+                android:background="@android:color/transparent" />
         </RelativeLayout>
 
         <EditText

@@ -2,33 +2,41 @@ package it.keyorchestra.registrowebapp;
 
 import it.keyorchestra.registrowebapp.dbMatthed.DatabaseOps;
 import it.keyorchestra.registrowebapp.interfaces.ActivitiesCommonFunctions;
+
+import java.util.Calendar;
+
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class UserMenu extends Activity implements ActivitiesCommonFunctions {
+public class UserMenu extends Activity  implements ActivitiesCommonFunctions {
 
 	private SharedPreferences getPrefs;
 	private DatabaseOps databaseOps;
-	TextView tvUserData;
-	ImageButton ibLogout, ivRuoloUtente, ibIsAdmin, ibEmail, ibChangePassword,
-			ibUsersPassword, ibDatiUtenti;
+	TextView tvUserData, tvNow;
+	ImageButton ibLogout, ibRuoloUtente, ibIsAdmin, ibEmail, ibChangePassword,
+			ibUsersPassword, ibDatiUtenti,imShowMenu;
+
+	private String ruoloScelto;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(final Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_user_menu);
@@ -47,10 +55,22 @@ public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 				"Menù dell'Utente: [" + id_utente + "] " + cognome + " " + nome,
 				Toast.LENGTH_SHORT).show();
 		// RUOLO SCELTO
-		ivRuoloUtente = (ImageButton) findViewById(R.id.ivRuoloUtente);
-		String ruoloScelto = getPrefs.getString("ruoloList", "1");
-		setIconRuoloScelto(ivRuoloUtente, ruoloScelto);
-		registerToolTipFor(ivRuoloUtente);
+		ibRuoloUtente = (ImageButton) findViewById(R.id.ibRuoloUtente);
+		ruoloScelto = getPrefs.getString("ruoloList", "1");
+		setIconRuoloScelto(ibRuoloUtente, ruoloScelto);
+		registerToolTipFor(ibRuoloUtente);
+		ibRuoloUtente.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				startAnimation((ImageButton)v, 2000);
+				Toast.makeText(
+						getApplicationContext(),
+						"Non vi sono attività implementate per il ruolo di: "
+								+ ruoloScelto, Toast.LENGTH_SHORT).show();
+			}
+		});
 
 		// IS ADMIN
 		ibIsAdmin = (ImageButton) findViewById(R.id.ibIsAdmin);
@@ -60,7 +80,9 @@ public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 
 		// DATI UTENTE SULLO SCHERMO
 		tvUserData = (TextView) findViewById(R.id.tvUserData);
-		tvUserData.setText("User: [" + id_utente + "] " + cognome + " " + nome);
+		String userName = (user_is_admin == 1) ? "Admin: [" : " User: [";
+		userName += id_utente + "] " + cognome + " " + nome;
+		tvUserData.setText(userName);
 
 		ibLogout = (ImageButton) findViewById(R.id.ibLogout);
 		registerToolTipFor(ibLogout);
@@ -69,6 +91,7 @@ public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				startAnimation((ImageButton)v, 2000);
 				Toast.makeText(getApplicationContext(),
 						"Logout dal Registro Scolastico in corso...",
 						Toast.LENGTH_SHORT).show();
@@ -90,18 +113,124 @@ public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 			}
 
 		});
-		
+
 		ibEmail = (ImageButton) findViewById(R.id.ibEmail);
-		registerToolTipFor(ibEmail); 
-		
+		registerToolTipFor(ibEmail);
+		ibEmail.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				startAnimation((ImageButton)v, 2000);
+				Toast.makeText(
+						getApplicationContext(),
+						"Non vi sono attività implementate"
+								, Toast.LENGTH_SHORT).show();
+			}
+		});
+
 		ibChangePassword = (ImageButton) findViewById(R.id.ibChangePassword);
 		registerToolTipFor(ibChangePassword);
-		
+		ibChangePassword.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				startAnimation((ImageButton)v, 2000);
+				Toast.makeText(
+						getApplicationContext(),
+						"Non vi sono attività implementate", Toast.LENGTH_SHORT).show();
+			}
+		});
+
 		ibUsersPassword = (ImageButton) findViewById(R.id.ibUsersPassword);
 		registerToolTipFor(ibUsersPassword);
-		
+		ibUsersPassword.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				startAnimation((ImageButton)v, 2000);
+				Toast.makeText(
+						getApplicationContext(),
+						"Non vi sono attività implementate", Toast.LENGTH_SHORT).show();
+			}
+		});
+
 		ibDatiUtenti = (ImageButton) findViewById(R.id.ibDatiUtenti);
 		registerToolTipFor(ibDatiUtenti);
+		ibDatiUtenti.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				startAnimation((ImageButton)v, 2000);
+				Toast.makeText(
+						getApplicationContext(),
+						"Non vi sono attività implementate", Toast.LENGTH_SHORT).show();
+			}
+		});
+
+		tvNow = (TextView) findViewById(R.id.tvNow);
+		setCurrentDate();
+
+		imShowMenu = (ImageButton) findViewById(R.id.imShowMenu);
+		imShowMenu.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				// Toast.makeText(getApplicationContext(),
+				// "imShowMenu.OnClickListener()", Toast.LENGTH_SHORT)
+				// .show();
+				startAnimation((ImageButton)v, 2000);
+				Toast.makeText(getApplicationContext(),
+						"Richiesta menù in corso...", Toast.LENGTH_SHORT)
+						.show();
+
+				openOptionsMenu();
+			}
+		});
+	}
+
+	@Override
+	public void startAnimation(final ImageButton ib, final long durationInMilliseconds) {
+		// TODO Auto-generated method stub
+		// BUTTONS ANIMATION
+		final String TAG = "ImageButton Animation";
+		Animation animation = new AlphaAnimation(1.0f, 0.25f); // Change alpha from
+														// fully visible to
+														// invisible
+		animation.setDuration(500); // duration - half a second
+		animation.setInterpolator(new LinearInterpolator()); // do not alter
+																// animation
+																// rate
+		animation.setRepeatCount(Animation.INFINITE); // Repeat animation
+														// infinitely
+		animation.setRepeatMode(Animation.REVERSE); // Reverse animation at the
+													// end so the button will
+													// fade back in
+
+		ib.startAnimation(animation);
+
+		Thread t = new Thread() {
+			long timeElapsed = 0l;
+
+			public void run() {
+				try {
+					while (timeElapsed <= durationInMilliseconds) {
+						long start = System.currentTimeMillis();
+						sleep(1000);
+						timeElapsed += System.currentTimeMillis() - start;
+					}
+				} catch (InterruptedException e) {
+					Log.e(TAG, e.toString());
+				}finally{
+					ib.clearAnimation();
+				}
+			}
+		};
+		t.start();
 	}
 
 	private void setIconIsAdmin(ImageButton ibIsAdmin, Long user_is_admin) {
@@ -184,5 +313,36 @@ public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	// display current date both on the text view and the Date Picker when the
+	// application starts.
+
+	private void setCurrentDate() {
+		final Calendar calendar = Calendar.getInstance();
+
+		int year = calendar.get(Calendar.YEAR);
+
+		int month = calendar.get(Calendar.MONTH);
+
+		int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+		// set current date into textview
+
+		tvNow.setText(new StringBuilder()
+
+		// Month is 0 based, so you have to add 1
+
+				.append(day).append("-")
+
+				.append(month + 1).append("-")
+
+				.append(year).append(" "));
+
+		// set current date into Date Picker
+
+		// date_picker.init(year, month, day, null);
+
+	}
+
 
 }

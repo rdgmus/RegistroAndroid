@@ -3,6 +3,7 @@ package it.keyorchestra.registrowebapp;
 import it.keyorchestra.registrowebapp.dbMatthed.DatabaseOps;
 import it.keyorchestra.registrowebapp.interfaces.ActivitiesCommonFunctions;
 import it.keyorchestra.registrowebapp.scuola.util.FieldsValidator;
+import it.keyorchestra.registrowebapp.scuola.util.ToastExpander;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -12,12 +13,16 @@ import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -48,6 +53,7 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				startAnimation((ImageButton)v, 2000);
 				Toast.makeText(getApplicationContext(),
 						"Pulizia campi in corso...", Toast.LENGTH_SHORT).show();
 
@@ -66,6 +72,7 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				// Va alla pagina di login
+				startAnimation((ImageButton)v, 2000);
 				Toast.makeText(getApplicationContext(),
 						"Re-indirizzamento a pagina iniziale in corso...",
 						Toast.LENGTH_SHORT).show();
@@ -86,6 +93,7 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				// Va alla pagina di login
+				startAnimation((ImageButton)v, 2000);
 				Toast.makeText(getApplicationContext(),
 						"Re-indirizzamento a Iscrizione in corso...",
 						Toast.LENGTH_SHORT).show();
@@ -107,6 +115,7 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 		etLoginPasswd = (EditText) findViewById(R.id.etLoginPasswd);
 
 		imShowMenu = (ImageButton) findViewById(R.id.imShowMenu);
+		registerToolTipFor(imShowMenu);
 		imShowMenu.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -115,6 +124,7 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 				// Toast.makeText(getApplicationContext(),
 				// "imShowMenu.OnClickListener()", Toast.LENGTH_SHORT)
 				// .show();
+				startAnimation((ImageButton)v, 2000);
 				Toast.makeText(getApplicationContext(),
 						"Richiesta menù in corso...", Toast.LENGTH_SHORT)
 						.show();
@@ -131,6 +141,7 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				startAnimation((ImageButton)v, 2000);
 				Toast.makeText(getApplicationContext(),
 						"Autenticazione credenziali in corso...",
 						Toast.LENGTH_SHORT).show();
@@ -144,7 +155,8 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 					return;
 				}
 
-				DatabaseOps databaseOps = new DatabaseOps(getApplicationContext());
+				DatabaseOps databaseOps = new DatabaseOps(
+						getApplicationContext());
 				// Controlla se le credenziali esistono
 				String phpencoder = getPrefs.getString("phpencoder", null);
 				if (phpencoder == null) {
@@ -169,13 +181,17 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 							.getDefaultSharedPreferences(getApplicationContext());
 					Long is_locked = sharedpreferences.getLong("is_locked", -1);
 					if (is_locked == 1) {
-						Toast.makeText(
+						 Toast myToast = Toast.makeText(
 								getApplicationContext(),
-								"L'utente ha già effettuato il login da un altro IP!\n"
-										+ "Oppure non ha alcun ruolo accreditato.\n"
+								"(1) L'utente ha già effettuato il login da un altro IP?\n"
+										+ "(2) Non ha alcun ruolo accreditato?\n"
+										+ "(3) Non ha effettuato il logout?\n"
+										+ "Contattare l'Amministratore!\n"
 										+ "Permesso di accesso NEGATO!",
-								Toast.LENGTH_SHORT).show();
-
+								Toast.LENGTH_SHORT);
+						
+					        ToastExpander.showFor(myToast, 10000);
+					        
 					} else {
 
 						// Controlla i permessi del ruolo di accesso prescelto
@@ -202,8 +218,8 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 									getApplicationContext(),
 									getDatabaseIpFromPreferences());
 
-							//REGISTRA LOGIN EVENT
-							
+							// REGISTRA LOGIN EVENT
+
 							// Lancia un nuovo Intent per andare allo userMenu
 							// del ruolo prescelto. All'interno dello user menù
 							// verranno mostrate opzioni in base al ruolo e se
@@ -249,6 +265,7 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				startAnimation((ImageButton)v, 2000);
 				Toast.makeText(getApplicationContext(),
 						"Cambio Ruolo in corso...", Toast.LENGTH_SHORT).show();
 
@@ -268,6 +285,7 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				startAnimation((ImageButton)v, 2000);
 				Toast.makeText(getApplicationContext(),
 						"Inserimento credenziali amministratore in corso...",
 						Toast.LENGTH_SHORT).show();
@@ -313,7 +331,8 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 	private class FetchSQL extends AsyncTask<Void, Void, String> {
 		@Override
 		protected String doInBackground(Void... params) {
-			String retval = new DatabaseOps(getApplicationContext()).FetchConnection(getBaseContext());
+			String retval = new DatabaseOps(getApplicationContext())
+					.FetchConnection(getBaseContext());
 			return retval;
 		}
 
@@ -494,6 +513,45 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 		toast.setView(layout);
 		toast.show();
 		return true;
+	}
+
+	@Override
+	public void startAnimation(final ImageButton ib, final long durationInMilliseconds) {
+		// TODO Auto-generated method stub
+		final String TAG = "ImageButton Animation";
+		Animation animation = new AlphaAnimation(1.0f, 0.25f); // Change alpha from
+														// fully visible to
+														// invisible
+		animation.setDuration(500); // duration - half a second
+		animation.setInterpolator(new LinearInterpolator()); // do not alter
+																// animation
+																// rate
+		animation.setRepeatCount(Animation.INFINITE); // Repeat animation
+														// infinitely
+		animation.setRepeatMode(Animation.REVERSE); // Reverse animation at the
+													// end so the button will
+													// fade back in
+
+		ib.startAnimation(animation);
+
+		Thread t = new Thread() {
+			long timeElapsed = 0l;
+
+			public void run() {
+				try {
+					while (timeElapsed <= durationInMilliseconds) {
+						long start = System.currentTimeMillis();
+						sleep(1000);
+						timeElapsed += System.currentTimeMillis() - start;
+					}
+				} catch (InterruptedException e) {
+					Log.e(TAG, e.toString());
+				}finally{
+					ib.clearAnimation();
+				}
+			}
+		};
+		t.start();
 	}
 
 }

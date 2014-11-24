@@ -102,5 +102,9 @@
     <string android:id="@+id/string1" android:layout_width="wrap_content" android:layout_height="wrap_content" name="ibChangePasswordDescription">Cambio Password</string>
     <string android:layout_width="wrap_content" android:id="@+id/string1" android:layout_height="wrap_content" name="ibUsersPasswordDescription">Cambio password altri utenti</string>
     <string android:layout_width="wrap_content" android:id="@+id/string1" android:layout_height="wrap_content" name="gestisciDatiUtenti">Gestione informazioni altri utenti</string>
+    <string android:layout_height="wrap_content" android:id="@+id/string1" android:layout_width="wrap_content" name="othersPasswdHint">Pass Utenti</string>
+    <string android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/string1" name="othersData">Dati Utenti</string>
+    <string android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/string1" name="now">24-11-2014</string>
+    <string android:layout_width="wrap_content" android:id="@+id/string1" android:layout_height="wrap_content" name="ruoliOptionsDescription">Accede alle attività del Ruolo indicato</string>
 
 </resources>

@@ -46,9 +46,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
-                android:background="@color/colorListItem"
                 android:contentDescription="@string/showMenu"
-                android:src="@drawable/menu64" />
+                android:src="@drawable/activity_menu" 
+                android:background="@android:color/transparent"/>
         </RelativeLayout>
 
         <TextView

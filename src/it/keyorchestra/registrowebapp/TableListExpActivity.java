@@ -1,5 +1,6 @@
 package it.keyorchestra.registrowebapp;
 
+import it.keyorchestra.registrowebapp.interfaces.ActivitiesCommonFunctions;
 import it.keyorchestra.registrowebapp.mysqlandroid.MySqlAndroid;
 import it.keyorchestra.registrowebapp.scuola.util.ExpandableListAdapter;
 
@@ -11,23 +12,33 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 @SuppressLint("NewApi")
-public class TableListExpActivity extends Activity {
+public class TableListExpActivity extends Activity implements ActivitiesCommonFunctions {
 
 	ImageButton imShowMenu;
 	ExpandableListAdapter listAdapter;
@@ -49,6 +60,7 @@ public class TableListExpActivity extends Activity {
 		setContentView(R.layout.table_list_exp);
 
 		imShowMenu = (ImageButton) findViewById(R.id.imShowMenu);
+		registerToolTipFor(imShowMenu);
 		imShowMenu.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -57,6 +69,7 @@ public class TableListExpActivity extends Activity {
 				// Toast.makeText(getApplicationContext(),
 				// "imShowMenu.OnClickListener()", Toast.LENGTH_SHORT)
 				// .show();
+				startAnimation((ImageButton)v, 2000);
 				openOptionsMenu();
 			}
 		});
@@ -328,5 +341,107 @@ public class TableListExpActivity extends Activity {
 		}
 
 		return false;
+	}
+
+
+
+	@Override
+	public void registerToolTipFor(ImageButton ib) {
+		// TODO Auto-generated method stub
+		ib.setOnLongClickListener(new View.OnLongClickListener() {
+
+			@Override
+			public boolean onLongClick(View view) {
+
+				customToast(view.getContentDescription(), R.drawable.help32,
+						R.layout.info_layout);
+
+				return true;
+			}
+		});
+	}
+
+
+
+	@Override
+	public boolean customToast(CharSequence charSequence, int iconId,
+			int layoutId) {
+		// TODO Auto-generated method stub
+		Resources res = getResources();
+		LayoutInflater inflater = getLayoutInflater();
+		View layout = inflater.inflate(layoutId,
+				(ViewGroup) findViewById(R.id.toast_layout_root));
+		TextView tvToastConnect = (TextView) layout
+				.findViewById(R.id.tvToastConnect);
+		tvToastConnect.setText(charSequence);
+
+		ImageView ivToastConnect = (ImageView) layout
+				.findViewById(R.id.ivToastConnect);
+		ivToastConnect.setImageDrawable(res.getDrawable(iconId));
+
+		Toast toast = new Toast(getApplicationContext());
+		toast.setGravity(Gravity.BOTTOM, 0, 0);
+		toast.setDuration(Toast.LENGTH_SHORT);
+		toast.setView(layout);
+		toast.show();
+		return true;
+	}
+
+
+
+	@Override
+	public String getDefaultDatabaseFromPreferences() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+	@Override
+	public String getDatabaseIpFromPreferences() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+	@Override
+	public void startAnimation(final ImageButton ib, final long durationInMilliseconds) {
+		// TODO Auto-generated method stub
+		// BUTTONS ANIMATION
+				final String TAG = "ImageButton Animation";
+				Animation animation = new AlphaAnimation(1.0f, 0.25f); // Change alpha from
+																// fully visible to
+																// invisible
+				animation.setDuration(500); // duration - half a second
+				animation.setInterpolator(new LinearInterpolator()); // do not alter
+																		// animation
+																		// rate
+				animation.setRepeatCount(Animation.INFINITE); // Repeat animation
+																// infinitely
+				animation.setRepeatMode(Animation.REVERSE); // Reverse animation at the
+															// end so the button will
+															// fade back in
+
+				ib.startAnimation(animation);
+
+				Thread t = new Thread() {
+					long timeElapsed = 0l;
+
+					public void run() {
+						try {
+							while (timeElapsed <= durationInMilliseconds) {
+								long start = System.currentTimeMillis();
+								sleep(1000);
+								timeElapsed += System.currentTimeMillis() - start;
+							}
+						} catch (InterruptedException e) {
+							Log.e(TAG, e.toString());
+						}finally{
+							ib.clearAnimation();
+						}
+					}
+				};
+				t.start();
 	}
 }

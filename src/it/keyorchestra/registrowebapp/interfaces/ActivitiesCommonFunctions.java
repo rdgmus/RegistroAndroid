@@ -17,4 +17,7 @@ public interface ActivitiesCommonFunctions {
 	public String getDefaultDatabaseFromPreferences();
 
 	public String getDatabaseIpFromPreferences();
+
+	public void startAnimation(final ImageButton ib,
+			final long durationInMilliseconds);
 }

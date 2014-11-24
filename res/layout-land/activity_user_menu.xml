@@ -6,22 +6,12 @@
     android:orientation="vertical" >
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="88dp" >
-
-            <ImageButton
-                android:id="@+id/ivRuoloUtente"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:background="@android:color/transparent"
-                android:contentDescription="@string/ruoliUtentiDescription"
-                android:src="@drawable/admin" />
 
             <ImageButton
                 android:id="@+id/ibIsAdmin"
@@ -52,7 +42,7 @@
                 android:gravity="center"
                 android:text="User Name"
                 android:textColor="@color/colorOrange"
-                android:textSize="15sp"
+                android:textSize="25sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -66,8 +56,64 @@
                 android:textColor="@color/colorOrange"
                 android:textSize="25sp"
                 android:textStyle="bold" />
-        </RelativeLayout>
 
+            <ImageButton
+                android:id="@+id/imShowMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:contentDescription="@string/showMenu"
+                android:src="@drawable/activity_menu" 
+                android:background="@android:color/transparent"/>
+
+            <LinearLayout
+                android:id="@+id/linearLayout1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ibLogout"
+                android:layout_centerHorizontal="true"
+                android:orientation="vertical" >
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/ibIsAdmin"
+                android:layout_toRightOf="@+id/ibIsAdmin"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/tvNow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/ibRuoloUtente"
+                    android:layout_toLeftOf="@+id/ibRuoloUtente"
+                    android:text="@string/now"
+                    android:textColor="@color/colorOrange" />
+
+                <DigitalClock
+                    android:id="@+id/digitalClock1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/linearLayout2"
+                    android:layout_alignRight="@+id/tvNow"
+                    android:layout_gravity="center"
+                    android:textColor="@color/colorOrange" />
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/ibRuoloUtente"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toLeftOf="@+id/imShowMenu"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/ruoliOptionsDescription"
+                android:src="@drawable/admin" />
+
+        </RelativeLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -75,38 +121,101 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
 
-        <ImageButton
-            android:id="@+id/ibEmail"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/mail" 
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/ibEmailDescription"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
 
-        <ImageButton
-            android:id="@+id/ibChangePassword"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/user_password" 
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/ibChangePasswordDescription"/>
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/emailHint"
+                android:textColor="@color/colorOrange"
+                android:textSize="15sp"
+                android:textStyle="bold" />
 
-        <ImageButton
-            android:id="@+id/ibUsersPassword"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/users_password"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/ibUsersPasswordDescription"/>
+            <ImageButton
+                android:id="@+id/ibEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/ibEmailDescription"
+                android:src="@drawable/mail" />
+        </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/ibDatiUtenti"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ruoli_utenti" 
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/gestisciDatiUtenti"/>
-        
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/passwdHint"
+                android:textColor="@color/colorOrange"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/ibChangePassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/ibChangePasswordDescription"
+                android:src="@drawable/user_password" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/othersPasswdHint"
+                android:textColor="@color/colorOrange"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/ibUsersPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/ibUsersPasswordDescription"
+                android:src="@drawable/users_password" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/othersData"
+                android:textColor="@color/colorOrange"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/ibDatiUtenti"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/gestisciDatiUtenti"
+                android:src="@drawable/ruoli_utenti" />
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>
