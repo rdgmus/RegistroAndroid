@@ -26,6 +26,12 @@ import android.content.pm.ResolveInfo;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
 
+/**
+ * In questa classe si effettuano query al database MySQL direttamente
+ * ricevendone i risultati.
+ * @author rdgmus
+ *
+ */
 public class DatabaseOps implements DatabasesInterface {
 	SharedPreferences getPrefs;
 	Long id_utente;

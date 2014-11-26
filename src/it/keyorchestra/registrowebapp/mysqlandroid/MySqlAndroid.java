@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -123,5 +124,35 @@ public class MySqlAndroid {
 		result = getResultFromInputStream( context, is);
 
 		return result;
+	}
+	
+	/**
+	 * Carica i dati di una tabella
+	 * @param context
+	 * @param uri
+	 * @param tableName
+	 * @return
+	 */
+	public JSONArray retrieveTableData(Context context, String uri, String tableName){
+		InputStream is = null;
+		is = getInputStreamFromUri(context,uri);
+		if(is == null){
+			return null;			
+		}
+		String result = null;
+		result = getResultFromInputStream( context, is);
+
+		
+		JSONArray jArray = null;
+
+		try {
+			jArray = new JSONArray(result);
+		} catch (JSONException e1) {
+			e1.printStackTrace();
+		} catch (ParseException e1) {
+			e1.printStackTrace();
+		}
+		
+		return jArray;
 	}
 }

@@ -12,8 +12,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -59,9 +59,35 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="it.keyorchestra.registrowebapp.mysqlandroid.UtentiScuolaActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="landscape" >
+            <intent-filter>
+                <action android:name="android.intent.action.UTENTI_SCUOLA_ACTIVITY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name="it.keyorchestra.registrowebapp.mysqlandroid.Tab1Activity" >
+        </activity>
+        <activity android:name="it.keyorchestra.registrowebapp.mysqlandroid.Tab2Activity" >
+        </activity>
+        <activity android:name="it.keyorchestra.registrowebapp.mysqlandroid.Tab3Activity" >
+        </activity>
+        <activity
+            android:name="it.keyorchestra.registrowebapp.UsersDataManager"
+            android:label="@string/app_name"
+            android:screenOrientation="landscape" >
+            <intent-filter>
+                <action android:name="android.intent.action.USER_DATA_MANAGER" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name="it.keyorchestra.registrowebapp.UserMenu"
-            android:label="@string/app_name" 
-            android:screenOrientation="landscape">
+            android:label="@string/app_name"
+            android:screenOrientation="landscape" >
             <intent-filter>
                 <action android:name="android.intent.action.USER_MENU" />
 
@@ -70,8 +96,8 @@
         </activity>
         <activity
             android:name="it.keyorchestra.registrowebapp.Login"
-            android:label="@string/app_name" 
-            android:screenOrientation="portrait">
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.LOGIN" />
 
@@ -80,8 +106,8 @@
         </activity>
         <activity
             android:name="it.keyorchestra.registrowebapp.Iscrizione"
-            android:label="@string/app_name" 
-            android:screenOrientation="portrait">
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.REGISTER_USER" />
 
@@ -222,7 +248,8 @@
         </activity>
         <activity
             android:name="it.keyorchestra.registrowebapp.TableListExpActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="it.keyorchestra.registrowebapp.LIST_ACTIVITY" />
 

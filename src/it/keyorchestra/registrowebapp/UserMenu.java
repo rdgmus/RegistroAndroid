@@ -168,6 +168,10 @@ public class UserMenu extends Activity  implements ActivitiesCommonFunctions {
 				Toast.makeText(
 						getApplicationContext(),
 						"Non vi sono attività implementate", Toast.LENGTH_SHORT).show();
+				Intent ourStartingPoint = new Intent(UserMenu.this,
+						UsersDataManager.class);
+				startActivity(ourStartingPoint);
+				
 			}
 		});
 

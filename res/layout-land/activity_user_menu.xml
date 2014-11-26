@@ -63,18 +63,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
+                android:background="@android:color/transparent"
                 android:contentDescription="@string/showMenu"
-                android:src="@drawable/activity_menu" 
-                android:background="@android:color/transparent"/>
-
-            <LinearLayout
-                android:id="@+id/linearLayout1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/ibLogout"
-                android:layout_centerHorizontal="true"
-                android:orientation="vertical" >
-            </LinearLayout>
+                android:src="@drawable/activity_menu" />
 
             <LinearLayout
                 android:id="@+id/linearLayout2"
@@ -112,7 +103,6 @@
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/ruoliOptionsDescription"
                 android:src="@drawable/admin" />
-
         </RelativeLayout>
     </LinearLayout>
 
@@ -217,5 +207,4 @@
                 android:src="@drawable/ruoli_utenti" />
         </LinearLayout>
     </LinearLayout>
-
 </LinearLayout>

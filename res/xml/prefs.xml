@@ -16,7 +16,7 @@
         android:enabled="true"
         android:key="phpmysql"
         android:selectable="true"
-        android:summary="File di interfaccia"
+        android:summary="Server Side Scripting"
         android:title="Interfaccia Php-MySQL" >
         <EditTextPreference
             android:defaultValue="PhpMySqlAndroid/mySqlAndroidTest.php"
@@ -28,6 +28,11 @@
             android:key="phpencoder"
             android:summary="Posizione Php-Encoder nel server Apache"
             android:title="Php Encoder" />
+        <EditTextPreference
+            android:defaultValue="PhpMySqlAndroid/retrieveTableData.php"
+            android:key="retrieveTableData"
+            android:summary="Posizione funzioni tabellari nel Server Apache"
+            android:title="Carica Dati in Tabella" />
     </PreferenceCategory>
     <PreferenceCategory
         android:enabled="true"
