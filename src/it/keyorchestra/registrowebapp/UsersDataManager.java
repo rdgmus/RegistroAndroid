@@ -11,6 +11,7 @@ import it.keyorchestra.registrowebapp.mysqlandroid.Tab2Activity;
 import it.keyorchestra.registrowebapp.mysqlandroid.Tab3Activity;
 import it.keyorchestra.registrowebapp.mysqlandroid.UtentiScuolaActivity;
 import android.app.Activity;
+import android.app.TabActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -36,7 +37,8 @@ import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class UsersDataManager extends Activity implements
+@SuppressWarnings("deprecation")
+public class UsersDataManager extends TabActivity implements
 		ActivitiesCommonFunctions {
 
 	ImageButton ibBack;
@@ -72,28 +74,28 @@ public class UsersDataManager extends Activity implements
 		});
 //		// TAB
 //		// create the TabHost that will contain the Tabs
-//		TabHost tabHost = (TabHost) findViewById(android.R.id.tabhost);
-//		TabSpec tab1 = tabHost.newTabSpec("First Tab");
-//		TabSpec tab2 = tabHost.newTabSpec("Second Tab");
-//		TabSpec tab3 = tabHost.newTabSpec("Third tab");
-//		// Set the Tab name and Activity
-//		// that will be opened when particular Tab will be selected
-//		tab1.setIndicator("Tab1");
-//		tab1.setContent(new Intent(this,
-//				Tab1Activity.class));
-//
-//		tab2.setIndicator("Tab2");
-//		tab2.setContent(new Intent(this, Tab2Activity.class));
-//
-//		tab3.setIndicator("Tab3");
-//		tab3.setContent(new Intent(this, Tab3Activity.class));
-//
-//		/** Add the tabs to the TabHost to display. */
-//		tabHost.addTab(tab1);
-//		tabHost.addTab(tab2);
-//		tabHost.addTab(tab3);
+		TabHost tabHost = (TabHost) findViewById(android.R.id.tabhost);
+		TabSpec tab1 = tabHost.newTabSpec("First Tab");
+		TabSpec tab2 = tabHost.newTabSpec("Second Tab");
+		TabSpec tab3 = tabHost.newTabSpec("Third tab");
+		// Set the Tab name and Activity
+		// that will be opened when particular Tab will be selected
+		tab1.setIndicator("Tab1");
+		tab1.setContent(new Intent(this,
+				Tab1Activity.class));
+
+		tab2.setIndicator("Tab2");
+		tab2.setContent(new Intent(this, Tab2Activity.class));
+
+		tab3.setIndicator("Tab3");
+		tab3.setContent(new Intent(this, Tab3Activity.class));
+
+		/** Add the tabs to the TabHost to display. */
+		tabHost.addTab(tab1);
+		tabHost.addTab(tab2);
+		tabHost.addTab(tab3);
 		
-		RetrieveUsersData("utenti_scuola");
+//		RetrieveUsersData("utenti_scuola");
 	}
 
 	@Override
