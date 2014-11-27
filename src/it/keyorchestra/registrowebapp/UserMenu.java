@@ -25,13 +25,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class UserMenu extends Activity  implements ActivitiesCommonFunctions {
+public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 
 	private SharedPreferences getPrefs;
 	private DatabaseOps databaseOps;
 	TextView tvUserData, tvNow;
 	ImageButton ibLogout, ibRuoloUtente, ibIsAdmin, ibEmail, ibChangePassword,
-			ibDatiUtenti,imShowMenu;
+			ibDatiUtenti, imShowMenu;
 
 	private String ruoloScelto;
 
@@ -50,6 +50,10 @@ public class UserMenu extends Activity  implements ActivitiesCommonFunctions {
 		String cognome = databaseOps.getCognome();
 		String nome = databaseOps.getNome();
 
+		if (id_utente == -1) {
+			UserMenu.this.finish();
+		}
+
 		Toast.makeText(
 				getApplicationContext(),
 				"Menù dell'Utente: [" + id_utente + "] " + cognome + " " + nome,
@@ -64,7 +68,7 @@ public class UserMenu extends Activity  implements ActivitiesCommonFunctions {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				startAnimation((ImageButton)v, 2000);
+				startAnimation((ImageButton) v, 2000);
 				Toast.makeText(
 						getApplicationContext(),
 						"Non vi sono attività implementate per il ruolo di: "
@@ -91,25 +95,39 @@ public class UserMenu extends Activity  implements ActivitiesCommonFunctions {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				startAnimation((ImageButton)v, 2000);
+				startAnimation((ImageButton) v, 2000);
+
+				Thread thread = new Thread() {
+					@Override
+					public void run() {
+						try {
+							Thread.sleep(3500); // As I am using LENGTH_LONG in
+												// Toast
+							// SBLOCCA UTENTE
+							databaseOps.UnlockUser(getApplicationContext(),
+									null, id_utente);
+							// CANCELLA UTENTE DALLE PREFERENZE
+							databaseOps.DeleteUserFromPreferences(id_utente);
+							// REGISTRA LOGOUT EVENT
+
+							// LANCIA TableListExpActivity
+							Intent ourStartingPoint = new Intent(UserMenu.this,
+									TableListExpActivity.class);
+							startActivity(ourStartingPoint);
+
+							// FINISH
+							UserMenu.this.finish();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				};
+
 				Toast.makeText(getApplicationContext(),
-						"Logout dal Registro Scolastico in corso...",
-						Toast.LENGTH_SHORT).show();
+						"Logout dal Registro Scolastico", Toast.LENGTH_SHORT)
+						.show();
+				thread.start();
 
-				// SBLOCCA UTENTE
-				databaseOps
-						.UnlockUser(getApplicationContext(), null, id_utente);
-				// CANCELLA UTENTE DALLE PREFERENZE
-				databaseOps.DeleteUserFromPreferences(id_utente);
-				// REGISTRA LOGOUT EVENT
-
-				// LANCIA TableListExpActivity
-				Intent ourStartingPoint = new Intent(UserMenu.this,
-						TableListExpActivity.class);
-				startActivity(ourStartingPoint);
-
-				// FINISH
-				finish();
 			}
 
 		});
@@ -121,11 +139,10 @@ public class UserMenu extends Activity  implements ActivitiesCommonFunctions {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				startAnimation((ImageButton)v, 2000);
-				Toast.makeText(
-						getApplicationContext(),
-						"Non vi sono attività implementate"
-								, Toast.LENGTH_SHORT).show();
+				startAnimation((ImageButton) v, 2000);
+				Toast.makeText(getApplicationContext(),
+						"Non vi sono attività implementate", Toast.LENGTH_SHORT)
+						.show();
 			}
 		});
 
@@ -136,14 +153,12 @@ public class UserMenu extends Activity  implements ActivitiesCommonFunctions {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				startAnimation((ImageButton)v, 2000);
-				Toast.makeText(
-						getApplicationContext(),
-						"Non vi sono attività implementate", Toast.LENGTH_SHORT).show();
+				startAnimation((ImageButton) v, 2000);
+				Toast.makeText(getApplicationContext(),
+						"Non vi sono attività implementate", Toast.LENGTH_SHORT)
+						.show();
 			}
 		});
-
-		
 
 		ibDatiUtenti = (ImageButton) findViewById(R.id.ibDatiUtenti);
 		registerToolTipFor(ibDatiUtenti);
@@ -152,14 +167,13 @@ public class UserMenu extends Activity  implements ActivitiesCommonFunctions {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				startAnimation((ImageButton)v, 2000);
-				Toast.makeText(
-						getApplicationContext(),
-						"Manager Utenti", Toast.LENGTH_SHORT).show();
+				startAnimation((ImageButton) v, 2000);
+				Toast.makeText(getApplicationContext(), "Manager Utenti",
+						Toast.LENGTH_SHORT).show();
 				Intent ourStartingPoint = new Intent(UserMenu.this,
 						UsersDataManager.class);
 				startActivity(ourStartingPoint);
-				
+
 			}
 		});
 
@@ -175,7 +189,7 @@ public class UserMenu extends Activity  implements ActivitiesCommonFunctions {
 				// Toast.makeText(getApplicationContext(),
 				// "imShowMenu.OnClickListener()", Toast.LENGTH_SHORT)
 				// .show();
-				startAnimation((ImageButton)v, 2000);
+				startAnimation((ImageButton) v, 2000);
 				Toast.makeText(getApplicationContext(),
 						"Richiesta menù in corso...", Toast.LENGTH_SHORT)
 						.show();
@@ -186,13 +200,15 @@ public class UserMenu extends Activity  implements ActivitiesCommonFunctions {
 	}
 
 	@Override
-	public void startAnimation(final ImageButton ib, final long durationInMilliseconds) {
+	public void startAnimation(final ImageButton ib,
+			final long durationInMilliseconds) {
 		// TODO Auto-generated method stub
 		// BUTTONS ANIMATION
 		final String TAG = "ImageButton Animation";
-		Animation animation = new AlphaAnimation(1.0f, 0.25f); // Change alpha from
-														// fully visible to
-														// invisible
+		Animation animation = new AlphaAnimation(1.0f, 0.25f); // Change alpha
+																// from
+		// fully visible to
+		// invisible
 		animation.setDuration(500); // duration - half a second
 		animation.setInterpolator(new LinearInterpolator()); // do not alter
 																// animation
@@ -217,7 +233,7 @@ public class UserMenu extends Activity  implements ActivitiesCommonFunctions {
 					}
 				} catch (InterruptedException e) {
 					Log.e(TAG, e.toString());
-				}finally{
+				} finally {
 					ib.clearAnimation();
 				}
 			}
@@ -335,6 +351,5 @@ public class UserMenu extends Activity  implements ActivitiesCommonFunctions {
 		// date_picker.init(year, month, day, null);
 
 	}
-
 
 }

@@ -226,14 +226,31 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 							// l'utente è un admin avrà anche la possibilità di
 							// accedere
 							// al database con tutti i permessi
+							
+							Thread thread = new Thread(){
+					             @Override
+					            public void run() {
+					                 try {
+					                    Thread.sleep(3500); // As I am using LENGTH_LONG in Toast
+					                    Intent ourStartingPoint = new Intent(Login.this,
+												UserMenu.class);
+										startActivity(ourStartingPoint);
+										finish();
+					                } catch (Exception e) {
+					                    e.printStackTrace();
+					                }
+					             }  
+					           };
+					           
 							Toast.makeText(getApplicationContext(),
 									"Ora accediamo al suo menù!",
 									Toast.LENGTH_SHORT).show();
-
-							Intent ourStartingPoint = new Intent(Login.this,
-									UserMenu.class);
-							startActivity(ourStartingPoint);
-							finish();
+							thread.start();
+							
+//							Intent ourStartingPoint = new Intent(Login.this,
+//									UserMenu.class);
+//							startActivity(ourStartingPoint);
+//							finish();
 						} else {
 							Toast.makeText(
 									getApplicationContext(),
