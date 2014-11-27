@@ -31,7 +31,7 @@ public class UserMenu extends Activity  implements ActivitiesCommonFunctions {
 	private DatabaseOps databaseOps;
 	TextView tvUserData, tvNow;
 	ImageButton ibLogout, ibRuoloUtente, ibIsAdmin, ibEmail, ibChangePassword,
-			ibUsersPassword, ibDatiUtenti,imShowMenu;
+			ibDatiUtenti,imShowMenu;
 
 	private String ruoloScelto;
 
@@ -143,19 +143,7 @@ public class UserMenu extends Activity  implements ActivitiesCommonFunctions {
 			}
 		});
 
-		ibUsersPassword = (ImageButton) findViewById(R.id.ibUsersPassword);
-		registerToolTipFor(ibUsersPassword);
-		ibUsersPassword.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				startAnimation((ImageButton)v, 2000);
-				Toast.makeText(
-						getApplicationContext(),
-						"Non vi sono attività implementate", Toast.LENGTH_SHORT).show();
-			}
-		});
+		
 
 		ibDatiUtenti = (ImageButton) findViewById(R.id.ibDatiUtenti);
 		registerToolTipFor(ibDatiUtenti);
@@ -167,7 +155,7 @@ public class UserMenu extends Activity  implements ActivitiesCommonFunctions {
 				startAnimation((ImageButton)v, 2000);
 				Toast.makeText(
 						getApplicationContext(),
-						"Non vi sono attività implementate", Toast.LENGTH_SHORT).show();
+						"Manager Utenti", Toast.LENGTH_SHORT).show();
 				Intent ourStartingPoint = new Intent(UserMenu.this,
 						UsersDataManager.class);
 				startActivity(ourStartingPoint);

@@ -40,9 +40,9 @@
                 android:layout_alignLeft="@+id/ibIsAdmin"
                 android:layout_alignParentTop="true"
                 android:gravity="center"
-                android:text="User Name"
+                android:text="@string/author"
                 android:textColor="@color/colorOrange"
-                android:textSize="25sp"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -79,8 +79,6 @@
                     android:id="@+id/tvNow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/ibRuoloUtente"
-                    android:layout_toLeftOf="@+id/ibRuoloUtente"
                     android:text="@string/now"
                     android:textColor="@color/colorOrange" />
 
@@ -88,8 +86,6 @@
                     android:id="@+id/digitalClock1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_above="@+id/linearLayout2"
-                    android:layout_alignRight="@+id/tvNow"
                     android:layout_gravity="center"
                     android:textColor="@color/colorOrange" />
             </LinearLayout>
@@ -159,29 +155,7 @@
                 android:src="@drawable/user_password" />
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical" >
-
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/othersPasswdHint"
-                android:textColor="@color/colorOrange"
-                android:textSize="15sp"
-                android:textStyle="bold" />
-
-            <ImageButton
-                android:id="@+id/ibUsersPassword"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:contentDescription="@string/ibUsersPasswordDescription"
-                android:src="@drawable/users_password" />
-        </LinearLayout>
+        
 
         <LinearLayout
             android:layout_width="wrap_content"

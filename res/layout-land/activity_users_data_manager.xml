@@ -5,13 +5,28 @@
     android:background="@drawable/background_color1"
     android:orientation="vertical" >
 
-    <ImageButton
-        android:id="@+id/ibBack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:contentDescription="@string/home"
-        android:src="@drawable/wm_back64" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <ImageButton
+            android:id="@+id/ibBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/home"
+            android:src="@drawable/wm_back64" />
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/othersData"
+            android:textColor="@color/colorOrange"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical" />
+    </LinearLayout>
 
     <HorizontalScrollView
         android:layout_width="fill_parent"
@@ -50,24 +65,24 @@
                 android:layout_height="match_parent" >
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:id="@+id/tab1"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" >
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal" >
                 </LinearLayout>
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:id="@+id/tab2"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" >
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal" >
                 </LinearLayout>
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:id="@+id/tab3"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" >
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal" >
                 </LinearLayout>
             </FrameLayout>
         </LinearLayout>
