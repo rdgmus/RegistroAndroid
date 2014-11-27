@@ -29,8 +29,9 @@ import android.widget.Toast;
 /**
  * In questa classe si effettuano query al database MySQL direttamente
  * ricevendone i risultati.
+ * 
  * @author rdgmus
- *
+ * 
  */
 public class DatabaseOps implements DatabasesInterface {
 	SharedPreferences getPrefs;
@@ -569,4 +570,31 @@ public class DatabaseOps implements DatabasesInterface {
 
 	}
 
+	public void setUserLocked(Context applicationContext, int id_utente,
+			boolean is_locked) {
+		// TODO Auto-generated method stub
+		String url = getUrl(applicationContext);
+
+		Connection conn;
+		try {
+			DriverManager.setLoginTimeout(15);
+			conn = DriverManager.getConnection(url);
+			Statement st = conn.createStatement();
+			String sql = null;
+
+			int lock = is_locked ? 1 : 0;
+			sql = "UPDATE `utenti_scuola` SET `is_locked`=" + lock
+					+ " WHERE `id_utente` = "+id_utente;
+			int result = st.executeUpdate(sql);
+			if (result==1) {
+				Toast.makeText(applicationContext, "Utente = " + id_utente+
+						" is_locked = "+lock,
+						Toast.LENGTH_LONG).show();
+			}
+			st.close();
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }

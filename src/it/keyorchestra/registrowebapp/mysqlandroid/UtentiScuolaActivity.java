@@ -1,6 +1,7 @@
 package it.keyorchestra.registrowebapp.mysqlandroid;
 
 import it.keyorchestra.registrowebapp.R;
+import it.keyorchestra.registrowebapp.dbMatthed.DatabaseOps;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -163,33 +164,25 @@ public class UtentiScuolaActivity extends Activity {
 
 					b2.setChecked((json_data.getInt("is_locked") == 1) ? true
 							: false);
-					b2.setText(json_data.getInt("is_locked") == 1 ? "Sì": "No");
-					
+					b2.setText(json_data.getInt("is_locked") == 1 ? "Sì" : "No");
+
 					b2.setTag(json_data.getInt("id_utente"));
-					
+
 					b2.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-						
+
 						@Override
-						public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+						public void onCheckedChanged(CompoundButton buttonView,
+								boolean isChecked) {
 							// TODO Auto-generated method stub
-							Toast.makeText(getApplicationContext(), "Checked = " + isChecked+
-									" per l'utente:"+b2.getTag(),
-									Toast.LENGTH_SHORT).show();
+							Toast.makeText(
+									getApplicationContext(),
+									"Checked = " + isChecked + " per l'utente:"
+											+ b2.getTag(), Toast.LENGTH_SHORT)
+									.show();
+						DatabaseOps dataBaseOps = new DatabaseOps(getApplicationContext());
+						dataBaseOps.setUserLocked(getApplicationContext(),(Integer) b2.getTag(), isChecked);
 						}
 					});
-					
-					// TextView b2 = new TextView(UtentiScuolaActivity.this);
-					//
-					// b2.setPadding(10, 0, 0, 0);
-					//
-					// String stime2 = String.valueOf(json_data
-					// .getInt("is_locked"));
-					//
-					// b2.setText(stime2);
-					//
-					// b2.setTextColor(Color.BLACK);
-					//
-					// b2.setTextSize(15);
 
 					tr.addView(b2);
 
