@@ -570,6 +570,14 @@ public class DatabaseOps implements DatabasesInterface {
 
 	}
 
+	/**
+	 * Update del campo 'is_locked' della tabella 'utenti_scuola'
+	 * Sblocco o viceversa, blocco dell'account di un utente.
+	 * Può essere effettuato solo da un ADMIN
+	 * @param applicationContext
+	 * @param id_utente
+	 * @param is_locked
+	 */
 	public void setUserLocked(Context applicationContext, int id_utente,
 			boolean is_locked) {
 		// TODO Auto-generated method stub
@@ -584,12 +592,13 @@ public class DatabaseOps implements DatabasesInterface {
 
 			int lock = is_locked ? 1 : 0;
 			sql = "UPDATE `utenti_scuola` SET `is_locked`=" + lock
-					+ " WHERE `id_utente` = "+id_utente;
+					+ " WHERE `id_utente` = " + id_utente;
 			int result = st.executeUpdate(sql);
-			if (result==1) {
-				Toast.makeText(applicationContext, "Utente = " + id_utente+
-						" is_locked = "+lock,
-						Toast.LENGTH_LONG).show();
+			if (result == 1) {
+				Toast.makeText(
+						applicationContext,
+						"Utente: [" + id_utente + "] => is_locked = "
+								+ is_locked, Toast.LENGTH_SHORT).show();
 			}
 			st.close();
 			conn.close();

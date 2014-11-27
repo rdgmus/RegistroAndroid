@@ -50,7 +50,7 @@ public class Iscrizione extends Activity implements ActivitiesCommonFunctions {
 				// .show();
 				startAnimation((ImageButton)v, 2000);
 				Toast.makeText(getApplicationContext(),
-						"Richiesta menù in corso...", Toast.LENGTH_SHORT)
+						"Richiesta menù", Toast.LENGTH_SHORT)
 						.show();
 
 				openOptionsMenu();
@@ -70,7 +70,7 @@ public class Iscrizione extends Activity implements ActivitiesCommonFunctions {
 				startAnimation((ImageButton)v, 2000);
 				Toast.makeText(
 						getApplicationContext(),
-						"Re-indirizzamento a pagina iniziale in corso...",
+						"Re-indirizzamento a pagina iniziale",
 						Toast.LENGTH_SHORT).show();
 
 				Intent ourStartingPoint = new Intent(
@@ -93,7 +93,7 @@ public class Iscrizione extends Activity implements ActivitiesCommonFunctions {
 				startAnimation((ImageButton)v, 2000);
 				Toast.makeText(
 						getApplicationContext(),
-						"Re-indirizzamento a pagina di Login in corso...",
+						"Re-indirizzamento a pagina di Login",
 						Toast.LENGTH_SHORT).show();
 
 				Intent loginUserActivity = new Intent(
@@ -121,7 +121,7 @@ public class Iscrizione extends Activity implements ActivitiesCommonFunctions {
 				startAnimation((ImageButton)v, 2000);
 				Toast.makeText(
 						getApplicationContext(),
-						"Registrazione nuovo utente in corso...",
+						"Registrazione nuovo utente",
 						Toast.LENGTH_SHORT).show();
 
 				if (!FieldsValidator.Is_Valid_Person_Name(nome)) {
@@ -166,7 +166,7 @@ public class Iscrizione extends Activity implements ActivitiesCommonFunctions {
 				// Controlla le credenziali dell'utente
 				Toast.makeText(
 						getApplicationContext(),
-						"Registrazione Nuovo Utente del Registro Scolastico in corso...",
+						"Registrazione Nuovo Utente del Registro Scolastico",
 						Toast.LENGTH_SHORT).show();
 
 				boolean hasBeenRegistered = databaseOps.RegisterNewUser(
@@ -201,7 +201,7 @@ public class Iscrizione extends Activity implements ActivitiesCommonFunctions {
 				startAnimation((ImageButton)v, 2000);
 				Toast.makeText(
 						getApplicationContext(),
-						"Pulizia campi in corso...",
+						"Pulizia campi",
 						Toast.LENGTH_SHORT).show();
 
 				nome.setText("");

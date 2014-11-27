@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="55dip"
-    android:orientation="vertical" >
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" >
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    
 
         <ImageView
             android:contentDescription="@string/iconDescription"
@@ -16,23 +14,20 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_margin="5dp"
-            android:src="@drawable/database_list32"
+            android:src="@drawable/database_list48"
             android:background="@android:color/transparent"/>
 
         <TextView
             android:id="@+id/lblListItem"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/imageViewChild"
-            android:paddingBottom="5dp"
-            android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft"
-            android:paddingTop="5dp"
-            android:textSize="17sp" 
+            android:textSize="18sp" 
             android:text="@string/app_name"
             android:textStyle="bold"
             android:background="@color/colorListItem"
             android:textColor="@color/colorNavy"
-            android:alpha="0.8"/>
-    </RelativeLayout>
+            android:alpha="0.8"
+            android:layout_gravity="center_vertical"/>
+  
 
 </LinearLayout>

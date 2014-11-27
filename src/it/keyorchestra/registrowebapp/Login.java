@@ -55,7 +55,7 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 				// TODO Auto-generated method stub
 				startAnimation((ImageButton)v, 2000);
 				Toast.makeText(getApplicationContext(),
-						"Pulizia campi in corso...", Toast.LENGTH_SHORT).show();
+						"Pulizia campi", Toast.LENGTH_SHORT).show();
 
 				etLoginEmail.setText("");
 				etLoginPasswd.setText("");
@@ -74,7 +74,7 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 				// Va alla pagina di login
 				startAnimation((ImageButton)v, 2000);
 				Toast.makeText(getApplicationContext(),
-						"Re-indirizzamento a pagina iniziale in corso...",
+						"Re-indirizzamento a pagina iniziale",
 						Toast.LENGTH_SHORT).show();
 
 				Intent ourStartingPoint = new Intent(
@@ -95,7 +95,7 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 				// Va alla pagina di login
 				startAnimation((ImageButton)v, 2000);
 				Toast.makeText(getApplicationContext(),
-						"Re-indirizzamento a Iscrizione in corso...",
+						"Re-indirizzamento a Iscrizione",
 						Toast.LENGTH_SHORT).show();
 
 				Intent loginUserActivity = new Intent(
@@ -126,7 +126,7 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 				// .show();
 				startAnimation((ImageButton)v, 2000);
 				Toast.makeText(getApplicationContext(),
-						"Richiesta menù in corso...", Toast.LENGTH_SHORT)
+						"Richiesta menù", Toast.LENGTH_SHORT)
 						.show();
 
 				openOptionsMenu();
@@ -143,7 +143,7 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 				// TODO Auto-generated method stub
 				startAnimation((ImageButton)v, 2000);
 				Toast.makeText(getApplicationContext(),
-						"Autenticazione credenziali in corso...",
+						"Autenticazione credenziali",
 						Toast.LENGTH_SHORT).show();
 				if (!FieldsValidator.Is_Valid_Email(etLoginEmail)) {
 					etLoginEmail.requestFocus();
@@ -267,7 +267,7 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 				// TODO Auto-generated method stub
 				startAnimation((ImageButton)v, 2000);
 				Toast.makeText(getApplicationContext(),
-						"Cambio Ruolo in corso...", Toast.LENGTH_SHORT).show();
+						"Cambio Ruolo", Toast.LENGTH_SHORT).show();
 
 				Intent i = new Intent(
 						"it.keyorchestra.registrowebapp.RUOLO_UTENTE");
@@ -287,7 +287,7 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 				// TODO Auto-generated method stub
 				startAnimation((ImageButton)v, 2000);
 				Toast.makeText(getApplicationContext(),
-						"Inserimento credenziali amministratore in corso...",
+						"Inserimento credenziali amministratore",
 						Toast.LENGTH_SHORT).show();
 
 				String adminEmail = getPrefs.getString("adminEmail", "");
