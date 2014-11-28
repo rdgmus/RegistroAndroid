@@ -177,6 +177,7 @@ public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 				Intent ourStartingPoint = new Intent(UserMenu.this,
 						UsersDataManager.class);
 				startActivity(ourStartingPoint);
+				UserMenu.this.finish();
 
 			}
 		});

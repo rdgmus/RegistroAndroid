@@ -333,7 +333,7 @@ public class TableListExpActivity extends Activity implements ActivitiesCommonFu
 			startActivity(d);
 			break;
 		case R.id.exit:
-			finish();
+			TableListExpActivity.this.finish();
 			break;
 
 		default:
