@@ -1,9 +1,10 @@
 package it.keyorchestra.registrowebapp;
 
 import it.keyorchestra.registrowebapp.interfaces.ActivitiesCommonFunctions;
+import it.keyorchestra.registrowebapp.mysqlandroid.AssegnamentoRuoliActivity;
 import it.keyorchestra.registrowebapp.mysqlandroid.Tab2Activity;
 import it.keyorchestra.registrowebapp.mysqlandroid.Tab3Activity;
-import it.keyorchestra.registrowebapp.mysqlandroid.UtentiScuolaActivity;
+import it.keyorchestra.registrowebapp.mysqlandroid.UtentiBloccatiActivity;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -49,7 +50,7 @@ public class UsersDataManager extends TabActivity implements
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				startAnimation((ImageButton) v, 2000);
-				Toast.makeText(getApplicationContext(), "Running Back...",
+				Toast.makeText(getApplicationContext(), "Gestione Utenti terminata!",
 						Toast.LENGTH_LONG).show();
 				Intent ourStartingPoint = new Intent(UsersDataManager.this,
 						UserMenu.class);
@@ -67,16 +68,16 @@ public class UsersDataManager extends TabActivity implements
 		TabSpec tab3 = tabHost.newTabSpec("Third tab");
 		// Set the Tab name and Activity
 		// that will be opened when particular Tab will be selected
-		tab1.setIndicator("Blocco Utenti", 
+		tab1.setIndicator("Utenti Bloccati", 
 				getResources().getDrawable(R.drawable.users_password));
 		tab1.setContent(new Intent(this,
-				UtentiScuolaActivity.class));
+				UtentiBloccatiActivity.class));
 
-		tab2.setIndicator("Gestione Ruoli",
+		tab2.setIndicator("Assegnamento Ruoli",
 				getResources().getDrawable(R.drawable.ruoli_utenti));
-		tab2.setContent(new Intent(this, Tab2Activity.class));
+		tab2.setContent(new Intent(this, AssegnamentoRuoliActivity.class));
 
-		tab3.setIndicator("Cambio Password",
+		tab3.setIndicator("Rilascio Nuove Password",
 				getResources().getDrawable(R.drawable.user_password));
 		tab3.setContent(new Intent(this, Tab3Activity.class));
 

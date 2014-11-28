@@ -59,11 +59,21 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="it.keyorchestra.registrowebapp.mysqlandroid.UtentiScuolaActivity"
+            android:name="it.keyorchestra.registrowebapp.mysqlandroid.AssegnamentoRuoliActivity"
             android:label="@string/app_name"
             android:screenOrientation="landscape" >
             <intent-filter>
-                <action android:name="android.intent.action.UTENTI_SCUOLA_ACTIVITY" />
+                <action android:name="android.intent.action.ASSEGNA_RUOLI_ACTIVITY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="it.keyorchestra.registrowebapp.mysqlandroid.UtentiBloccatiActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="landscape" >
+            <intent-filter>
+                <action android:name="android.intent.action.UTENTI_BLOCCATI_ACTIVITY" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>

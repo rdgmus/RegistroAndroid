@@ -10,6 +10,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Gravity;
@@ -97,19 +100,12 @@ public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 				// TODO Auto-generated method stub
 				startAnimation((ImageButton) v, 2000);
 
-				Thread thread = new Thread() {
+				 LooperThread thread = new LooperThread() {
 					@Override
 					public void run() {
 						try {
 							Thread.sleep(3500); // As I am using LENGTH_LONG in
 												// Toast
-							// SBLOCCA UTENTE
-							databaseOps.UnlockUser(getApplicationContext(),
-									null, id_utente);
-							// CANCELLA UTENTE DALLE PREFERENZE
-							databaseOps.DeleteUserFromPreferences(id_utente);
-							// REGISTRA LOGOUT EVENT
-
 							// LANCIA TableListExpActivity
 							Intent ourStartingPoint = new Intent(UserMenu.this,
 									TableListExpActivity.class);
@@ -122,6 +118,14 @@ public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 						}
 					}
 				};
+
+				
+				// SBLOCCA UTENTE
+				databaseOps.UnlockUser(getApplicationContext(),
+						null, id_utente);
+				// CANCELLA UTENTE DALLE PREFERENZE
+				databaseOps.DeleteUserFromPreferences(id_utente);
+				// REGISTRA LOGOUT EVENT
 
 				Toast.makeText(getApplicationContext(),
 						"Logout dal Registro Scolastico", Toast.LENGTH_SHORT)
@@ -352,4 +356,20 @@ public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 
 	}
 
+}
+
+class LooperThread extends Thread {
+	public Handler mHandler;
+
+	public void run() {
+		Looper.prepare();
+
+		mHandler = new Handler() {
+			public void handleMessage(Message msg) {
+				// process incoming messages here
+			}
+		};
+
+		Looper.loop();
+	}
 }
