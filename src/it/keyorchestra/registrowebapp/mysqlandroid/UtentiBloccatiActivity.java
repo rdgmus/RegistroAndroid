@@ -1,11 +1,11 @@
 package it.keyorchestra.registrowebapp.mysqlandroid;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-
 import it.keyorchestra.registrowebapp.R;
 import it.keyorchestra.registrowebapp.dbMatthed.DatabaseOps;
 import it.keyorchestra.registrowebapp.interfaces.ActivitiesCommonFunctions;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,7 +25,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageButton;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -39,13 +38,7 @@ public class UtentiBloccatiActivity extends Activity implements
 	int checkedRadioButtonID;
 	String query = "SELECT * FROM utenti_scuola WHERE  1";
 
-	// RadioButton radioTutti, radioBloccati, radioLiberi;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see android.app.Activity#onCreate(android.os.Bundle)
-	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub

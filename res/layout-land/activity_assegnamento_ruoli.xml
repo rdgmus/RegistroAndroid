@@ -3,6 +3,40 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <Spinner
+            android:id="@+id/spinnerRuoli"
+            android:layout_width="232dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/colorNavy"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/bAddRole"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="=>"
+            android:textColor="@color/colorNavy"
+            android:textSize="25dp"
+            android:textStyle="bold" />
+
+        <Spinner
+            android:id="@+id/spinnerUtenti"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/colorNavy"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
     <TableLayout
         android:id="@+id/header_table"
         android:layout_width="match_parent"

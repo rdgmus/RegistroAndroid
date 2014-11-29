@@ -2,6 +2,7 @@ package it.keyorchestra.registrowebapp.mysqlandroid;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -9,6 +10,9 @@ import org.json.JSONObject;
 
 import it.keyorchestra.registrowebapp.dbMatthed.DatabaseOps;
 import it.keyorchestra.registrowebapp.interfaces.ActivitiesCommonFunctions;
+import it.keyorchestra.registrowebapp.scuola.util.MySimpleArrayAdapter;
+import it.keyorchestra.registrowebapp.scuola.util.RuoliArrayAdapter;
+import it.keyorchestra.registrowebapp.scuola.util.UtentiArrayAdapter;
 import it.keyorchestra.registrowebapp.R;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -20,9 +24,13 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -32,6 +40,8 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 public class AssegnamentoRuoliActivity extends Activity implements
 		ActivitiesCommonFunctions {
 	private SharedPreferences getPrefs;
+
+	Spinner spinnerRuoli, spinnerUtenti;
 
 	/*
 	 * (non-Javadoc)
@@ -44,28 +54,209 @@ public class AssegnamentoRuoliActivity extends Activity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_assegnamento_ruoli);
 
-		CaricaUtentiRuoli("utenti_scuola");
-	}
-
-	private void CaricaUtentiRuoli(String table_name) {
-		// TODO Auto-generated method stub
 		getPrefs = PreferenceManager
 				.getDefaultSharedPreferences(getApplicationContext());
+
+		// SPINNER RUOLI
+		spinnerRuoli = (Spinner) findViewById(R.id.spinnerRuoli);
+		RuoliArrayAdapter ruoliAdapter = new RuoliArrayAdapter(
+				getApplicationContext(), CaricaRuoliAsJSON(),
+				CaricaRuoliAsArray());
+		ruoliAdapter
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+		ruoliAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+		// Apply the adapter to the spinner
+		spinnerRuoli.setAdapter(ruoliAdapter);
+
+		spinnerRuoli.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				Toast.makeText(
+						getApplicationContext(),
+						"Ruolo: " + parent.getItemAtPosition(position) + " Id:"
+								+ id, Toast.LENGTH_SHORT).show();
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+
+		// SPINNER UTENTI
+		spinnerUtenti = (Spinner) findViewById(R.id.spinnerUtenti);
+		UtentiArrayAdapter utentiAdapter = new UtentiArrayAdapter(
+				getApplicationContext(), CaricaUtentiAsJSON(),
+				CaricaUtentiAsArray());
+		utentiAdapter
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+		// Apply the adapter to the spinner
+		spinnerUtenti.setAdapter(utentiAdapter);
+
+		CaricaUtentiRuoli();
+	}
+
+	private ArrayList<String> CaricaRuoliAsArray() {
+		// TODO Auto-generated method stub
+		ArrayList<String> ruoliArray = new ArrayList<String>();
+		String retrieveTableData = getPrefs
+				.getString("retrieveTableData", null);
+
+		String ip = getDatabaseIpFromPreferences();
+
+		jsonRuoliAmmessi(retrieveTableData, ip);
+
+		String query = "SELECT * FROM ruoli_utenti WHERE 1 ORDER BY ruolo";
+		
+		JSONArray jArray;
+
+		try {
+			jArray = new MySqlAndroid().retrieveTableData(
+					getApplicationContext(),
+					"http://" + ip + "/" + retrieveTableData + "?sql="
+							+ URLEncoder.encode(query, "UTF-8"), null);
+			for (int i = 0; i < jArray.length(); i++) {
+				JSONObject json_data;
+				try {
+					json_data = jArray.getJSONObject(i);
+					long id_ruolo = json_data.getLong("id_ruolo");
+					String ruolo = json_data.getString("ruolo");
+
+					ruoliArray.add("[" + id_ruolo + "] " + ruolo);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return ruoliArray;
+	}
+
+	private JSONArray CaricaRuoliAsJSON() {
+		// TODO Auto-generated method stub
+		String retrieveTableData = getPrefs
+				.getString("retrieveTableData", null);
+
+		String ip = getDatabaseIpFromPreferences();
+
+		String query = "SELECT * FROM ruoli_utenti WHERE 1 ORDER BY ruolo";
+
+		JSONArray jArray = null;
+
+		try {
+			jArray = new MySqlAndroid().retrieveTableData(
+					getApplicationContext(),
+					"http://" + ip + "/" + retrieveTableData + "?sql="
+							+ URLEncoder.encode(query, "UTF-8"), null);
+
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return jArray;
+	}
+
+	private JSONArray CaricaUtentiAsJSON() {
+		String retrieveTableData = getPrefs
+				.getString("retrieveTableData", null);
+
+		String ip = getDatabaseIpFromPreferences();
+
+		String query = "SELECT * FROM utenti_scuola WHERE 1 ORDER BY cognome, nome";
+
+		JSONArray jArray = null;
+
+		try {
+			jArray = new MySqlAndroid().retrieveTableData(
+					getApplicationContext(),
+					"http://" + ip + "/" + retrieveTableData + "?sql="
+							+ URLEncoder.encode(query, "UTF-8"), null);
+
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return jArray;
+	}
+
+	private ArrayList<String> CaricaUtentiAsArray() {
+		// TODO Auto-generated method stub
+		ArrayList<String> utentiArray = new ArrayList<String>();
+		String retrieveTableData = getPrefs
+				.getString("retrieveTableData", null);
+
+		String ip = getDatabaseIpFromPreferences();
+
+		jsonRuoliAmmessi(retrieveTableData, ip);
+
+		String query = "SELECT * FROM utenti_scuola WHERE 1 ORDER BY cognome, nome";
+
+		JSONArray jArray;
+
+		try {
+			jArray = new MySqlAndroid().retrieveTableData(
+					getApplicationContext(),
+					"http://" + ip + "/" + retrieveTableData + "?sql="
+							+ URLEncoder.encode(query, "UTF-8"), null);
+			for (int i = 0; i < jArray.length(); i++) {
+				JSONObject json_data;
+				try {
+					json_data = jArray.getJSONObject(i);
+					long id_utente = json_data.getLong("id_utente");
+					String cognome = json_data.getString("cognome");
+					String nome = json_data.getString("nome");
+					String email = json_data.getString("email");
+
+					utentiArray.add("[" + id_utente + "] " + cognome + " "
+							+ nome + " <" + email + ">");
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return utentiArray;
+	}
+
+	protected void CaricaUtentiRuoli() {
+		// TODO Auto-generated method stub
 
 		String retrieveTableData = getPrefs
 				.getString("retrieveTableData", null);
 
 		String ip = getDatabaseIpFromPreferences();
 
-		String query = "SELECT * FROM " + table_name + " WHERE is_locked = 1";
+		jsonRuoliAmmessi(retrieveTableData, ip);
+
+		String query = "SELECT * FROM utenti_scuola WHERE 1";
 
 		JSONArray jArray;
 		try {
 			jArray = new MySqlAndroid().retrieveTableData(
-					getApplicationContext(), "http://" + ip + "/"
-							+ retrieveTableData + "?table_name=" + table_name
-							+ "&sql=" + URLEncoder.encode(query, "UTF-8"),
-					table_name);
+					getApplicationContext(),
+					"http://" + ip + "/" + retrieveTableData + "?sql="
+							+ URLEncoder.encode(query, "UTF-8"), null);
 
 			if (jArray == null) {
 				Toast.makeText(
@@ -82,6 +273,24 @@ public class AssegnamentoRuoliActivity extends Activity implements
 
 	}
 
+	private JSONArray jsonRuoliAmmessi(String phpInterface, String ip) {
+		// TODO Auto-generated method stub
+		String query = "SELECT * FROM ruoli_utenti WHERE 1";
+
+		JSONArray jArray = null;
+		try {
+			jArray = new MySqlAndroid().retrieveTableData(
+					getApplicationContext(),
+					"http://" + ip + "/" + phpInterface + "?sql="
+							+ URLEncoder.encode(query, "UTF-8"), null);
+
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return jArray;
+	}
+
 	private void buildUsersAndRolesTable(JSONArray jArray) {
 		// TODO Auto-generated method stub
 		try {
@@ -96,23 +305,9 @@ public class AssegnamentoRuoliActivity extends Activity implements
 			// CONTENT TABLE
 			TableLayout contentTable = (TableLayout) findViewById(R.id.content_table);
 
-			int maxLengthRow = 0;
-			@SuppressWarnings("unused")
-			JSONObject longestRow = null;
-
 			for (int i = 0; i < jArray.length(); i++) {
 				JSONObject json_data = jArray.getJSONObject(i);
 
-				int lengthRow = (String.valueOf(json_data.getInt("id_utente"))
-						+ json_data.getString("cognome") + " "
-						+ json_data.getString("nome")
-						+ String.valueOf(json_data.getInt("is_locked")) + json_data
-						.getString("email")).length();
-
-				if (lengthRow > maxLengthRow || i == 0) {
-					maxLengthRow = lengthRow;
-					longestRow = json_data;
-				}
 				contentTable = addRowToTableAsJson(getApplicationContext(),
 						contentTable, json_data, LayoutParams.WRAP_CONTENT, i);
 
