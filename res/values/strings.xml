@@ -106,5 +106,7 @@
     <string android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/string1" name="othersData">Gestione Utenti</string>
     <string android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/string1" name="now">24-11-2014</string>
     <string android:layout_width="wrap_content" android:id="@+id/string1" android:layout_height="wrap_content" name="ruoliOptionsDescription">Accede alle attività del Ruolo indicato</string>
+    <string android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/string1" name="addRuolo">Aggiunge ruolo a utente</string>
+    <string android:layout_height="wrap_content" android:id="@+id/string1" android:layout_width="wrap_content" name="removeRuolo">Rimuove dal ruolo l\'utente</string>
 
 </resources>

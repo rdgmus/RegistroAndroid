@@ -18,13 +18,20 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
@@ -39,6 +46,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ToggleButton;
 
 public class AssegnamentoRuoliActivity extends Activity implements
 		ActivitiesCommonFunctions {
@@ -46,6 +54,23 @@ public class AssegnamentoRuoliActivity extends Activity implements
 
 	Spinner spinnerRuoli, spinnerUtenti;
 	ImageButton bAddRole, bRemoveRole;
+	ToggleButton tbMembers;
+	private long selectedRole= -1;
+
+	
+	/**
+	 * @return the selectedRole
+	 */
+	public long getSelectedRole() {
+		return selectedRole;
+	}
+
+	/**
+	 * @param selectedRole the selectedRole to set
+	 */
+	public void setSelectedRole(long selectedRole) {
+		this.selectedRole = selectedRole;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -61,13 +86,37 @@ public class AssegnamentoRuoliActivity extends Activity implements
 		getPrefs = PreferenceManager
 				.getDefaultSharedPreferences(getApplicationContext());
 
+		// tbMembers
+		tbMembers = (ToggleButton)findViewById(R.id.tbMembers);
+		tbMembers.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				// TODO Auto-generated method stub
+				bAddRole.setVisibility(isChecked ? ToggleButton.INVISIBLE:ToggleButton.VISIBLE);
+				bRemoveRole.setVisibility(!isChecked ? ToggleButton.INVISIBLE:ToggleButton.VISIBLE);
+				
+				UtentiArrayAdapter utentiAdapter = new UtentiArrayAdapter(
+						getApplicationContext(),
+						CaricaUtentiAsJSON(getSelectedRole()),
+						CaricaUtentiAsArray(getSelectedRole()));
+				utentiAdapter
+						.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+				// Apply the adapter to the spinner
+				spinnerUtenti.setAdapter(utentiAdapter);
+				utentiAdapter.notifyDataSetChanged();
+			}
+		});
 		// ADD ROLE
 		bAddRole = (ImageButton) findViewById(R.id.bAddRole);
+		registerToolTipFor(bAddRole);
 		bAddRole.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				startAnimation((ImageButton) v, 2000);
 				Toast.makeText(getApplicationContext(),
 						"Aggiungo Ruolo a Utente", Toast.LENGTH_SHORT).show();
 			}
@@ -75,11 +124,13 @@ public class AssegnamentoRuoliActivity extends Activity implements
 
 		// REMOVE ROLE
 		bRemoveRole = (ImageButton) findViewById(R.id.bRemoveRole);
+		registerToolTipFor(bRemoveRole);
 		bRemoveRole.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				startAnimation((ImageButton) v, 2000);
 				Toast.makeText(getApplicationContext(),
 						"Rimozione Utente da Ruolo", Toast.LENGTH_SHORT).show();
 
@@ -111,7 +162,8 @@ public class AssegnamentoRuoliActivity extends Activity implements
 						(String) myTextView.getText());
 
 				UtentiArrayAdapter utentiAdapter = new UtentiArrayAdapter(
-						getApplicationContext(), CaricaUtentiAsJSON((Long) myTextView.getTag()),
+						getApplicationContext(),
+						CaricaUtentiAsJSON((Long) myTextView.getTag()),
 						CaricaUtentiAsArray((Long) myTextView.getTag()));
 				utentiAdapter
 						.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -119,6 +171,7 @@ public class AssegnamentoRuoliActivity extends Activity implements
 				// Apply the adapter to the spinner
 				spinnerUtenti.setAdapter(utentiAdapter);
 				utentiAdapter.notifyDataSetChanged();
+				setSelectedRole((Long) myTextView.getTag());
 			}
 
 			@Override
@@ -130,21 +183,21 @@ public class AssegnamentoRuoliActivity extends Activity implements
 
 		// SPINNER UTENTI
 		spinnerUtenti = (Spinner) findViewById(R.id.spinnerUtenti);
-//		UtentiArrayAdapter utentiAdapter = new UtentiArrayAdapter(
-//				getApplicationContext(), CaricaUtentiAsJSON(-1l),
-//				CaricaUtentiAsArray(-1l));
-//		utentiAdapter
-//				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//
-//		// Apply the adapter to the spinner
-//		spinnerUtenti.setAdapter(utentiAdapter);
+		// UtentiArrayAdapter utentiAdapter = new UtentiArrayAdapter(
+		// getApplicationContext(), CaricaUtentiAsJSON(-1l),
+		// CaricaUtentiAsArray(-1l));
+		// utentiAdapter
+		// .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		//
+		// // Apply the adapter to the spinner
+		// spinnerUtenti.setAdapter(utentiAdapter);
 		spinnerUtenti.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view,
 					int position, long id) {
 				// TODO Auto-generated method stub
-				if(view == null)
+				if (view == null)
 					return;
 				TextView myTextView = (TextView) view
 						.findViewById(R.id.tvMyText);
@@ -247,17 +300,22 @@ public class AssegnamentoRuoliActivity extends Activity implements
 		String ip = getDatabaseIpFromPreferences();
 
 		String query;
-			
+
 		if (id_ruolo == -1) {
 			query = "SELECT * FROM utenti_scuola WHERE 1 ORDER BY cognome, nome";
 		} else {
-			query = "SELECT * FROM utenti_scuola as a WHERE NOT EXISTS ("
-				+ "SELECT * FROM ruoli_granted_to_utenti as b "
-				+ "WHERE a.id_utente = b.id_utente " + "AND b.id_ruolo = "
-				+ id_ruolo + ") ORDER BY a.cognome, a.nome";
+			if(tbMembers.isChecked()){
+				query = "SELECT * FROM utenti_scuola as a WHERE  EXISTS ("
+						+ "SELECT * FROM ruoli_granted_to_utenti as b "
+						+ "WHERE a.id_utente = b.id_utente " + "AND b.id_ruolo = "
+						+ id_ruolo + ") ORDER BY a.cognome, a.nome";
+			}else{
+				query = "SELECT * FROM utenti_scuola as a WHERE NOT EXISTS ("
+						+ "SELECT * FROM ruoli_granted_to_utenti as b "
+						+ "WHERE a.id_utente = b.id_utente " + "AND b.id_ruolo = "
+						+ id_ruolo + ") ORDER BY a.cognome, a.nome";				
+			}
 		}
-
-		
 
 		JSONArray jArray = null;
 
@@ -284,14 +342,21 @@ public class AssegnamentoRuoliActivity extends Activity implements
 		String ip = getDatabaseIpFromPreferences();
 
 		String query;
-		
+
 		if (id_ruolo == -1) {
 			query = "SELECT * FROM utenti_scuola WHERE 1 ORDER BY cognome, nome";
 		} else {
-			query = "SELECT * FROM utenti_scuola as a WHERE NOT EXISTS ("
-				+ "SELECT * FROM ruoli_granted_to_utenti as b "
-				+ "WHERE a.id_utente = b.id_utente " + "AND b.id_ruolo = "
-				+ id_ruolo + ") ORDER BY a.cognome, a.nome";
+			if(tbMembers.isChecked()){
+				query = "SELECT * FROM utenti_scuola as a WHERE  EXISTS ("
+						+ "SELECT * FROM ruoli_granted_to_utenti as b "
+						+ "WHERE a.id_utente = b.id_utente " + "AND b.id_ruolo = "
+						+ id_ruolo + ") ORDER BY a.cognome, a.nome";
+			}else{
+				query = "SELECT * FROM utenti_scuola as a WHERE NOT EXISTS ("
+						+ "SELECT * FROM ruoli_granted_to_utenti as b "
+						+ "WHERE a.id_utente = b.id_utente " + "AND b.id_ruolo = "
+						+ id_ruolo + ") ORDER BY a.cognome, a.nome";				
+			}
 		}
 
 		JSONArray jArray;
@@ -422,14 +487,41 @@ public class AssegnamentoRuoliActivity extends Activity implements
 	@Override
 	public void registerToolTipFor(ImageButton ib) {
 		// TODO Auto-generated method stub
+		ib.setOnLongClickListener(new View.OnLongClickListener() {
 
+			@Override
+			public boolean onLongClick(View view) {
+
+				customToast(view.getContentDescription(), R.drawable.help32,
+						R.layout.info_layout);
+
+				return true;
+			}
+		});
 	}
 
 	@Override
 	public boolean customToast(CharSequence charSequence, int iconId,
 			int layoutId) {
 		// TODO Auto-generated method stub
-		return false;
+		Resources res = getResources();
+		LayoutInflater inflater = getLayoutInflater();
+		View layout = inflater.inflate(layoutId,
+				(ViewGroup) findViewById(R.id.toast_layout_root));
+		TextView tvToastConnect = (TextView) layout
+				.findViewById(R.id.tvToastConnect);
+		tvToastConnect.setText(charSequence);
+
+		ImageView ivToastConnect = (ImageView) layout
+				.findViewById(R.id.ivToastConnect);
+		ivToastConnect.setImageDrawable(res.getDrawable(iconId));
+
+		Toast toast = new Toast(getApplicationContext());
+		toast.setGravity(Gravity.BOTTOM, 0, 0);
+		toast.setDuration(Toast.LENGTH_SHORT);
+		toast.setView(layout);
+		toast.show();
+		return true;
 	}
 
 	@Override
@@ -455,9 +547,43 @@ public class AssegnamentoRuoliActivity extends Activity implements
 	}
 
 	@Override
-	public void startAnimation(ImageButton ib, long durationInMilliseconds) {
+	public void startAnimation(final ImageButton ib, final long durationInMilliseconds) {
 		// TODO Auto-generated method stub
+		final String TAG = "ImageButton Animation";
+		Animation animation = new AlphaAnimation(1.0f, 0.25f); // Change alpha
+																// from
+		// fully visible to
+		// invisible
+		animation.setDuration(500); // duration - half a second
+		animation.setInterpolator(new LinearInterpolator()); // do not alter
+																// animation
+																// rate
+		animation.setRepeatCount(Animation.INFINITE); // Repeat animation
+														// infinitely
+		animation.setRepeatMode(Animation.REVERSE); // Reverse animation at the
+													// end so the button will
+													// fade back in
 
+		ib.startAnimation(animation);
+
+		Thread t = new Thread() {
+			long timeElapsed = 0l;
+
+			public void run() {
+				try {
+					while (timeElapsed <= durationInMilliseconds) {
+						long start = System.currentTimeMillis();
+						sleep(1000);
+						timeElapsed += System.currentTimeMillis() - start;
+					}
+				} catch (InterruptedException e) {
+					Log.e(TAG, e.toString());
+				} finally {
+					ib.clearAnimation();
+				}
+			}
+		};
+		t.start();
 	}
 
 	protected TableLayout addRowToTableAsJson(Context applicationContext,
