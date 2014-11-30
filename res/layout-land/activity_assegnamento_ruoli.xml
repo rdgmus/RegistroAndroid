@@ -11,25 +11,43 @@
 
         <Spinner
             android:id="@+id/spinnerRuoli"
-            android:layout_width="232dp"
+            android:layout_width="235dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:textColor="@color/colorNavy"
             android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/bAddRole"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:text="=>"
-            android:textColor="@color/colorNavy"
-            android:textSize="25dp"
-            android:textStyle="bold" />
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <ImageButton
+                android:id="@+id/bAddRole"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/colorNavy"
+                android:textStyle="bold" 
+                android:src="@drawable/add"
+                android:background="@android:color/transparent"/>
+
+            <ImageButton
+                android:id="@+id/bRemoveRole"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/colorNavy"
+                android:textStyle="bold" 
+                android:layout_weight="1"
+                android:src="@drawable/delete48"
+                android:background="@android:color/transparent"/>
+        </LinearLayout>
 
         <Spinner
             android:id="@+id/spinnerUtenti"
-            android:layout_width="match_parent"
+            android:layout_width="235dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:textColor="@color/colorNavy"

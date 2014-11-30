@@ -23,6 +23,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -30,7 +31,9 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -42,6 +45,7 @@ public class AssegnamentoRuoliActivity extends Activity implements
 	private SharedPreferences getPrefs;
 
 	Spinner spinnerRuoli, spinnerUtenti;
+	ImageButton bAddRole, bRemoveRole;
 
 	/*
 	 * (non-Javadoc)
@@ -57,6 +61,30 @@ public class AssegnamentoRuoliActivity extends Activity implements
 		getPrefs = PreferenceManager
 				.getDefaultSharedPreferences(getApplicationContext());
 
+		// ADD ROLE
+		bAddRole = (ImageButton) findViewById(R.id.bAddRole);
+		bAddRole.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Toast.makeText(getApplicationContext(),
+						"Aggiungo Ruolo a Utente", Toast.LENGTH_SHORT).show();
+			}
+		});
+
+		// REMOVE ROLE
+		bRemoveRole = (ImageButton) findViewById(R.id.bRemoveRole);
+		bRemoveRole.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Toast.makeText(getApplicationContext(),
+						"Rimozione Utente da Ruolo", Toast.LENGTH_SHORT).show();
+
+			}
+		});
 		// SPINNER RUOLI
 		spinnerRuoli = (Spinner) findViewById(R.id.spinnerRuoli);
 		RuoliArrayAdapter ruoliAdapter = new RuoliArrayAdapter(
@@ -65,7 +93,8 @@ public class AssegnamentoRuoliActivity extends Activity implements
 		ruoliAdapter
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-		ruoliAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		ruoliAdapter
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 		// Apply the adapter to the spinner
 		spinnerRuoli.setAdapter(ruoliAdapter);
@@ -76,10 +105,20 @@ public class AssegnamentoRuoliActivity extends Activity implements
 			public void onItemSelected(AdapterView<?> parent, View view,
 					int position, long id) {
 				// TODO Auto-generated method stub
-				Toast.makeText(
-						getApplicationContext(),
-						"Ruolo: " + parent.getItemAtPosition(position) + " Id:"
-								+ id, Toast.LENGTH_SHORT).show();
+				TextView myTextView = (TextView) view
+						.findViewById(R.id.tvMyText);
+				CaricaUtentiRuoloSelezionato((Long) myTextView.getTag(),
+						(String) myTextView.getText());
+
+				UtentiArrayAdapter utentiAdapter = new UtentiArrayAdapter(
+						getApplicationContext(), CaricaUtentiAsJSON((Long) myTextView.getTag()),
+						CaricaUtentiAsArray((Long) myTextView.getTag()));
+				utentiAdapter
+						.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+				// Apply the adapter to the spinner
+				spinnerUtenti.setAdapter(utentiAdapter);
+				utentiAdapter.notifyDataSetChanged();
 			}
 
 			@Override
@@ -91,18 +130,44 @@ public class AssegnamentoRuoliActivity extends Activity implements
 
 		// SPINNER UTENTI
 		spinnerUtenti = (Spinner) findViewById(R.id.spinnerUtenti);
-		UtentiArrayAdapter utentiAdapter = new UtentiArrayAdapter(
-				getApplicationContext(), CaricaUtentiAsJSON(),
-				CaricaUtentiAsArray());
-		utentiAdapter
-				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//		UtentiArrayAdapter utentiAdapter = new UtentiArrayAdapter(
+//				getApplicationContext(), CaricaUtentiAsJSON(-1l),
+//				CaricaUtentiAsArray(-1l));
+//		utentiAdapter
+//				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//
+//		// Apply the adapter to the spinner
+//		spinnerUtenti.setAdapter(utentiAdapter);
+		spinnerUtenti.setOnItemSelectedListener(new OnItemSelectedListener() {
 
-		// Apply the adapter to the spinner
-		spinnerUtenti.setAdapter(utentiAdapter);
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				if(view == null)
+					return;
+				TextView myTextView = (TextView) view
+						.findViewById(R.id.tvMyText);
+				Toast.makeText(
+						getApplicationContext(),
+						"Utente: " + parent.getItemAtPosition(position)
+								+ " Id:" + myTextView.getTag(),
+						Toast.LENGTH_SHORT).show();
+			}
 
-		CaricaUtentiRuoli();
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// TODO Auto-generated method stub
+
+			}
+		});
 	}
 
+	/**
+	 * Carica tutti i ruoli ammessi dal database scuola
+	 * 
+	 * @return ArrayList<String>
+	 */
 	private ArrayList<String> CaricaRuoliAsArray() {
 		// TODO Auto-generated method stub
 		ArrayList<String> ruoliArray = new ArrayList<String>();
@@ -111,10 +176,10 @@ public class AssegnamentoRuoliActivity extends Activity implements
 
 		String ip = getDatabaseIpFromPreferences();
 
-		jsonRuoliAmmessi(retrieveTableData, ip);
+		// jsonRuoliAmmessi(retrieveTableData, ip);
 
 		String query = "SELECT * FROM ruoli_utenti WHERE 1 ORDER BY ruolo";
-		
+
 		JSONArray jArray;
 
 		try {
@@ -145,6 +210,11 @@ public class AssegnamentoRuoliActivity extends Activity implements
 		return ruoliArray;
 	}
 
+	/**
+	 * Carica tutti i ruoli ammessi dal database scuola
+	 * 
+	 * @return JSONArray
+	 */
 	private JSONArray CaricaRuoliAsJSON() {
 		// TODO Auto-generated method stub
 		String retrieveTableData = getPrefs
@@ -170,13 +240,24 @@ public class AssegnamentoRuoliActivity extends Activity implements
 		return jArray;
 	}
 
-	private JSONArray CaricaUtentiAsJSON() {
+	private JSONArray CaricaUtentiAsJSON(long id_ruolo) {
 		String retrieveTableData = getPrefs
 				.getString("retrieveTableData", null);
 
 		String ip = getDatabaseIpFromPreferences();
 
-		String query = "SELECT * FROM utenti_scuola WHERE 1 ORDER BY cognome, nome";
+		String query;
+			
+		if (id_ruolo == -1) {
+			query = "SELECT * FROM utenti_scuola WHERE 1 ORDER BY cognome, nome";
+		} else {
+			query = "SELECT * FROM utenti_scuola as a WHERE NOT EXISTS ("
+				+ "SELECT * FROM ruoli_granted_to_utenti as b "
+				+ "WHERE a.id_utente = b.id_utente " + "AND b.id_ruolo = "
+				+ id_ruolo + ") ORDER BY a.cognome, a.nome";
+		}
+
+		
 
 		JSONArray jArray = null;
 
@@ -194,7 +275,7 @@ public class AssegnamentoRuoliActivity extends Activity implements
 		return jArray;
 	}
 
-	private ArrayList<String> CaricaUtentiAsArray() {
+	private ArrayList<String> CaricaUtentiAsArray(long id_ruolo) {
 		// TODO Auto-generated method stub
 		ArrayList<String> utentiArray = new ArrayList<String>();
 		String retrieveTableData = getPrefs
@@ -202,9 +283,16 @@ public class AssegnamentoRuoliActivity extends Activity implements
 
 		String ip = getDatabaseIpFromPreferences();
 
-		jsonRuoliAmmessi(retrieveTableData, ip);
-
-		String query = "SELECT * FROM utenti_scuola WHERE 1 ORDER BY cognome, nome";
+		String query;
+		
+		if (id_ruolo == -1) {
+			query = "SELECT * FROM utenti_scuola WHERE 1 ORDER BY cognome, nome";
+		} else {
+			query = "SELECT * FROM utenti_scuola as a WHERE NOT EXISTS ("
+				+ "SELECT * FROM ruoli_granted_to_utenti as b "
+				+ "WHERE a.id_utente = b.id_utente " + "AND b.id_ruolo = "
+				+ id_ruolo + ") ORDER BY a.cognome, a.nome";
+		}
 
 		JSONArray jArray;
 
@@ -239,7 +327,7 @@ public class AssegnamentoRuoliActivity extends Activity implements
 		return utentiArray;
 	}
 
-	protected void CaricaUtentiRuoli() {
+	protected void CaricaUtentiRuoloSelezionato(long id_ruolo, String ruolo) {
 		// TODO Auto-generated method stub
 
 		String retrieveTableData = getPrefs
@@ -247,9 +335,12 @@ public class AssegnamentoRuoliActivity extends Activity implements
 
 		String ip = getDatabaseIpFromPreferences();
 
-		jsonRuoliAmmessi(retrieveTableData, ip);
+		// jsonRuoliAmmessi(retrieveTableData, ip);
 
-		String query = "SELECT * FROM utenti_scuola WHERE 1";
+		String query = "SELECT * FROM utenti_scuola as a WHERE  EXISTS ("
+				+ "SELECT * FROM ruoli_granted_to_utenti as b "
+				+ "WHERE a.id_utente = b.id_utente " + "AND b.id_ruolo = "
+				+ id_ruolo + ") ORDER BY a.cognome, a.nome";
 
 		JSONArray jArray;
 		try {
@@ -269,13 +360,17 @@ public class AssegnamentoRuoliActivity extends Activity implements
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			Toast.makeText(getApplicationContext(),
+					"Ruolo: " + ruolo + " Id:" + id_ruolo, Toast.LENGTH_SHORT)
+					.show();
 		}
 
 	}
 
 	private JSONArray jsonRuoliAmmessi(String phpInterface, String ip) {
 		// TODO Auto-generated method stub
-		String query = "SELECT * FROM ruoli_utenti WHERE 1";
+		String query = "SELECT * FROM ruoli_utenti WHERE 1 ORDER BY ruolo";
 
 		JSONArray jArray = null;
 		try {
@@ -296,7 +391,7 @@ public class AssegnamentoRuoliActivity extends Activity implements
 		try {
 			// HEADER TABLE
 			TableLayout headerTable = (TableLayout) findViewById(R.id.header_table);
-
+			headerTable.removeAllViews();
 			headerTable = addRowToTable(getApplicationContext(), headerTable,
 					LayoutParams.WRAP_CONTENT);
 			headerTable.setBackgroundColor(getResources().getColor(
@@ -304,7 +399,7 @@ public class AssegnamentoRuoliActivity extends Activity implements
 
 			// CONTENT TABLE
 			TableLayout contentTable = (TableLayout) findViewById(R.id.content_table);
-
+			contentTable.removeAllViews();
 			for (int i = 0; i < jArray.length(); i++) {
 				JSONObject json_data = jArray.getJSONObject(i);
 
@@ -377,12 +472,9 @@ public class AssegnamentoRuoliActivity extends Activity implements
 		else
 			tr.setBackgroundColor(getResources().getColor(R.color.colorOrange));
 
-		// android:layout_width="0dp" // this t.v will consume all width
-		// android:layout_weight="1"
-		// android:layout_height="match_parent"
 		TextView b = new TextView(AssegnamentoRuoliActivity.this);
 
-		String stime = String.valueOf(json_data.getInt("id_utente"));
+		String stime = String.valueOf(json_data.getLong("id_utente"));
 
 		b.setText(stime);
 
@@ -422,25 +514,10 @@ public class AssegnamentoRuoliActivity extends Activity implements
 		tr.addView(b3);
 
 		// QUI VOGLIO METTERE UNA CHECKBOX
-		final CheckBox b2 = new CheckBox(AssegnamentoRuoliActivity.this);
-
-		b2.setChecked((json_data.getInt("is_locked") == 1) ? true : false);
-		b2.setText(json_data.getInt("is_locked") == 1 ? "Sì" : "No");
-
-		b2.setTag(json_data.getInt("id_utente"));
-
-		b2.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView,
-					boolean isChecked) {
-				// TODO Auto-generated method stub
-				DatabaseOps dataBaseOps = new DatabaseOps(
-						getApplicationContext());
-				dataBaseOps.setUserLocked(getApplicationContext(),
-						(Integer) b2.getTag(), isChecked);
-			}
-		});
+		final ImageView b2 = new ImageView(AssegnamentoRuoliActivity.this);
+		b2.setImageDrawable(applicationContext.getResources().getDrawable(
+				R.drawable.ruoli_utenti48));
+		b2.setTag(json_data.getLong("id_utente"));
 
 		tr.addView(b2);
 		tr.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, 0));
@@ -485,7 +562,7 @@ public class AssegnamentoRuoliActivity extends Activity implements
 
 		TextView b29 = new TextView(AssegnamentoRuoliActivity.this);
 		b29.setPadding(10, 0, 0, 0);
-		b29.setText("Blocco");
+		b29.setText("Ruoli Utente");
 		b29.setTextColor(Color.WHITE);
 		b29.setTextSize(15);
 		// b29.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);

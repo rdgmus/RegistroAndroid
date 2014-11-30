@@ -54,6 +54,7 @@ public class RuoliArrayAdapter extends ArrayAdapter<String> {
 			textView.setBackgroundColor(_context.getResources().getColor(
 					R.color.colorBlack));
 			textView.setTextSize(15);
+			textView.setTag(s.getLong("id_ruolo"));
 			setIconForRoles(imageView, s.getString("ruolo"));
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -81,6 +82,7 @@ public class RuoliArrayAdapter extends ArrayAdapter<String> {
 			textView.setBackgroundColor(_context.getResources().getColor(
 					R.color.colorBlack));
 			textView.setTextSize(15);
+			textView.setTag(s.getLong("id_ruolo"));
 			setIconForRoles(imageView, s.getString("ruolo"));
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -93,19 +95,19 @@ public class RuoliArrayAdapter extends ArrayAdapter<String> {
 	private void setIconForRoles(ImageView ivIsAdmin, String role) {
 		// TODO Auto-generated method stub
 		Resources res = _context.getResources();
-		if (role.equals("Amministratore")) {
+		if (role.contains("Amministratore".toUpperCase())) {
 			ivIsAdmin.setImageDrawable(res
 					.getDrawable(R.drawable.admin64));
 		}
-		if (role.equals("Professore")) {
+		if (role.contains("Insegnante".toUpperCase())) {
 			ivIsAdmin.setImageDrawable(res
 					.getDrawable(R.drawable.professor64));
 		}
-		if (role.equals("Ata")) {
+		if (role.contains("Ata".toUpperCase())) {
 			ivIsAdmin.setImageDrawable(res
 					.getDrawable(R.drawable.ata64));
 		}
-		if (role.equals("Segreteria")) {
+		if (role.contains("Segreteria".toUpperCase())) {
 			ivIsAdmin.setImageDrawable(res
 					.getDrawable(R.drawable.secretary64));
 		}
