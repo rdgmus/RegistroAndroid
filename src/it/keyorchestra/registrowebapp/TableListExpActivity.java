@@ -406,7 +406,7 @@ public class TableListExpActivity extends Activity implements ActivitiesCommonFu
 
 
 	@Override
-	public void startAnimation(final ImageButton ib, final long durationInMilliseconds) {
+	public void startAnimation(final View ib, final long durationInMilliseconds) {
 		// TODO Auto-generated method stub
 		// BUTTONS ANIMATION
 				final String TAG = "ImageButton Animation";

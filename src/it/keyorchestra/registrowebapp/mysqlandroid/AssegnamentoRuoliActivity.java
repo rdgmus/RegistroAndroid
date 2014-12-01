@@ -1,5 +1,11 @@
 package it.keyorchestra.registrowebapp.mysqlandroid;
 
+import it.keyorchestra.registrowebapp.R;
+import it.keyorchestra.registrowebapp.dbMatthed.DatabaseOps;
+import it.keyorchestra.registrowebapp.interfaces.ActivitiesCommonFunctions;
+import it.keyorchestra.registrowebapp.scuola.util.RuoliArrayAdapter;
+import it.keyorchestra.registrowebapp.scuola.util.UtentiArrayAdapter;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -8,12 +14,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import it.keyorchestra.registrowebapp.dbMatthed.DatabaseOps;
-import it.keyorchestra.registrowebapp.interfaces.ActivitiesCommonFunctions;
-import it.keyorchestra.registrowebapp.scuola.util.MySimpleArrayAdapter;
-import it.keyorchestra.registrowebapp.scuola.util.RuoliArrayAdapter;
-import it.keyorchestra.registrowebapp.scuola.util.UtentiArrayAdapter;
-import it.keyorchestra.registrowebapp.R;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -26,26 +26,24 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.view.ViewGroup.OnHierarchyChangeListener;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ToggleButton;
 
 public class AssegnamentoRuoliActivity extends Activity implements
@@ -55,9 +53,24 @@ public class AssegnamentoRuoliActivity extends Activity implements
 	Spinner spinnerRuoli, spinnerUtenti;
 	ImageButton bAddRole, bRemoveRole;
 	ToggleButton tbMembers;
-	private long selectedRole= -1;
+	private long selectedRole = -1;
+	private long selectedUser = -1;
 
-	
+	/**
+	 * @return the selectedUser
+	 */
+	public long getSelectedUser() {
+		return selectedUser;
+	}
+
+	/**
+	 * @param selectedUser
+	 *            the selectedUser to set
+	 */
+	public void setSelectedUser(long selectedUser) {
+		this.selectedUser = selectedUser;
+	}
+
 	/**
 	 * @return the selectedRole
 	 */
@@ -66,7 +79,8 @@ public class AssegnamentoRuoliActivity extends Activity implements
 	}
 
 	/**
-	 * @param selectedRole the selectedRole to set
+	 * @param selectedRole
+	 *            the selectedRole to set
 	 */
 	public void setSelectedRole(long selectedRole) {
 		this.selectedRole = selectedRole;
@@ -87,25 +101,20 @@ public class AssegnamentoRuoliActivity extends Activity implements
 				.getDefaultSharedPreferences(getApplicationContext());
 
 		// tbMembers
-		tbMembers = (ToggleButton)findViewById(R.id.tbMembers);
+		tbMembers = (ToggleButton) findViewById(R.id.tbMembers);
 		tbMembers.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				// TODO Auto-generated method stub
-				bAddRole.setVisibility(isChecked ? ToggleButton.INVISIBLE:ToggleButton.VISIBLE);
-				bRemoveRole.setVisibility(!isChecked ? ToggleButton.INVISIBLE:ToggleButton.VISIBLE);
-				
-				UtentiArrayAdapter utentiAdapter = new UtentiArrayAdapter(
-						getApplicationContext(),
-						CaricaUtentiAsJSON(getSelectedRole()),
-						CaricaUtentiAsArray(getSelectedRole()));
-				utentiAdapter
-						.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-				// Apply the adapter to the spinner
-				spinnerUtenti.setAdapter(utentiAdapter);
-				utentiAdapter.notifyDataSetChanged();
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView,
+					boolean isChecked) {
+				// TODO Auto-generated method stub
+				bAddRole.setVisibility(isChecked ? ToggleButton.INVISIBLE
+						: ToggleButton.VISIBLE);
+				bRemoveRole.setVisibility(!isChecked ? ToggleButton.INVISIBLE
+						: ToggleButton.VISIBLE);
+
+				reloadUtentiAdapter(getSelectedRole());
+				CaricaUtentiRuoloSelezionato(getSelectedRole(), null);
 			}
 		});
 		// ADD ROLE
@@ -117,9 +126,9 @@ public class AssegnamentoRuoliActivity extends Activity implements
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				startAnimation((ImageButton) v, 2000);
-				Toast.makeText(getApplicationContext(),
-						"Aggiungo Ruolo a Utente", Toast.LENGTH_SHORT).show();
+				addUserToRole(getSelectedRole(), getSelectedUser());
 			}
+
 		});
 
 		// REMOVE ROLE
@@ -131,8 +140,7 @@ public class AssegnamentoRuoliActivity extends Activity implements
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				startAnimation((ImageButton) v, 2000);
-				Toast.makeText(getApplicationContext(),
-						"Rimozione Utente da Ruolo", Toast.LENGTH_SHORT).show();
+				removeUserFromRole(getSelectedRole(), getSelectedUser());
 
 			}
 		});
@@ -161,16 +169,8 @@ public class AssegnamentoRuoliActivity extends Activity implements
 				CaricaUtentiRuoloSelezionato((Long) myTextView.getTag(),
 						(String) myTextView.getText());
 
-				UtentiArrayAdapter utentiAdapter = new UtentiArrayAdapter(
-						getApplicationContext(),
-						CaricaUtentiAsJSON((Long) myTextView.getTag()),
-						CaricaUtentiAsArray((Long) myTextView.getTag()));
-				utentiAdapter
-						.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+				reloadUtentiAdapter((Long) myTextView.getTag());
 
-				// Apply the adapter to the spinner
-				spinnerUtenti.setAdapter(utentiAdapter);
-				utentiAdapter.notifyDataSetChanged();
 				setSelectedRole((Long) myTextView.getTag());
 			}
 
@@ -183,14 +183,34 @@ public class AssegnamentoRuoliActivity extends Activity implements
 
 		// SPINNER UTENTI
 		spinnerUtenti = (Spinner) findViewById(R.id.spinnerUtenti);
-		// UtentiArrayAdapter utentiAdapter = new UtentiArrayAdapter(
-		// getApplicationContext(), CaricaUtentiAsJSON(-1l),
-		// CaricaUtentiAsArray(-1l));
-		// utentiAdapter
-		// .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		//
-		// // Apply the adapter to the spinner
-		// spinnerUtenti.setAdapter(utentiAdapter);
+		reloadUtentiAdapter(-1l);
+		spinnerUtenti
+				.setOnHierarchyChangeListener(new OnHierarchyChangeListener() {
+
+					@Override
+					public void onChildViewRemoved(View parent, View child) {
+						// TODO Auto-generated method stub
+						// Toast.makeText(
+						// getApplicationContext(),
+						// "onChildViewRemoved",
+						// Toast.LENGTH_SHORT).show();
+					}
+
+					@Override
+					public void onChildViewAdded(View parent, View child) {
+						// TODO Auto-generated method stub
+
+						TextView myTextView = (TextView) child
+								.findViewById(R.id.tvMyText);
+						Toast.makeText(
+								getApplicationContext(),
+								"Utente: "
+										+ myTextView.getText() + " Id:"
+										+ myTextView.getTag(),
+								Toast.LENGTH_SHORT).show();
+						setSelectedUser((Long) myTextView.getTag());
+					}
+				});
 		spinnerUtenti.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 			@Override
@@ -201,11 +221,7 @@ public class AssegnamentoRuoliActivity extends Activity implements
 					return;
 				TextView myTextView = (TextView) view
 						.findViewById(R.id.tvMyText);
-				Toast.makeText(
-						getApplicationContext(),
-						"Utente: " + parent.getItemAtPosition(position)
-								+ " Id:" + myTextView.getTag(),
-						Toast.LENGTH_SHORT).show();
+				setSelectedUser((Long) myTextView.getTag());
 			}
 
 			@Override
@@ -214,6 +230,45 @@ public class AssegnamentoRuoliActivity extends Activity implements
 
 			}
 		});
+	}
+
+	protected void removeUserFromRole(long selectedRole, long selectedUser) {
+		// TODO Auto-generated method stub
+
+		DatabaseOps dataBaseOps = new DatabaseOps(getApplicationContext());
+		dataBaseOps.removeUserFromRole(getApplicationContext(), selectedRole,
+				selectedUser);
+		reloadUtentiAdapter(getSelectedRole());
+		CaricaUtentiRuoloSelezionato(selectedRole, null);
+	}
+
+	protected void addUserToRole(long selectedRole, long selectedUser) {
+		// TODO Auto-generated method stub
+
+		DatabaseOps dataBaseOps = new DatabaseOps(getApplicationContext());
+		dataBaseOps.addUserToRole(getApplicationContext(), selectedRole,
+				selectedUser);
+		reloadUtentiAdapter(getSelectedRole());
+		CaricaUtentiRuoloSelezionato(selectedRole, null);
+	}
+
+	/**
+	 * Rifresca l'adapter degli utenti per lo spinnerUtenti in modo che rifletta
+	 * la situazione attuale dei ruoli-utenti
+	 * 
+	 * @param tag
+	 */
+	private void reloadUtentiAdapter(Long tag) {
+		// TODO Auto-generated method stub
+		UtentiArrayAdapter utentiAdapter = new UtentiArrayAdapter(
+				getApplicationContext(), CaricaUtentiAsJSON(tag),
+				CaricaUtentiAsArray(tag));
+		utentiAdapter
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+		// Apply the adapter to the spinner
+		spinnerUtenti.setAdapter(utentiAdapter);
+		utentiAdapter.notifyDataSetChanged();
 	}
 
 	/**
@@ -304,16 +359,18 @@ public class AssegnamentoRuoliActivity extends Activity implements
 		if (id_ruolo == -1) {
 			query = "SELECT * FROM utenti_scuola WHERE 1 ORDER BY cognome, nome";
 		} else {
-			if(tbMembers.isChecked()){
+			if (tbMembers.isChecked()) {
 				query = "SELECT * FROM utenti_scuola as a WHERE  EXISTS ("
 						+ "SELECT * FROM ruoli_granted_to_utenti as b "
-						+ "WHERE a.id_utente = b.id_utente " + "AND b.id_ruolo = "
-						+ id_ruolo + ") ORDER BY a.cognome, a.nome";
-			}else{
+						+ "WHERE a.id_utente = b.id_utente "
+						+ "AND b.id_ruolo = " + id_ruolo
+						+ ") ORDER BY a.cognome, a.nome";
+			} else {
 				query = "SELECT * FROM utenti_scuola as a WHERE NOT EXISTS ("
 						+ "SELECT * FROM ruoli_granted_to_utenti as b "
-						+ "WHERE a.id_utente = b.id_utente " + "AND b.id_ruolo = "
-						+ id_ruolo + ") ORDER BY a.cognome, a.nome";				
+						+ "WHERE a.id_utente = b.id_utente "
+						+ "AND b.id_ruolo = " + id_ruolo
+						+ ") ORDER BY a.cognome, a.nome";
 			}
 		}
 
@@ -346,16 +403,18 @@ public class AssegnamentoRuoliActivity extends Activity implements
 		if (id_ruolo == -1) {
 			query = "SELECT * FROM utenti_scuola WHERE 1 ORDER BY cognome, nome";
 		} else {
-			if(tbMembers.isChecked()){
+			if (tbMembers.isChecked()) {
 				query = "SELECT * FROM utenti_scuola as a WHERE  EXISTS ("
 						+ "SELECT * FROM ruoli_granted_to_utenti as b "
-						+ "WHERE a.id_utente = b.id_utente " + "AND b.id_ruolo = "
-						+ id_ruolo + ") ORDER BY a.cognome, a.nome";
-			}else{
+						+ "WHERE a.id_utente = b.id_utente "
+						+ "AND b.id_ruolo = " + id_ruolo
+						+ ") ORDER BY a.cognome, a.nome";
+			} else {
 				query = "SELECT * FROM utenti_scuola as a WHERE NOT EXISTS ("
 						+ "SELECT * FROM ruoli_granted_to_utenti as b "
-						+ "WHERE a.id_utente = b.id_utente " + "AND b.id_ruolo = "
-						+ id_ruolo + ") ORDER BY a.cognome, a.nome";				
+						+ "WHERE a.id_utente = b.id_utente "
+						+ "AND b.id_ruolo = " + id_ruolo
+						+ ") ORDER BY a.cognome, a.nome";
 			}
 		}
 
@@ -402,11 +461,18 @@ public class AssegnamentoRuoliActivity extends Activity implements
 
 		// jsonRuoliAmmessi(retrieveTableData, ip);
 
-		String query = "SELECT * FROM utenti_scuola as a WHERE  EXISTS ("
-				+ "SELECT * FROM ruoli_granted_to_utenti as b "
-				+ "WHERE a.id_utente = b.id_utente " + "AND b.id_ruolo = "
-				+ id_ruolo + ") ORDER BY a.cognome, a.nome";
-
+		String query;
+		if (tbMembers.isChecked()) {
+			query = "SELECT * FROM utenti_scuola as a WHERE  EXISTS ("
+					+ "SELECT * FROM ruoli_granted_to_utenti as b "
+					+ "WHERE a.id_utente = b.id_utente " + "AND b.id_ruolo = "
+					+ id_ruolo + ") ORDER BY a.cognome, a.nome";
+		} else {
+			query = "SELECT * FROM utenti_scuola as a WHERE NOT EXISTS ("
+					+ "SELECT * FROM ruoli_granted_to_utenti as b "
+					+ "WHERE a.id_utente = b.id_utente " + "AND b.id_ruolo = "
+					+ id_ruolo + ") ORDER BY a.cognome, a.nome";
+		}
 		JSONArray jArray;
 		try {
 			jArray = new MySqlAndroid().retrieveTableData(
@@ -426,13 +492,15 @@ public class AssegnamentoRuoliActivity extends Activity implements
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-			Toast.makeText(getApplicationContext(),
-					"Ruolo: " + ruolo + " Id:" + id_ruolo, Toast.LENGTH_SHORT)
-					.show();
+			if (ruolo != null)
+				Toast.makeText(getApplicationContext(),
+						"Ruolo: " + ruolo + " Id:" + id_ruolo,
+						Toast.LENGTH_SHORT).show();
 		}
 
 	}
 
+	@SuppressWarnings("unused")
 	private JSONArray jsonRuoliAmmessi(String phpInterface, String ip) {
 		// TODO Auto-generated method stub
 		String query = "SELECT * FROM ruoli_utenti WHERE 1 ORDER BY ruolo";
@@ -472,8 +540,7 @@ public class AssegnamentoRuoliActivity extends Activity implements
 						contentTable, json_data, LayoutParams.WRAP_CONTENT, i);
 
 			}
-			// headerTable = addRowToTableAsJson(getApplicationContext(),
-			// headerTable, longestRow, convertPixelsToDp(1), -1);
+
 		} catch (JSONException e) {
 
 			Log.e("log_tag", "Error parsing data" + e.toString());
@@ -547,7 +614,8 @@ public class AssegnamentoRuoliActivity extends Activity implements
 	}
 
 	@Override
-	public void startAnimation(final ImageButton ib, final long durationInMilliseconds) {
+	public void startAnimation(final View ib,
+			final long durationInMilliseconds) {
 		// TODO Auto-generated method stub
 		final String TAG = "ImageButton Animation";
 		Animation animation = new AlphaAnimation(1.0f, 0.25f); // Change alpha
@@ -587,10 +655,10 @@ public class AssegnamentoRuoliActivity extends Activity implements
 	}
 
 	protected TableLayout addRowToTableAsJson(Context applicationContext,
-			TableLayout headerTable, JSONObject json_data, int height, int index)
-			throws JSONException {
+			TableLayout headerTable, JSONObject json_data, int height,
+			final int index) throws JSONException {
 		// TODO Auto-generated method stub
-		TableRow tr = new TableRow(AssegnamentoRuoliActivity.this);
+		final TableRow tr = new TableRow(AssegnamentoRuoliActivity.this);
 
 		if (index % 2 == 0)
 			tr.setBackgroundColor(getResources()
@@ -639,7 +707,7 @@ public class AssegnamentoRuoliActivity extends Activity implements
 
 		tr.addView(b3);
 
-		// QUI VOGLIO METTERE UNA CHECKBOX
+		// QUI VOGLIO METTERE LE IMMAGINI DEI RUOLI UTENTE
 		final ImageView b2 = new ImageView(AssegnamentoRuoliActivity.this);
 		b2.setImageDrawable(applicationContext.getResources().getDrawable(
 				R.drawable.ruoli_utenti48));
@@ -649,8 +717,34 @@ public class AssegnamentoRuoliActivity extends Activity implements
 		tr.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, 0));
 		tr.setWeightSum(1);
 
+		tr.setTag(json_data.getLong("id_utente"));
+
+		tr.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				startAnimation(tr, 2000);
+				int position = getUserIdPositionIntoSpinner(spinnerUtenti, (Long) v.getTag());
+				spinnerUtenti.setSelection(position, true);
+			}
+		});
 		headerTable.addView(tr);
 		return headerTable;
+	}
+
+	protected int getUserIdPositionIntoSpinner(Spinner spinner, long id) {
+		// TODO Auto-generated method stub
+		int count = spinner.getCount();
+		for(int i =0; i< count; i++){
+			View rowView = spinner.getAdapter().getView(i, null, spinner);
+			TextView tvMyText = (TextView) rowView.findViewById(R.id.tvMyText);
+			if((Long)tvMyText.getTag() == id){
+				return i;
+			}
+			
+		}
+		return 0;
 	}
 
 	@SuppressLint("NewApi")

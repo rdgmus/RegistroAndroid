@@ -377,7 +377,7 @@ public class UtentiBloccatiActivity extends Activity implements
 	}
 
 	@Override
-	public void startAnimation(ImageButton ib, long durationInMilliseconds) {
+	public void startAnimation(View ib, long durationInMilliseconds) {
 		// TODO Auto-generated method stub
 
 	}

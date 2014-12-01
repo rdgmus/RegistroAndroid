@@ -1,5 +1,6 @@
 package it.keyorchestra.registrowebapp.interfaces;
 
+import android.view.View;
 import android.widget.ImageButton;
 
 public interface ActivitiesCommonFunctions {
@@ -18,6 +19,6 @@ public interface ActivitiesCommonFunctions {
 
 	public String getDatabaseIpFromPreferences();
 
-	public void startAnimation(final ImageButton ib,
+	public void startAnimation(final View ib,
 			final long durationInMilliseconds);
 }

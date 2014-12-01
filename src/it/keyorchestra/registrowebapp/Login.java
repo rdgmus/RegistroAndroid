@@ -533,7 +533,7 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 	}
 
 	@Override
-	public void startAnimation(final ImageButton ib, final long durationInMilliseconds) {
+	public void startAnimation(final View ib, final long durationInMilliseconds) {
 		// TODO Auto-generated method stub
 		final String TAG = "ImageButton Animation";
 		Animation animation = new AlphaAnimation(1.0f, 0.25f); // Change alpha from

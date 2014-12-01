@@ -571,9 +571,10 @@ public class DatabaseOps implements DatabasesInterface {
 	}
 
 	/**
-	 * Update del campo 'is_locked' della tabella 'utenti_scuola'
-	 * Sblocco o viceversa, blocco dell'account di un utente.
-	 * Può essere effettuato solo da un ADMIN
+	 * Update del campo 'is_locked' della tabella 'utenti_scuola' Sblocco o
+	 * viceversa, blocco dell'account di un utente. Può essere effettuato solo
+	 * da un ADMIN
+	 * 
 	 * @param applicationContext
 	 * @param id_utente
 	 * @param is_locked
@@ -595,10 +596,149 @@ public class DatabaseOps implements DatabasesInterface {
 					+ " WHERE `id_utente` = " + id_utente;
 			int result = st.executeUpdate(sql);
 			if (result == 1) {
+				if (is_locked)
+					Toast.makeText(
+							applicationContext,
+							"Utente: ["
+									+ getUserName(applicationContext, id_utente)
+									+ "] => BLOCCATO!", Toast.LENGTH_SHORT)
+							.show();
+				else
+					Toast.makeText(
+							applicationContext,
+							"Utente: ["
+									+ getUserName(applicationContext, id_utente)
+									+ "] => SBLOCCATO!",
+							Toast.LENGTH_SHORT).show();
+			}
+			st.close();
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Aggiunge ruolo a utente
+	 * 
+	 * @param applicationContext
+	 * @param selectedRole
+	 * @param selectedUser
+	 */
+	public void addUserToRole(Context applicationContext, long selectedRole,
+			long selectedUser) {
+		// TODO Auto-generated method stub
+		String url = getUrl(applicationContext);
+
+		Connection conn;
+		try {
+			DriverManager.setLoginTimeout(15);
+			conn = DriverManager.getConnection(url);
+			Statement st = conn.createStatement();
+			String sql = null;
+
+			sql = "INSERT INTO `ruoli_granted_to_utenti`(`id_utente`, `id_ruolo`) "
+					+ "VALUES (" + selectedUser + "," + selectedRole + ")";
+			int result = st.executeUpdate(sql);
+			if (result == 1) {
 				Toast.makeText(
 						applicationContext,
-						"Utente: [" + id_utente + "] => is_locked = "
-								+ is_locked, Toast.LENGTH_SHORT).show();
+						"Aggiunto Ruolo: ["
+								+ getRuoloName(applicationContext, selectedRole)
+								+ "] " + "a Utente: ["
+								+ getUserName(applicationContext, selectedUser)
+								+ "]", Toast.LENGTH_SHORT).show();
+			}
+			st.close();
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private String getUserName(Context applicationContext, long selectedUser) {
+		// TODO Auto-generated method stub
+		String url = getUrl(applicationContext);
+		String retval = null;
+
+		Connection conn;
+		try {
+			DriverManager.setLoginTimeout(15);
+			conn = DriverManager.getConnection(url);
+			Statement st = conn.createStatement();
+			String sql = null;
+
+			sql = "SELECT cognome, nome FROM utenti_scuola "
+					+ "WHERE  id_utente=" + selectedUser;
+			ResultSet result = st.executeQuery(sql);
+			while (result.next()) {
+				retval = result.getString("cognome") + " "
+						+ result.getString("nome");
+			}
+			st.close();
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return retval;
+	}
+
+	private String getRuoloName(Context applicationContext, long selectedRole) {
+		// TODO Auto-generated method stub
+		String url = getUrl(applicationContext);
+		String retval = null;
+
+		Connection conn;
+		try {
+			DriverManager.setLoginTimeout(15);
+			conn = DriverManager.getConnection(url);
+			Statement st = conn.createStatement();
+			String sql = null;
+
+			sql = "SELECT ruolo FROM ruoli_utenti " + "WHERE  id_ruolo="
+					+ selectedRole;
+			ResultSet result = st.executeQuery(sql);
+			while (result.next()) {
+				retval = result.getString("ruolo");
+			}
+			st.close();
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return retval;
+	}
+
+	/**
+	 * Rimuove utente da ruolo
+	 * 
+	 * @param applicationContext
+	 * @param selectedRole
+	 * @param selectedUser
+	 */
+	public void removeUserFromRole(Context applicationContext,
+			long selectedRole, long selectedUser) {
+		// TODO Auto-generated method stub
+		String url = getUrl(applicationContext);
+
+		Connection conn;
+		try {
+			DriverManager.setLoginTimeout(15);
+			conn = DriverManager.getConnection(url);
+			Statement st = conn.createStatement();
+			String sql = null;
+
+			sql = "DELETE FROM ruoli_granted_to_utenti " + "WHERE  id_utente="
+					+ selectedUser + " AND id_ruolo=" + selectedRole;
+			int result = st.executeUpdate(sql);
+			if (result == 1) {
+				Toast.makeText(
+						applicationContext,
+						"Rimosso Utente: ["
+								+ getUserName(applicationContext, selectedUser)
+								+ "] da Ruolo: ["
+								+ getRuoloName(applicationContext, selectedRole)
+								+ "]", Toast.LENGTH_SHORT).show();
 			}
 			st.close();
 			conn.close();

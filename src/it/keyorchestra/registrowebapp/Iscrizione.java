@@ -285,7 +285,7 @@ public class Iscrizione extends Activity implements ActivitiesCommonFunctions {
 	}
 
 	@Override
-	public void startAnimation(final ImageButton ib,
+	public void startAnimation(final View ib,
 			final long durationInMilliseconds) {
 		// TODO Auto-generated method stub
 		final String TAG = "ImageButton Animation";
