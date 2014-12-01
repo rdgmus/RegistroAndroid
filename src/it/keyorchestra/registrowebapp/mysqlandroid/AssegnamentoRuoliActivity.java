@@ -108,9 +108,9 @@ public class AssegnamentoRuoliActivity extends Activity implements
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {
 				// TODO Auto-generated method stub
-				bAddRole.setVisibility(isChecked ? ToggleButton.INVISIBLE
+				bAddRole.setVisibility(isChecked ? ToggleButton.GONE
 						: ToggleButton.VISIBLE);
-				bRemoveRole.setVisibility(!isChecked ? ToggleButton.INVISIBLE
+				bRemoveRole.setVisibility(!isChecked ? ToggleButton.GONE
 						: ToggleButton.VISIBLE);
 
 				reloadUtentiAdapter(getSelectedRole());
@@ -204,8 +204,7 @@ public class AssegnamentoRuoliActivity extends Activity implements
 								.findViewById(R.id.tvMyText);
 						Toast.makeText(
 								getApplicationContext(),
-								"Utente: "
-										+ myTextView.getText() + " Id:"
+								"Utente: " + myTextView.getText() + " Id:"
 										+ myTextView.getTag(),
 								Toast.LENGTH_SHORT).show();
 						setSelectedUser((Long) myTextView.getTag());
@@ -614,8 +613,7 @@ public class AssegnamentoRuoliActivity extends Activity implements
 	}
 
 	@Override
-	public void startAnimation(final View ib,
-			final long durationInMilliseconds) {
+	public void startAnimation(final View ib, final long durationInMilliseconds) {
 		// TODO Auto-generated method stub
 		final String TAG = "ImageButton Animation";
 		Animation animation = new AlphaAnimation(1.0f, 0.25f); // Change alpha
@@ -658,91 +656,150 @@ public class AssegnamentoRuoliActivity extends Activity implements
 			TableLayout headerTable, JSONObject json_data, int height,
 			final int index) throws JSONException {
 		// TODO Auto-generated method stub
-		final TableRow tr = new TableRow(AssegnamentoRuoliActivity.this);
+		LayoutInflater inflater = (LayoutInflater) applicationContext
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		final View rowView = inflater.inflate(R.layout.ruoli_row_layout,
+				headerTable, false);
+		buildRuoliRowLayout(applicationContext, json_data, rowView);
 
-		if (index % 2 == 0)
-			tr.setBackgroundColor(getResources()
-					.getColor(R.color.colorListItem));
-		else
-			tr.setBackgroundColor(getResources().getColor(R.color.colorOrange));
+//		final TableRow tr = new TableRow(AssegnamentoRuoliActivity.this);
 
-		TextView b = new TextView(AssegnamentoRuoliActivity.this);
-
-		String stime = String.valueOf(json_data.getLong("id_utente"));
-
-		b.setText(stime);
-
-		b.setTextColor(Color.RED);
-
-		b.setTextSize(15);
-
-		tr.addView(b);
-
-		TextView b1 = new TextView(AssegnamentoRuoliActivity.this);
-
-		b1.setPadding(10, 0, 0, 0);
-
-		b1.setTextSize(15);
-
-		String stime1 = json_data.getString("cognome") + " "
-				+ json_data.getString("nome");
-
-		b1.setText(stime1);
-
-		b1.setTextColor(Color.BLACK);
-
-		tr.addView(b1);
-
-		TextView b3 = new TextView(AssegnamentoRuoliActivity.this);
-
-		b3.setPadding(10, 0, 0, 0);
-
-		b3.setTextSize(15);
-
-		String stime3 = json_data.getString("email");
-
-		b3.setText(stime3);
-
-		b3.setTextColor(Color.BLACK);
-
-		tr.addView(b3);
-
-		// QUI VOGLIO METTERE LE IMMAGINI DEI RUOLI UTENTE
-		final ImageView b2 = new ImageView(AssegnamentoRuoliActivity.this);
-		b2.setImageDrawable(applicationContext.getResources().getDrawable(
-				R.drawable.ruoli_utenti48));
-		b2.setTag(json_data.getLong("id_utente"));
-
-		tr.addView(b2);
-		tr.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, 0));
-		tr.setWeightSum(1);
-
-		tr.setTag(json_data.getLong("id_utente"));
-
-		tr.setOnClickListener(new OnClickListener() {
+		if (index % 2 == 0) {
+//			tr.setBackgroundColor(getResources()
+//					.getColor(R.color.colorListItem));
+			rowView.setBackgroundColor(getResources().getColor(
+					R.color.colorListItem));
+		} else {
+//			tr.setBackgroundColor(getResources().getColor(R.color.colorOrange));
+			rowView.setBackgroundColor(getResources().getColor(
+					R.color.colorOrange));
+		}
+		rowView.setTag(json_data.getLong("id_utente"));
+		rowView.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				startAnimation(tr, 2000);
-				int position = getUserIdPositionIntoSpinner(spinnerUtenti, (Long) v.getTag());
+				startAnimation(rowView, 2000);
+				int position = getUserIdPositionIntoSpinner(spinnerUtenti,
+						(Long) v.getTag());
 				spinnerUtenti.setSelection(position, true);
 			}
 		});
-		headerTable.addView(tr);
+
+//		TextView b = new TextView(AssegnamentoRuoliActivity.this);
+//
+//		String stime = String.valueOf(json_data.getLong("id_utente"));
+//
+//		b.setText(stime);
+//
+//		b.setTextColor(Color.RED);
+//
+//		b.setTextSize(15);
+//
+//		tr.addView(b);
+//
+//		TextView b1 = new TextView(AssegnamentoRuoliActivity.this);
+//
+//		b1.setPadding(10, 0, 0, 0);
+//
+//		b1.setTextSize(15);
+//
+//		String stime1 = json_data.getString("cognome") + " "
+//				+ json_data.getString("nome");
+//
+//		b1.setText(stime1);
+//
+//		b1.setTextColor(Color.BLACK);
+//
+//		tr.addView(b1);
+//
+//		TextView b3 = new TextView(AssegnamentoRuoliActivity.this);
+//
+//		b3.setPadding(10, 0, 0, 0);
+//
+//		b3.setTextSize(15);
+//
+//		String stime3 = json_data.getString("email");
+//
+//		b3.setText(stime3);
+//
+//		b3.setTextColor(Color.BLACK);
+//
+//		tr.addView(b3);
+//
+//		// QUI VOGLIO METTERE LE IMMAGINI DEI RUOLI UTENTE
+//		final ImageView b2 = new ImageView(AssegnamentoRuoliActivity.this);
+//		b2.setImageDrawable(applicationContext.getResources().getDrawable(
+//				R.drawable.ruoli_utenti48));
+//		b2.setTag(json_data.getLong("id_utente"));
+//
+//		tr.addView(b2);
+//		tr.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, 0));
+//		tr.setWeightSum(1);
+//
+//		tr.setTag(json_data.getLong("id_utente"));
+//
+//		tr.setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				startAnimation(tr, 2000);
+//				int position = getUserIdPositionIntoSpinner(spinnerUtenti,
+//						(Long) v.getTag());
+//				spinnerUtenti.setSelection(position, true);
+//			}
+//		});
+		// headerTable.addView(tr);
+		headerTable.addView(rowView);
 		return headerTable;
+	}
+
+	private void buildRuoliRowLayout(Context applicationContext,
+			JSONObject json_data, View rowView) {
+		// TODO Auto-generated method stub
+		TextView tvIdUtente = (TextView) rowView.findViewById(R.id.tvIdUtente);
+		TextView tvCognomeNome = (TextView) rowView
+				.findViewById(R.id.tvCognomeNome);
+		TextView tvEmail = (TextView) rowView.findViewById(R.id.tvEmail);
+		ImageButton ibAdmin = (ImageButton) findViewById(R.id.ibAdmin);
+		ImageButton ibAta = (ImageButton) findViewById(R.id.ibAta);
+		ImageButton ibProf = (ImageButton) findViewById(R.id.ibProf);
+		ImageButton ibSegr = (ImageButton) findViewById(R.id.ibSegr);
+
+		try {
+			tvIdUtente.setText(String.valueOf(json_data.getLong("id_utente")));
+			tvIdUtente.setTextColor(applicationContext.getResources().getColor(
+					R.color.colorRed));
+			tvIdUtente.setTextSize(15);
+
+			tvCognomeNome.setText(json_data.getString("cognome") + " "
+					+ json_data.getString("nome"));
+			tvCognomeNome.setTextColor(applicationContext.getResources()
+					.getColor(R.color.colorBlack));
+			tvCognomeNome.setTextSize(15);
+
+			tvEmail.setText(json_data.getString("email"));
+			tvEmail.setTextColor(applicationContext.getResources().getColor(
+					R.color.colorBlack));
+			tvEmail.setTextSize(15);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	protected int getUserIdPositionIntoSpinner(Spinner spinner, long id) {
 		// TODO Auto-generated method stub
 		int count = spinner.getCount();
-		for(int i =0; i< count; i++){
+		for (int i = 0; i < count; i++) {
 			View rowView = spinner.getAdapter().getView(i, null, spinner);
 			TextView tvMyText = (TextView) rowView.findViewById(R.id.tvMyText);
-			if((Long)tvMyText.getTag() == id){
+			if ((Long) tvMyText.getTag() == id) {
 				return i;
 			}
-			
+
 		}
 		return 0;
 	}
