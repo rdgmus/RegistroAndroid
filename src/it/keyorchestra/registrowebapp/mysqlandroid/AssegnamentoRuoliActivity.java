@@ -37,8 +37,10 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -242,8 +244,9 @@ public class AssegnamentoRuoliActivity extends Activity implements
 					getApplicationContext(), selectedRole))) {
 				Toast.makeText(
 						getApplicationContext(),
-						"NON PUOI RIMUOVERE TE STESSO DAL RUOLO: "
-								+ ruoloScelto, Toast.LENGTH_LONG).show();
+						"NON PUOI RIMUOVERE TE STESSO DAL RUOLO: ["
+								+ ruoloScelto + "] !", Toast.LENGTH_LONG)
+						.show();
 				return;
 			}
 		}
@@ -708,10 +711,27 @@ public class AssegnamentoRuoliActivity extends Activity implements
 		TextView tvCognomeNome = (TextView) rowView
 				.findViewById(R.id.tvCognomeNome);
 		TextView tvEmail = (TextView) rowView.findViewById(R.id.tvEmail);
-		ImageButton ibAdmin = (ImageButton) findViewById(R.id.ibAdmin);
-		ImageButton ibAta = (ImageButton) findViewById(R.id.ibAta);
-		ImageButton ibProf = (ImageButton) findViewById(R.id.ibProf);
-		ImageButton ibSegr = (ImageButton) findViewById(R.id.ibSegr);
+
+		// IMMAGINI RUOLI
+		HorizontalScrollView hsvRoles = (HorizontalScrollView) rowView
+				.findViewById(R.id.hsvRoles);
+		LinearLayout layoutRoles = (LinearLayout) hsvRoles
+				.findViewById(R.id.layoutRoles);
+
+		ImageButton ibAdmin = (ImageButton) layoutRoles
+				.findViewById(R.id.ibAdmin);
+		 ibAdmin.setVisibility(ImageButton.GONE);
+
+		ImageButton ibAta = (ImageButton) layoutRoles.findViewById(R.id.ibAta);
+		 ibAta.setVisibility(ImageButton.GONE);
+
+		ImageButton ibProf = (ImageButton) layoutRoles
+				.findViewById(R.id.ibProf);
+		 ibProf.setVisibility(ImageButton.GONE);
+
+		ImageButton ibSegr = (ImageButton) layoutRoles
+				.findViewById(R.id.ibSegr);
+		 ibSegr.setVisibility(ImageButton.GONE);
 
 		try {
 			tvIdUtente.setText(String.valueOf(json_data.getLong("id_utente")));
@@ -729,10 +749,33 @@ public class AssegnamentoRuoliActivity extends Activity implements
 			tvEmail.setTextColor(applicationContext.getResources().getColor(
 					R.color.colorBlack));
 			tvEmail.setTextSize(15);
+
+			ArrayList<String> ruoliUtente = listUserRoles(json_data
+					.getLong("id_utente"));
+			for (String ruolo : ruoliUtente) {
+				if (ruolo.equals("AMMINISTRATORE")) {
+					 ibAdmin.setVisibility(ImageButton.VISIBLE);
+				}
+				if (ruolo.equals("ATA")) {
+					 ibAta.setVisibility(ImageButton.VISIBLE);
+				}
+				if (ruolo.equals("INSEGNANTE")) {
+					 ibProf.setVisibility(ImageButton.VISIBLE);
+				}
+				if (ruolo.equals("SEGRETERIA")) {
+					 ibSegr.setVisibility(ImageButton.VISIBLE);
+				}
+			}
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	private ArrayList<String> listUserRoles(long id_utente) {
+		// TODO Auto-generated method stub
+		DatabaseOps dataBaseOps = new DatabaseOps(getApplicationContext());
+		return dataBaseOps.listUserRoles(getApplicationContext(), id_utente);
 	}
 
 	protected int getUserIdPositionIntoSpinner(Spinner spinner, long id) {

@@ -746,4 +746,31 @@ public class DatabaseOps implements DatabasesInterface {
 			e.printStackTrace();
 		}
 	}
+
+	public ArrayList<String> listUserRoles(Context applicationContext,
+			long selectedUser) {
+		// TODO Auto-generated method stub
+		ArrayList<String> myRoles = new ArrayList<String>();
+		String url = getUrl(applicationContext);
+
+		Connection conn;
+		try {
+			DriverManager.setLoginTimeout(15);
+			conn = DriverManager.getConnection(url);
+			Statement st = conn.createStatement();
+			String sql = null;
+
+			sql = "SELECT * FROM ruoli_granted_to_utenti " + "WHERE  id_utente="
+					+ selectedUser;
+			ResultSet result = st.executeQuery(sql);
+			while (result.next()) {
+				myRoles.add(result.getString("ruolo"));
+			}
+			st.close();
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return myRoles;
+	}
 }
