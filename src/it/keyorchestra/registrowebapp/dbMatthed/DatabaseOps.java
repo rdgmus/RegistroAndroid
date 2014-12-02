@@ -601,15 +601,13 @@ public class DatabaseOps implements DatabasesInterface {
 							applicationContext,
 							"Utente: "
 									+ getUserName(applicationContext, id_utente)
-									+ " BLOCCATO!", Toast.LENGTH_SHORT)
-							.show();
+									+ " BLOCCATO!", Toast.LENGTH_SHORT).show();
 				else
 					Toast.makeText(
 							applicationContext,
 							"Utente: "
 									+ getUserName(applicationContext, id_utente)
-									+ " SBLOCCATO!",
-							Toast.LENGTH_SHORT).show();
+									+ " SBLOCCATO!", Toast.LENGTH_SHORT).show();
 			}
 			st.close();
 			conn.close();
@@ -639,7 +637,9 @@ public class DatabaseOps implements DatabasesInterface {
 
 			sql = "INSERT INTO `ruoli_granted_to_utenti`(`id_utente`, `id_ruolo`) "
 					+ "VALUES (" + selectedUser + "," + selectedRole + ")";
+
 			int result = st.executeUpdate(sql);
+
 			if (result == 1) {
 				Toast.makeText(
 						applicationContext,
@@ -760,8 +760,8 @@ public class DatabaseOps implements DatabasesInterface {
 			Statement st = conn.createStatement();
 			String sql = null;
 
-			sql = "SELECT * FROM ruoli_granted_to_utenti " + "WHERE  id_utente="
-					+ selectedUser;
+			sql = "SELECT * FROM ruoli_granted_to_utenti "
+					+ "WHERE  id_utente=" + selectedUser;
 			ResultSet result = st.executeQuery(sql);
 			while (result.next()) {
 				myRoles.add(result.getString("ruolo"));
@@ -772,5 +772,31 @@ public class DatabaseOps implements DatabasesInterface {
 			e.printStackTrace();
 		}
 		return myRoles;
+	}
+
+	public long getIdRuolo(Context applicationContext, String ruolo) {
+		// TODO Auto-generated method stub
+		String url = getUrl(applicationContext);
+		long retval = -1;
+
+		Connection conn;
+		try {
+			DriverManager.setLoginTimeout(15);
+			conn = DriverManager.getConnection(url);
+			Statement st = conn.createStatement();
+			String sql = null;
+
+			sql = "SELECT id_ruolo FROM ruoli_utenti " + "WHERE  ruolo='"
+					+ ruolo + "'";
+			ResultSet result = st.executeQuery(sql);
+			while (result.next()) {
+				retval = result.getLong("id_ruolo");
+			}
+			st.close();
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return retval;
 	}
 }

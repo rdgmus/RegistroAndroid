@@ -7,7 +7,7 @@
     <TextView
         android:id="@+id/tvIdUtente"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:padding="5sp"
         android:text="Id"
@@ -16,29 +16,30 @@
     <TextView
         android:id="@+id/tvCognomeNome"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:gravity="center_vertical"
         android:padding="5sp"
         android:text="Nome"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textStyle="bold" 
-        android:layout_weight="1"/>
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tvEmail"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:gravity="center_vertical"
         android:padding="5sp"
         android:text="Email"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textStyle="bold" 
-        android:layout_weight="1"/>
+        android:textStyle="bold" />
 
     <HorizontalScrollView
+        android:id="@+id/hsvRoles"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" 
-        android:id="@+id/hsvRoles">
+        android:layout_height="wrap_content"
+        android:visibility="visible" >
 
         <LinearLayout
             android:id="@+id/layoutRoles"
@@ -64,8 +65,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:src="@drawable/professor48"
-                android:visibility="visible" />
+                android:src="@drawable/professor48" />
 
             <ImageButton
                 android:id="@+id/ibSegr"
@@ -73,6 +73,18 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:src="@drawable/secretary48" />
+
+            <TextView
+                android:id="@+id/tvNoRoles"
+                android:layout_width="wrap_content"
+                android:layout_height="48sp"
+                android:gravity="center_vertical"
+                android:padding="5sp"
+                android:text="Nessun Ruolo"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/colorRed"
+                android:textStyle="bold" />
+
         </LinearLayout>
     </HorizontalScrollView>
 

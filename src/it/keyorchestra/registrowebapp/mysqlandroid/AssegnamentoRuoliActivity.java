@@ -1,6 +1,7 @@
 package it.keyorchestra.registrowebapp.mysqlandroid;
 
 import it.keyorchestra.registrowebapp.R;
+import it.keyorchestra.registrowebapp.SqLite;
 import it.keyorchestra.registrowebapp.dbMatthed.DatabaseOps;
 import it.keyorchestra.registrowebapp.interfaces.ActivitiesCommonFunctions;
 import it.keyorchestra.registrowebapp.scuola.util.RuoliArrayAdapter;
@@ -104,17 +105,14 @@ public class AssegnamentoRuoliActivity extends Activity implements
 
 		// tbMembers
 		tbMembers = (ToggleButton) findViewById(R.id.tbMembers);
+		tbMembers.setChecked(true);
 		tbMembers.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {
 				// TODO Auto-generated method stub
-				bAddRole.setVisibility(isChecked ? ToggleButton.GONE
-						: ToggleButton.VISIBLE);
-				bRemoveRole.setVisibility(!isChecked ? ToggleButton.GONE
-						: ToggleButton.VISIBLE);
-
+				toggleAddRemoveButtons(isChecked);
 				reloadUtentiAdapter(getSelectedRole());
 				CaricaUtentiRuoloSelezionato(getSelectedRole(), null);
 			}
@@ -186,32 +184,7 @@ public class AssegnamentoRuoliActivity extends Activity implements
 		// SPINNER UTENTI
 		spinnerUtenti = (Spinner) findViewById(R.id.spinnerUtenti);
 		reloadUtentiAdapter(-1l);
-		spinnerUtenti
-				.setOnHierarchyChangeListener(new OnHierarchyChangeListener() {
-
-					@Override
-					public void onChildViewRemoved(View parent, View child) {
-						// TODO Auto-generated method stub
-						// Toast.makeText(
-						// getApplicationContext(),
-						// "onChildViewRemoved",
-						// Toast.LENGTH_SHORT).show();
-					}
-
-					@Override
-					public void onChildViewAdded(View parent, View child) {
-						// TODO Auto-generated method stub
-
-						TextView myTextView = (TextView) child
-								.findViewById(R.id.tvMyText);
-						Toast.makeText(
-								getApplicationContext(),
-								"Utente: " + myTextView.getText() + " Id:"
-										+ myTextView.getTag(),
-								Toast.LENGTH_SHORT).show();
-						setSelectedUser((Long) myTextView.getTag());
-					}
-				});
+		
 		spinnerUtenti.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 			@Override
@@ -231,6 +204,15 @@ public class AssegnamentoRuoliActivity extends Activity implements
 
 			}
 		});
+		toggleAddRemoveButtons(true);
+	}
+
+	protected void toggleAddRemoveButtons(boolean isChecked) {
+		// TODO Auto-generated method stub
+		bAddRole.setVisibility(isChecked ? ToggleButton.GONE
+				: ToggleButton.VISIBLE);
+		bRemoveRole.setVisibility(!isChecked ? ToggleButton.GONE
+				: ToggleButton.VISIBLE);
 	}
 
 	protected void removeUserFromRole(long selectedRole, long selectedUser) {
@@ -252,8 +234,8 @@ public class AssegnamentoRuoliActivity extends Activity implements
 		}
 
 		// RIMOZIONE UTENTE DA RUOLO
-		dataBaseOps.removeUserFromRole(getApplicationContext(), selectedRole,
-				selectedUser);
+		dataBaseOps.removeUserFromRole(AssegnamentoRuoliActivity.this,
+				selectedRole, selectedUser);
 		reloadUtentiAdapter(getSelectedRole());
 		CaricaUtentiRuoloSelezionato(selectedRole, null);
 	}
@@ -262,7 +244,7 @@ public class AssegnamentoRuoliActivity extends Activity implements
 		// TODO Auto-generated method stub
 
 		DatabaseOps dataBaseOps = new DatabaseOps(getApplicationContext());
-		dataBaseOps.addUserToRole(getApplicationContext(), selectedRole,
+		dataBaseOps.addUserToRole(AssegnamentoRuoliActivity.this, selectedRole,
 				selectedUser);
 		reloadUtentiAdapter(getSelectedRole());
 		CaricaUtentiRuoloSelezionato(selectedRole, null);
@@ -670,8 +652,8 @@ public class AssegnamentoRuoliActivity extends Activity implements
 	}
 
 	protected TableLayout addRowToTableAsJson(Context applicationContext,
-			TableLayout headerTable, JSONObject json_data, int height,
-			final int index) throws JSONException {
+			TableLayout headerTable, JSONObject json_data, int height, int index)
+			throws JSONException {
 		// TODO Auto-generated method stub
 		LayoutInflater inflater = (LayoutInflater) applicationContext
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -679,7 +661,7 @@ public class AssegnamentoRuoliActivity extends Activity implements
 				headerTable, false);
 		buildRuoliRowLayout(applicationContext, json_data, rowView);
 
-		if (index % 2 == 0) {
+		if ((index % 2) == 0) {
 			rowView.setBackgroundColor(getResources().getColor(
 					R.color.colorListItem));
 		} else {
@@ -720,18 +702,82 @@ public class AssegnamentoRuoliActivity extends Activity implements
 
 		ImageButton ibAdmin = (ImageButton) layoutRoles
 				.findViewById(R.id.ibAdmin);
-		 ibAdmin.setVisibility(ImageButton.GONE);
+		ibAdmin.setVisibility(ImageButton.GONE);
+		ibAdmin.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				long id_ruolo = getIdRuolo("AMMINISTRATORE");
+				int position = getRoleIdPositionIntoSpinner(spinnerRuoli,
+						id_ruolo);
+				spinnerRuoli.setSelection(position, true);
+				tbMembers.setChecked(true);
+
+				position = getUserIdPositionIntoSpinner(spinnerUtenti,
+						(Long) v.getTag());
+				spinnerUtenti.setSelection(position, true);
+			}
+		});
 
 		ImageButton ibAta = (ImageButton) layoutRoles.findViewById(R.id.ibAta);
-		 ibAta.setVisibility(ImageButton.GONE);
+		ibAta.setVisibility(ImageButton.GONE);
+		ibAta.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				long id_ruolo = getIdRuolo("ATA");
+				int position = getRoleIdPositionIntoSpinner(spinnerRuoli,
+						id_ruolo);
+				spinnerRuoli.setSelection(position, true);
+				tbMembers.setChecked(true);
+
+				position = getUserIdPositionIntoSpinner(spinnerUtenti,
+						(Long) v.getTag());
+				spinnerUtenti.setSelection(position, true);
+			}
+		});
 
 		ImageButton ibProf = (ImageButton) layoutRoles
 				.findViewById(R.id.ibProf);
-		 ibProf.setVisibility(ImageButton.GONE);
+		ibProf.setVisibility(ImageButton.GONE);
+		ibProf.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				long id_ruolo = getIdRuolo("INSEGNANTE");
+				int position = getRoleIdPositionIntoSpinner(spinnerRuoli,
+						id_ruolo);
+				spinnerRuoli.setSelection(position, true);
+				tbMembers.setChecked(true);
+
+				position = getUserIdPositionIntoSpinner(spinnerUtenti,
+						(Long) v.getTag());
+				spinnerUtenti.setSelection(position, true);
+			}
+		});
 
 		ImageButton ibSegr = (ImageButton) layoutRoles
 				.findViewById(R.id.ibSegr);
-		 ibSegr.setVisibility(ImageButton.GONE);
+		ibSegr.setVisibility(ImageButton.GONE);
+		ibSegr.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				long id_ruolo = getIdRuolo("SEGRETERIA");
+				int position = getRoleIdPositionIntoSpinner(spinnerRuoli,
+						id_ruolo);
+				spinnerRuoli.setSelection(position, true);
+				tbMembers.setChecked(true);
+				
+				position = getUserIdPositionIntoSpinner(spinnerUtenti,
+						(Long) v.getTag());
+				spinnerUtenti.setSelection(position, true);
+			}
+		});
 
 		try {
 			tvIdUtente.setText(String.valueOf(json_data.getLong("id_utente")));
@@ -752,24 +798,56 @@ public class AssegnamentoRuoliActivity extends Activity implements
 
 			ArrayList<String> ruoliUtente = listUserRoles(json_data
 					.getLong("id_utente"));
-			for (String ruolo : ruoliUtente) {
-				if (ruolo.equals("AMMINISTRATORE")) {
-					 ibAdmin.setVisibility(ImageButton.VISIBLE);
-				}
-				if (ruolo.equals("ATA")) {
-					 ibAta.setVisibility(ImageButton.VISIBLE);
-				}
-				if (ruolo.equals("INSEGNANTE")) {
-					 ibProf.setVisibility(ImageButton.VISIBLE);
-				}
-				if (ruolo.equals("SEGRETERIA")) {
-					 ibSegr.setVisibility(ImageButton.VISIBLE);
+
+			TextView tvNoRoles = (TextView) layoutRoles
+					.findViewById(R.id.tvNoRoles);
+			if (ruoliUtente.size() == 0) {
+				tvNoRoles.setVisibility(TextView.VISIBLE);
+			} else {
+				tvNoRoles.setVisibility(TextView.GONE);
+				for (String ruolo : ruoliUtente) {
+					if (ruolo.equals("AMMINISTRATORE")) {
+						ibAdmin.setVisibility(ImageButton.VISIBLE);
+						ibAdmin.setTag(json_data.getLong("id_utente"));
+					}
+					if (ruolo.equals("ATA")) {
+						ibAta.setVisibility(ImageButton.VISIBLE);
+						ibAta.setTag(json_data.getLong("id_utente"));
+					}
+					if (ruolo.equals("INSEGNANTE")) {
+						ibProf.setVisibility(ImageButton.VISIBLE);
+						ibProf.setTag(json_data.getLong("id_utente"));
+					}
+					if (ruolo.equals("SEGRETERIA")) {
+						ibSegr.setVisibility(ImageButton.VISIBLE);
+						ibSegr.setTag(json_data.getLong("id_utente"));
+					}
 				}
 			}
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	protected int getRoleIdPositionIntoSpinner(Spinner spinner, long id_ruolo) {
+		// TODO Auto-generated method stub
+		int count = spinner.getCount();
+		for (int i = 0; i < count; i++) {
+			View rowView = spinner.getAdapter().getView(i, null, spinner);
+			TextView tvMyText = (TextView) rowView.findViewById(R.id.tvMyText);
+			if ((Long) tvMyText.getTag() == id_ruolo) {
+				return i;
+			}
+
+		}
+		return 0;
+	}
+
+	protected long getIdRuolo(String ruolo) {
+		// TODO Auto-generated method stub
+		DatabaseOps dataBaseOps = new DatabaseOps(getApplicationContext());
+		return dataBaseOps.getIdRuolo(getApplicationContext(), ruolo);
 	}
 
 	private ArrayList<String> listUserRoles(long id_utente) {
