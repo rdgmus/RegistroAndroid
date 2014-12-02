@@ -235,6 +235,20 @@ public class AssegnamentoRuoliActivity extends Activity implements
 		// TODO Auto-generated method stub
 
 		DatabaseOps dataBaseOps = new DatabaseOps(getApplicationContext());
+		String ruoloScelto = getPrefs.getString("ruoloScelto", "");
+		long id_utente = getPrefs.getLong("id_utente", -1);
+		if (id_utente == selectedUser) {
+			if (ruoloScelto.equals(dataBaseOps.getRuoloName(
+					getApplicationContext(), selectedRole))) {
+				Toast.makeText(
+						getApplicationContext(),
+						"NON PUOI RIMUOVERE TE STESSO DAL RUOLO: "
+								+ ruoloScelto, Toast.LENGTH_LONG).show();
+				return;
+			}
+		}
+
+		// RIMOZIONE UTENTE DA RUOLO
 		dataBaseOps.removeUserFromRole(getApplicationContext(), selectedRole,
 				selectedUser);
 		reloadUtentiAdapter(getSelectedRole());
@@ -662,18 +676,14 @@ public class AssegnamentoRuoliActivity extends Activity implements
 				headerTable, false);
 		buildRuoliRowLayout(applicationContext, json_data, rowView);
 
-//		final TableRow tr = new TableRow(AssegnamentoRuoliActivity.this);
-
 		if (index % 2 == 0) {
-//			tr.setBackgroundColor(getResources()
-//					.getColor(R.color.colorListItem));
 			rowView.setBackgroundColor(getResources().getColor(
 					R.color.colorListItem));
 		} else {
-//			tr.setBackgroundColor(getResources().getColor(R.color.colorOrange));
 			rowView.setBackgroundColor(getResources().getColor(
 					R.color.colorOrange));
 		}
+
 		rowView.setTag(json_data.getLong("id_utente"));
 		rowView.setOnClickListener(new OnClickListener() {
 
@@ -687,71 +697,6 @@ public class AssegnamentoRuoliActivity extends Activity implements
 			}
 		});
 
-//		TextView b = new TextView(AssegnamentoRuoliActivity.this);
-//
-//		String stime = String.valueOf(json_data.getLong("id_utente"));
-//
-//		b.setText(stime);
-//
-//		b.setTextColor(Color.RED);
-//
-//		b.setTextSize(15);
-//
-//		tr.addView(b);
-//
-//		TextView b1 = new TextView(AssegnamentoRuoliActivity.this);
-//
-//		b1.setPadding(10, 0, 0, 0);
-//
-//		b1.setTextSize(15);
-//
-//		String stime1 = json_data.getString("cognome") + " "
-//				+ json_data.getString("nome");
-//
-//		b1.setText(stime1);
-//
-//		b1.setTextColor(Color.BLACK);
-//
-//		tr.addView(b1);
-//
-//		TextView b3 = new TextView(AssegnamentoRuoliActivity.this);
-//
-//		b3.setPadding(10, 0, 0, 0);
-//
-//		b3.setTextSize(15);
-//
-//		String stime3 = json_data.getString("email");
-//
-//		b3.setText(stime3);
-//
-//		b3.setTextColor(Color.BLACK);
-//
-//		tr.addView(b3);
-//
-//		// QUI VOGLIO METTERE LE IMMAGINI DEI RUOLI UTENTE
-//		final ImageView b2 = new ImageView(AssegnamentoRuoliActivity.this);
-//		b2.setImageDrawable(applicationContext.getResources().getDrawable(
-//				R.drawable.ruoli_utenti48));
-//		b2.setTag(json_data.getLong("id_utente"));
-//
-//		tr.addView(b2);
-//		tr.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, 0));
-//		tr.setWeightSum(1);
-//
-//		tr.setTag(json_data.getLong("id_utente"));
-//
-//		tr.setOnClickListener(new OnClickListener() {
-//
-//			@Override
-//			public void onClick(View v) {
-//				// TODO Auto-generated method stub
-//				startAnimation(tr, 2000);
-//				int position = getUserIdPositionIntoSpinner(spinnerUtenti,
-//						(Long) v.getTag());
-//				spinnerUtenti.setSelection(position, true);
-//			}
-//		});
-		// headerTable.addView(tr);
 		headerTable.addView(rowView);
 		return headerTable;
 	}

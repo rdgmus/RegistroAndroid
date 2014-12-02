@@ -213,6 +213,7 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 											+ "Autenticazione riuscita per il ruolo di "
 											+ ruoloScelto, Toast.LENGTH_SHORT)
 									.show();
+							saveRuoloSceltoIntoPreferences(ruoloScelto);
 							// Loccare l'id dell'utente: is_locked = 1
 							databaseOps.LockUserLogging(
 									getApplicationContext(),
@@ -316,6 +317,13 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 			}
 		});
 
+	}
+
+	protected void saveRuoloSceltoIntoPreferences(String ruoloScelto) {
+		// TODO Auto-generated method stub
+		SharedPreferences.Editor editor = getPrefs.edit();
+		editor.putString("ruoloScelto", ruoloScelto.toUpperCase());
+		editor.apply();
 	}
 
 	private void setLoginState(boolean b) {

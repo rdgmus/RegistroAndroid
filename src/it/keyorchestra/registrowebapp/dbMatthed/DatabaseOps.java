@@ -599,16 +599,16 @@ public class DatabaseOps implements DatabasesInterface {
 				if (is_locked)
 					Toast.makeText(
 							applicationContext,
-							"Utente: ["
+							"Utente: "
 									+ getUserName(applicationContext, id_utente)
-									+ "] => BLOCCATO!", Toast.LENGTH_SHORT)
+									+ " BLOCCATO!", Toast.LENGTH_SHORT)
 							.show();
 				else
 					Toast.makeText(
 							applicationContext,
-							"Utente: ["
+							"Utente: "
 									+ getUserName(applicationContext, id_utente)
-									+ "] => SBLOCCATO!",
+									+ " SBLOCCATO!",
 							Toast.LENGTH_SHORT).show();
 			}
 			st.close();
@@ -656,7 +656,7 @@ public class DatabaseOps implements DatabasesInterface {
 		}
 	}
 
-	private String getUserName(Context applicationContext, long selectedUser) {
+	public String getUserName(Context applicationContext, long selectedUser) {
 		// TODO Auto-generated method stub
 		String url = getUrl(applicationContext);
 		String retval = null;
@@ -683,7 +683,7 @@ public class DatabaseOps implements DatabasesInterface {
 		return retval;
 	}
 
-	private String getRuoloName(Context applicationContext, long selectedRole) {
+	public String getRuoloName(Context applicationContext, long selectedRole) {
 		// TODO Auto-generated method stub
 		String url = getUrl(applicationContext);
 		String retval = null;
