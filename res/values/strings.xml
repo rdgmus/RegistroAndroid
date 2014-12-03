@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <string name="app_name">Registro Scolastico Android v0.6-alpha</string>
+    <string name="app_name">Registro Scolastico Android v0.7-alpha</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Roberto Della Grotta vi da il benvenuto su</string>
     <string name="title_activity_login">Login</string>
     <string name="login_button">Login</string>
-    <string name="title">Registro Scolastico Android v0.6-alpha</string>
+    <string name="title">Registro Scolastico Android v0.7-alpha</string>
     <string name="programmer">di Roberto Della Grotta</string>
     <string name="registeredUser">Utente Registrato</string>
     <string name="newUser">Registra Nuovo Utente</string>
@@ -108,5 +108,8 @@
     <string android:layout_width="wrap_content" android:id="@+id/string1" android:layout_height="wrap_content" name="ruoliOptionsDescription">Accede alle attività del Ruolo indicato</string>
     <string android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/string1" name="addRuolo">Aggiunge ruolo a utente</string>
     <string android:layout_height="wrap_content" android:id="@+id/string1" android:layout_width="wrap_content" name="removeRuolo">Rimuove dal ruolo l\'utente</string>
+    <string name="newPasswdHint">Nuova Password</string>
+    <string android:layout_height="wrap_content" android:id="@+id/string1" android:layout_width="wrap_content" name="newPasswdText">Nuova Password:</string>
+    <string name="spinnerPasswdReqPrompt">Selezionare la richiesta password da elaborare</string>
 
 </resources>

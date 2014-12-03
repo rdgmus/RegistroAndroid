@@ -638,6 +638,7 @@ public class DatabaseOps implements DatabasesInterface {
 			sql = "INSERT INTO `ruoli_granted_to_utenti`(`id_utente`, `id_ruolo`) "
 					+ "VALUES (" + selectedUser + "," + selectedRole + ")";
 
+			@SuppressWarnings("unused")
 			int result = st.executeUpdate(sql);
 
 			st.close();
@@ -721,6 +722,7 @@ public class DatabaseOps implements DatabasesInterface {
 
 			sql = "DELETE FROM ruoli_granted_to_utenti " + "WHERE  id_utente="
 					+ selectedUser + " AND id_ruolo=" + selectedRole;
+			@SuppressWarnings("unused")
 			int result = st.executeUpdate(sql);
 			st.close();
 			conn.close();

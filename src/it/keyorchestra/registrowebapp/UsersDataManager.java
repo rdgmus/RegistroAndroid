@@ -2,6 +2,7 @@ package it.keyorchestra.registrowebapp;
 
 import it.keyorchestra.registrowebapp.interfaces.ActivitiesCommonFunctions;
 import it.keyorchestra.registrowebapp.mysqlandroid.AssegnamentoRuoliActivity;
+import it.keyorchestra.registrowebapp.mysqlandroid.RilascioNuovePassword;
 import it.keyorchestra.registrowebapp.mysqlandroid.Tab2Activity;
 import it.keyorchestra.registrowebapp.mysqlandroid.Tab3Activity;
 import it.keyorchestra.registrowebapp.mysqlandroid.UtentiBloccatiActivity;
@@ -79,7 +80,7 @@ public class UsersDataManager extends TabActivity implements
 
 		tab3.setIndicator("Rilascio Nuove Password",
 				getResources().getDrawable(R.drawable.user_password));
-		tab3.setContent(new Intent(this, Tab3Activity.class));
+		tab3.setContent(new Intent(this, RilascioNuovePassword.class));
 
 		/** Add the tabs to the TabHost to display. */
 		tabHost.addTab(tab1);
