@@ -640,15 +640,6 @@ public class DatabaseOps implements DatabasesInterface {
 
 			int result = st.executeUpdate(sql);
 
-			if (result == 1) {
-				Toast.makeText(
-						applicationContext,
-						"Aggiunto Ruolo: ["
-								+ getRuoloName(applicationContext, selectedRole)
-								+ "] " + "a Utente: ["
-								+ getUserName(applicationContext, selectedUser)
-								+ "]", Toast.LENGTH_SHORT).show();
-			}
 			st.close();
 			conn.close();
 		} catch (SQLException e) {
@@ -731,15 +722,6 @@ public class DatabaseOps implements DatabasesInterface {
 			sql = "DELETE FROM ruoli_granted_to_utenti " + "WHERE  id_utente="
 					+ selectedUser + " AND id_ruolo=" + selectedRole;
 			int result = st.executeUpdate(sql);
-			if (result == 1) {
-				Toast.makeText(
-						applicationContext,
-						"Rimosso Utente: ["
-								+ getUserName(applicationContext, selectedUser)
-								+ "] da Ruolo: ["
-								+ getRuoloName(applicationContext, selectedRole)
-								+ "]", Toast.LENGTH_SHORT).show();
-			}
 			st.close();
 			conn.close();
 		} catch (SQLException e) {

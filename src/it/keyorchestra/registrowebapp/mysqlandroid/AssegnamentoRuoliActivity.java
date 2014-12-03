@@ -115,6 +115,11 @@ public class AssegnamentoRuoliActivity extends Activity implements
 				toggleAddRemoveButtons(isChecked);
 				reloadUtentiAdapter(getSelectedRole());
 				CaricaUtentiRuoloSelezionato(getSelectedRole(), null);
+				
+				int position = getUserIdPositionIntoSpinner(spinnerUtenti,
+						getSelectedUser());
+				spinnerUtenti.setSelection(position, true);
+
 			}
 		});
 		// ADD ROLE
@@ -184,7 +189,7 @@ public class AssegnamentoRuoliActivity extends Activity implements
 		// SPINNER UTENTI
 		spinnerUtenti = (Spinner) findViewById(R.id.spinnerUtenti);
 		reloadUtentiAdapter(-1l);
-		
+
 		spinnerUtenti.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 			@Override
@@ -207,6 +212,10 @@ public class AssegnamentoRuoliActivity extends Activity implements
 		toggleAddRemoveButtons(true);
 	}
 
+	/**
+	 * Imposta i bottoni addUser e removeUser visibility
+	 * @param isChecked
+	 */
 	protected void toggleAddRemoveButtons(boolean isChecked) {
 		// TODO Auto-generated method stub
 		bAddRole.setVisibility(isChecked ? ToggleButton.GONE
@@ -215,6 +224,11 @@ public class AssegnamentoRuoliActivity extends Activity implements
 				: ToggleButton.VISIBLE);
 	}
 
+	/**
+	 * Remuove l'utente dal ruolo indicato.
+	 * @param selectedRole
+	 * @param selectedUser
+	 */
 	protected void removeUserFromRole(long selectedRole, long selectedUser) {
 		// TODO Auto-generated method stub
 
@@ -238,8 +252,20 @@ public class AssegnamentoRuoliActivity extends Activity implements
 				selectedRole, selectedUser);
 		reloadUtentiAdapter(getSelectedRole());
 		CaricaUtentiRuoloSelezionato(selectedRole, null);
+		Toast.makeText(
+				getApplicationContext(),
+				"Rimosso Utente: ["
+						+ dataBaseOps.getUserName(getApplicationContext(), selectedUser)
+						+ "] da Ruolo: ["
+						+ dataBaseOps.getRuoloName(getApplicationContext(), selectedRole)
+						+ "]", Toast.LENGTH_LONG).show();
 	}
 
+	/**
+	 * Aggiunge un utente al gruppo avente il ruolo indicato
+	 * @param selectedRole
+	 * @param selectedUser
+	 */
 	protected void addUserToRole(long selectedRole, long selectedUser) {
 		// TODO Auto-generated method stub
 
@@ -248,6 +274,13 @@ public class AssegnamentoRuoliActivity extends Activity implements
 				selectedUser);
 		reloadUtentiAdapter(getSelectedRole());
 		CaricaUtentiRuoloSelezionato(selectedRole, null);
+		Toast.makeText(
+				getApplicationContext(),
+				"Aggiunto Ruolo: ["
+						+ dataBaseOps.getRuoloName(getApplicationContext(), selectedRole)
+						+ "] " + "a Utente: ["
+						+ dataBaseOps.getUserName(getApplicationContext(), selectedUser)
+						+ "]", Toast.LENGTH_LONG).show();
 	}
 
 	/**
@@ -258,15 +291,20 @@ public class AssegnamentoRuoliActivity extends Activity implements
 	 */
 	private void reloadUtentiAdapter(Long tag) {
 		// TODO Auto-generated method stub
+		JSONArray jsonData = CaricaUtentiAsJSON(tag);
+		ArrayList<String> arrayData = CaricaUtentiAsArray(tag);
 		UtentiArrayAdapter utentiAdapter = new UtentiArrayAdapter(
-				getApplicationContext(), CaricaUtentiAsJSON(tag),
-				CaricaUtentiAsArray(tag));
+				getApplicationContext(), jsonData,
+				arrayData);
 		utentiAdapter
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 		// Apply the adapter to the spinner
 		spinnerUtenti.setAdapter(utentiAdapter);
-		utentiAdapter.notifyDataSetChanged();
+		if(jsonData.length()>0){
+			spinnerUtenti.setSelection(0);
+		}
+//		utentiAdapter.notifyDataSetChanged();
 	}
 
 	/**
@@ -346,6 +384,11 @@ public class AssegnamentoRuoliActivity extends Activity implements
 		return jArray;
 	}
 
+	/**
+	 * Carica gli utenti in formato JSONArray
+	 * @param id_ruolo
+	 * @return
+	 */
 	private JSONArray CaricaUtentiAsJSON(long id_ruolo) {
 		String retrieveTableData = getPrefs
 				.getString("retrieveTableData", null);
@@ -388,6 +431,11 @@ public class AssegnamentoRuoliActivity extends Activity implements
 		return jArray;
 	}
 
+	/**
+	 * Carica gli utenti in formato ArrayList<String>
+	 * @param id_ruolo
+	 * @return
+	 */
 	private ArrayList<String> CaricaUtentiAsArray(long id_ruolo) {
 		// TODO Auto-generated method stub
 		ArrayList<String> utentiArray = new ArrayList<String>();
@@ -449,6 +497,13 @@ public class AssegnamentoRuoliActivity extends Activity implements
 		return utentiArray;
 	}
 
+	/**
+	 * Carica la lista degli utenti appatenenti o non appartenenti al ruolo
+	 * di cui si indica l'id e la stringa del ruolo ricoperto per i confronti
+	 * necessari nel corpo della funzione.
+	 * @param id_ruolo
+	 * @param ruolo
+	 */
 	protected void CaricaUtentiRuoloSelezionato(long id_ruolo, String ruolo) {
 		// TODO Auto-generated method stub
 
@@ -498,6 +553,13 @@ public class AssegnamentoRuoliActivity extends Activity implements
 
 	}
 
+	/**
+	 * Lista dei ruoli previsti nella tabella ruoli_utenti del
+	 * database.
+	 * @param phpInterface
+	 * @param ip
+	 * @return
+	 */
 	@SuppressWarnings("unused")
 	private JSONArray jsonRuoliAmmessi(String phpInterface, String ip) {
 		// TODO Auto-generated method stub
@@ -517,6 +579,11 @@ public class AssegnamentoRuoliActivity extends Activity implements
 		return jArray;
 	}
 
+	/**
+	 * Costruzione della tabella utenti-ruoli con i dati ricevuti
+	 * dall'interfaccia server-scripting-interface in PHP
+	 * @param jArray
+	 */
 	private void buildUsersAndRolesTable(JSONArray jArray) {
 		// TODO Auto-generated method stub
 		try {
@@ -651,6 +718,18 @@ public class AssegnamentoRuoliActivity extends Activity implements
 		t.start();
 	}
 
+	/**
+	 * Aggiunge una riga nella tabella dei contenuti, riguardante
+	 * gli utenti appartenenti o non appartenenti al ruolo con i ruoli
+	 * ricoperti.
+	 * @param applicationContext
+	 * @param headerTable
+	 * @param json_data
+	 * @param height
+	 * @param index
+	 * @return
+	 * @throws JSONException
+	 */
 	protected TableLayout addRowToTableAsJson(Context applicationContext,
 			TableLayout headerTable, JSONObject json_data, int height, int index)
 			throws JSONException {
@@ -679,6 +758,7 @@ public class AssegnamentoRuoliActivity extends Activity implements
 				int position = getUserIdPositionIntoSpinner(spinnerUtenti,
 						(Long) v.getTag());
 				spinnerUtenti.setSelection(position, true);
+				setSelectedUser((Long) v.getTag());
 			}
 		});
 
@@ -686,6 +766,15 @@ public class AssegnamentoRuoliActivity extends Activity implements
 		return headerTable;
 	}
 
+	/**
+	 * Costruisce la riga di utente e ruoli ricoperti con il layout
+	 * contenuto nella rowView, dal quale richiama i TextView e gli
+	 * ImageButton e li valorizza i primi, e rende visibili o invisibili
+	 * i secondi in base ai ruoli ricoperti dall'utente stesso.
+	 * @param applicationContext
+	 * @param json_data
+	 * @param rowView
+	 */
 	private void buildRuoliRowLayout(Context applicationContext,
 			JSONObject json_data, View rowView) {
 		// TODO Auto-generated method stub
@@ -712,11 +801,13 @@ public class AssegnamentoRuoliActivity extends Activity implements
 				int position = getRoleIdPositionIntoSpinner(spinnerRuoli,
 						id_ruolo);
 				spinnerRuoli.setSelection(position, true);
-				tbMembers.setChecked(true);
 
 				position = getUserIdPositionIntoSpinner(spinnerUtenti,
 						(Long) v.getTag());
 				spinnerUtenti.setSelection(position, true);
+
+				setSelectedUser((Long) v.getTag());
+				tbMembers.setChecked(true);
 			}
 		});
 
@@ -731,11 +822,12 @@ public class AssegnamentoRuoliActivity extends Activity implements
 				int position = getRoleIdPositionIntoSpinner(spinnerRuoli,
 						id_ruolo);
 				spinnerRuoli.setSelection(position, true);
-				tbMembers.setChecked(true);
 
 				position = getUserIdPositionIntoSpinner(spinnerUtenti,
 						(Long) v.getTag());
 				spinnerUtenti.setSelection(position, true);
+				setSelectedUser((Long) v.getTag());
+				tbMembers.setChecked(true);
 			}
 		});
 
@@ -751,11 +843,12 @@ public class AssegnamentoRuoliActivity extends Activity implements
 				int position = getRoleIdPositionIntoSpinner(spinnerRuoli,
 						id_ruolo);
 				spinnerRuoli.setSelection(position, true);
-				tbMembers.setChecked(true);
 
 				position = getUserIdPositionIntoSpinner(spinnerUtenti,
 						(Long) v.getTag());
 				spinnerUtenti.setSelection(position, true);
+				setSelectedUser((Long) v.getTag());
+				tbMembers.setChecked(true);
 			}
 		});
 
@@ -771,11 +864,13 @@ public class AssegnamentoRuoliActivity extends Activity implements
 				int position = getRoleIdPositionIntoSpinner(spinnerRuoli,
 						id_ruolo);
 				spinnerRuoli.setSelection(position, true);
-				tbMembers.setChecked(true);
-				
+
 				position = getUserIdPositionIntoSpinner(spinnerUtenti,
 						(Long) v.getTag());
 				spinnerUtenti.setSelection(position, true);
+				setSelectedUser((Long) v.getTag());
+
+				tbMembers.setChecked(true);
 			}
 		});
 
@@ -830,6 +925,12 @@ public class AssegnamentoRuoliActivity extends Activity implements
 		}
 	}
 
+	/**
+	 * Ricava la posizione del ruolo indicato nello spinner
+	 * @param spinner
+	 * @param id_ruolo
+	 * @return
+	 */
 	protected int getRoleIdPositionIntoSpinner(Spinner spinner, long id_ruolo) {
 		// TODO Auto-generated method stub
 		int count = spinner.getCount();
@@ -844,18 +945,34 @@ public class AssegnamentoRuoliActivity extends Activity implements
 		return 0;
 	}
 
+	/**
+	 * Dal ruolo ricava l'id interrogando il database
+	 * @param ruolo
+	 * @return
+	 */
 	protected long getIdRuolo(String ruolo) {
 		// TODO Auto-generated method stub
 		DatabaseOps dataBaseOps = new DatabaseOps(getApplicationContext());
 		return dataBaseOps.getIdRuolo(getApplicationContext(), ruolo);
 	}
 
+	/**
+	 * Ricava la lista dei ruoli ricoperti dall'utente
+	 * @param id_utente
+	 * @return
+	 */
 	private ArrayList<String> listUserRoles(long id_utente) {
 		// TODO Auto-generated method stub
 		DatabaseOps dataBaseOps = new DatabaseOps(getApplicationContext());
 		return dataBaseOps.listUserRoles(getApplicationContext(), id_utente);
 	}
 
+	/**
+	 * Ricava la posizione dell'utente indicato nel relativo spinner.
+	 * @param spinner
+	 * @param id
+	 * @return
+	 */
 	protected int getUserIdPositionIntoSpinner(Spinner spinner, long id) {
 		// TODO Auto-generated method stub
 		int count = spinner.getCount();
@@ -870,6 +987,13 @@ public class AssegnamentoRuoliActivity extends Activity implements
 		return 0;
 	}
 
+	/**
+	 * Aggiunge la riga con i nomi dei campi nella tabella di intestazione.
+	 * @param context
+	 * @param table
+	 * @param height
+	 * @return
+	 */
 	@SuppressLint("NewApi")
 	protected TableLayout addRowToTable(Context context, TableLayout table,
 			int height) {
