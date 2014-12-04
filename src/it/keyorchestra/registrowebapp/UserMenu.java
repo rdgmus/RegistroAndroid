@@ -2,9 +2,9 @@ package it.keyorchestra.registrowebapp;
 
 import it.keyorchestra.registrowebapp.dbMatthed.DatabaseOps;
 import it.keyorchestra.registrowebapp.interfaces.ActivitiesCommonFunctions;
-
+import it.keyorchestra.registrowebapp.mysqlandroid.RilascioNuovePassword;
 import java.util.Calendar;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -154,13 +154,24 @@ public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 		registerToolTipFor(ibChangePassword);
 		ibChangePassword.setOnClickListener(new OnClickListener() {
 
+			@SuppressLint("NewApi")
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				startAnimation((ImageButton) v, 2000);
+				//ABILITA IL BOTTONE DI RITORNO
+				SharedPreferences.Editor editor = getPrefs.edit();
+				editor.putBoolean("backButtonForPasswordChange", true);
+				editor.apply();
+				
+				
 				Toast.makeText(getApplicationContext(),
-						"Non vi sono attività implementate", Toast.LENGTH_SHORT)
+						"Cambio Password", Toast.LENGTH_SHORT)
 						.show();
+				Intent ourStartingPoint = new Intent(UserMenu.this,
+						RilascioNuovePassword.class);
+				startActivity(ourStartingPoint);
+				UserMenu.this.finish();
 			}
 		});
 

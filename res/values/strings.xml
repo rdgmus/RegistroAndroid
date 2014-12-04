@@ -113,5 +113,6 @@
     <string name="spinnerPasswdReqPrompt">Selezionare la richiesta password da elaborare</string>
     <string name="impostaNuovaPassword">Imposta Nuova Password</string>
     <string name="generaPassword">Genera Passoword</string>
+    <string name="rilascioNuovePassword">Rilascio Nuova Password</string>
 
 </resources>

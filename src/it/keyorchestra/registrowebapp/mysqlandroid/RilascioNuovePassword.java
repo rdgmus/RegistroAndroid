@@ -1,10 +1,14 @@
 package it.keyorchestra.registrowebapp.mysqlandroid;
 
 import it.keyorchestra.registrowebapp.R;
+import it.keyorchestra.registrowebapp.UserMenu;
 import it.keyorchestra.registrowebapp.dbMatthed.DatabaseOps;
 import it.keyorchestra.registrowebapp.interfaces.ActivitiesCommonFunctions;
+import it.keyorchestra.registrowebapp.interfaces.GeneratePasswordInterface;
 import it.keyorchestra.registrowebapp.scuola.util.FieldsValidator;
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -32,19 +36,39 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class RilascioNuovePassword extends Activity implements
-		ActivitiesCommonFunctions {
+		ActivitiesCommonFunctions, GeneratePasswordInterface {
 	private SharedPreferences getPrefs;
+	private boolean backButtonVisible;
 
-	LinearLayout llGeneratorePassword, llRichieste, llCommands;
+	LinearLayout llGeneratorePassword, llRichieste, llCommands, headerLayout;
+
 	SeekBar sbPasswdLen;
 	TextView tvPasswdLen, etEmail, etPasswd;
 	EditText etRepeatPasswd, etNewPasswd;
 	CheckBox cbVediPassword;
-	ImageButton ibGeneratePasswd, ibSavePasswd;
+	ImageButton ibGeneratePasswd, ibSavePasswd, ibBack;
 
 	private long selectedUser;
-	
-	
+
+	/**
+	 * @return the backButtonVisible
+	 */
+	public boolean isBackButtonVisible() {
+		return backButtonVisible;
+	}
+
+	/**
+	 * @param backButtonVisible
+	 *            the backButtonVisible to set
+	 */
+	public void setBackButtonVisible(boolean backButtonVisible) {
+		this.backButtonVisible = backButtonVisible;
+		if (backButtonVisible)
+			ibBack.setVisibility(ImageButton.VISIBLE);
+		else
+			ibBack.setVisibility(ImageButton.GONE);
+	}
+
 	/**
 	 * @return the selectedUser
 	 */
@@ -53,7 +77,8 @@ public class RilascioNuovePassword extends Activity implements
 	}
 
 	/**
-	 * @param selectedUser the selectedUser to set
+	 * @param selectedUser
+	 *            the selectedUser to set
 	 */
 	public void setSelectedUser(long selectedUser) {
 		this.selectedUser = selectedUser;
@@ -72,7 +97,30 @@ public class RilascioNuovePassword extends Activity implements
 		getPrefs = PreferenceManager
 				.getDefaultSharedPreferences(getApplicationContext());
 
-		llRichieste = (LinearLayout) findViewById(R.id.llRichieste);
+		headerLayout = (LinearLayout) findViewById(R.id.headerLayout);
+		ibBack = (ImageButton) headerLayout.findViewById(R.id.ibBack);
+
+		setBackButtonVisible(getPrefs.getBoolean("backButtonForPasswordChange",
+				false));
+		ibBack.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				//Se il bottone è visibile una volta premuto riporta
+				//alla UserMenu.class
+				startAnimation((ImageButton) v, 2000);
+				Intent ourStartingPoint = new Intent(RilascioNuovePassword.this,
+						UserMenu.class);
+				startActivity(ourStartingPoint);
+
+				// FINISH
+				RilascioNuovePassword.this.finish();
+			}
+		});
+
+
+		llRichieste = (LinearLayout)findViewById(R.id.llRichieste);
 		// EMAIL E PASSWORD UTENTE CHE HA EFETTUATO RICHIESTA CAMBIO PASSWORD
 		etEmail = (TextView) llRichieste.findViewById(R.id.etEmail);
 		etPasswd = (TextView) llRichieste.findViewById(R.id.etPasswd);
@@ -96,18 +144,7 @@ public class RilascioNuovePassword extends Activity implements
 					public void onCheckedChanged(CompoundButton buttonView,
 							boolean isChecked) {
 						// TODO Auto-generated method stub
-						if (isChecked) {
-							etNewPasswd
-									.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-							etRepeatPasswd
-									.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-						} else {
-							etNewPasswd.setInputType(InputType.TYPE_CLASS_TEXT
-									| InputType.TYPE_TEXT_VARIATION_PASSWORD);
-							etRepeatPasswd
-									.setInputType(InputType.TYPE_CLASS_TEXT
-											| InputType.TYPE_TEXT_VARIATION_PASSWORD);
-						}
+						SetPasswordVisibility(isChecked);
 					}
 				});
 
@@ -120,14 +157,11 @@ public class RilascioNuovePassword extends Activity implements
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				startAnimation((ImageButton) v, 2000);
-				DatabaseOps databaseOps = new DatabaseOps(
-						getApplicationContext());
-				// Controlla se le credenziali esistono
-				String phpencoder = getPrefs.getString("phpencoder", null);
-				
-				String generatedPassword = databaseOps.generatePassword(getApplicationContext(), 
-						getDatabaseIpFromPreferences(), phpencoder, (String) tvPasswdLen.getText());
-				
+				String generatedPassword = GeneratePasswordFromPhp(
+						getBaseContext(), getDatabaseIpFromPreferences(),
+						getPrefs.getString("phpencoder", null), tvPasswdLen
+								.getText().toString());
+
 				etNewPasswd.setText(generatedPassword);
 				etRepeatPasswd.setText(generatedPassword);
 			}
@@ -150,10 +184,11 @@ public class RilascioNuovePassword extends Activity implements
 					etRepeatPasswd.requestFocus();
 					return;
 				}
+				// SaveNewPassword(id_utente, passwordToEncode);
+				// EmailToUser(id_utente, newPassword, msg);
 				Toast.makeText(
 						getApplicationContext(),
-						"Password impostata per l'utente!\n"
-						+ "Inviata Email!",
+						"Password impostata per l'utente!\n" + "Inviata Email!",
 						Toast.LENGTH_SHORT).show();
 			}
 		});
@@ -184,6 +219,7 @@ public class RilascioNuovePassword extends Activity implements
 			}
 		});
 		tvPasswdLen.setText("" + (sbPasswdLen.getProgress() + 4) + "");
+
 	}
 
 	@Override
@@ -287,6 +323,45 @@ public class RilascioNuovePassword extends Activity implements
 		};
 		t.start();
 
+	}
+
+	@Override
+	public String GeneratePasswordFromPhp(Context context, String ip,
+			String servSideScript, String length) {
+		// TODO Auto-generated method stub
+		DatabaseOps databaseOps = new DatabaseOps(getApplicationContext());
+		// Controlla se le credenziali esistono
+
+		return databaseOps
+				.generatePassword(context, ip, servSideScript, length);
+	}
+
+	@Override
+	public boolean SaveNewPassword(long id_utente, String passwordToEncode) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void EmailToUser(long id_utente, String newPassword, String msg) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void SetPasswordVisibility(boolean isVisible) {
+		// TODO Auto-generated method stub
+		if (isVisible) {
+			etNewPasswd
+					.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+			etRepeatPasswd
+					.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+		} else {
+			etNewPasswd.setInputType(InputType.TYPE_CLASS_TEXT
+					| InputType.TYPE_TEXT_VARIATION_PASSWORD);
+			etRepeatPasswd.setInputType(InputType.TYPE_CLASS_TEXT
+					| InputType.TYPE_TEXT_VARIATION_PASSWORD);
+		}
 	}
 
 }

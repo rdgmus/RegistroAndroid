@@ -3,13 +3,14 @@ package it.keyorchestra.registrowebapp;
 import it.keyorchestra.registrowebapp.interfaces.ActivitiesCommonFunctions;
 import it.keyorchestra.registrowebapp.mysqlandroid.AssegnamentoRuoliActivity;
 import it.keyorchestra.registrowebapp.mysqlandroid.RilascioNuovePassword;
-import it.keyorchestra.registrowebapp.mysqlandroid.Tab2Activity;
-import it.keyorchestra.registrowebapp.mysqlandroid.Tab3Activity;
 import it.keyorchestra.registrowebapp.mysqlandroid.UtentiBloccatiActivity;
+import android.annotation.SuppressLint;
 import android.app.TabActivity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -31,18 +32,22 @@ public class UsersDataManager extends TabActivity implements
 		ActivitiesCommonFunctions {
 
 	ImageButton ibBack;
-
+	private SharedPreferences getPrefs;
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
 	 */
+	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_users_data_manager);
 
+		getPrefs = PreferenceManager
+				.getDefaultSharedPreferences(getBaseContext());
+		
 		ibBack = (ImageButton) findViewById(R.id.ibBack);
 		registerToolTipFor(ibBack);
 		ibBack.setOnClickListener(new OnClickListener() {
@@ -78,10 +83,15 @@ public class UsersDataManager extends TabActivity implements
 				getResources().getDrawable(R.drawable.ruoli_utenti));
 		tab2.setContent(new Intent(this, AssegnamentoRuoliActivity.class));
 
+		SharedPreferences.Editor editor = getPrefs.edit();
+		editor.putBoolean("backButtonForPasswordChange", false);
+		editor.apply();
+		
 		tab3.setIndicator("Rilascio Nuove Password",
 				getResources().getDrawable(R.drawable.user_password));
 		tab3.setContent(new Intent(this, RilascioNuovePassword.class));
 
+		
 		/** Add the tabs to the TabHost to display. */
 		tabHost.addTab(tab1);
 		tabHost.addTab(tab2);
