@@ -111,5 +111,7 @@
     <string name="newPasswdHint">Nuova Password</string>
     <string android:layout_height="wrap_content" android:id="@+id/string1" android:layout_width="wrap_content" name="newPasswdText">Nuova Password:</string>
     <string name="spinnerPasswdReqPrompt">Selezionare la richiesta password da elaborare</string>
+    <string name="impostaNuovaPassword">Imposta Nuova Password</string>
+    <string name="generaPassword">Genera Passoword</string>
 
 </resources>

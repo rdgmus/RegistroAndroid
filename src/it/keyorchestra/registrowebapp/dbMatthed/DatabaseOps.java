@@ -402,7 +402,7 @@ public class DatabaseOps implements DatabasesInterface {
 		// "<cbasso1>" );
 	}
 
-	private String generateHash(Context applicationContext, String ip,
+	public String generateHash(Context applicationContext, String ip,
 			String phpencoder) {
 		// TODO Auto-generated method stub
 		// Genera hash tramite php
@@ -410,6 +410,16 @@ public class DatabaseOps implements DatabasesInterface {
 				applicationContext, "http://" + ip + "/" + phpencoder
 						+ "?actionEncode=generateHash");
 		return hash;
+	}
+	
+	public String generatePassword(Context applicationContext, String ip,
+			String phpencoder, String length) {
+		// TODO Auto-generated method stub
+		// Genera hash tramite php
+		String password = new MySqlAndroid().getEncodedStringFromUri(
+				applicationContext, "http://" + ip + "/" + phpencoder
+						+ "?actionEncode=generatePassword&length="+length);
+		return password;
 	}
 
 	private String encodePassword(Context applicationContext, String ip,
