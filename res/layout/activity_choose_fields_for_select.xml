@@ -10,7 +10,7 @@
     tools:context=".ChooseFieldsForSelect" >
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/tvRilascioTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -25,7 +25,7 @@
         android:id="@+id/linearLayout2"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView1"
+        android:layout_below="@+id/tvRilascioTitle"
         android:orientation="vertical" >
 
         <TextView

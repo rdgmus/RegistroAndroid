@@ -43,7 +43,7 @@ public class RilascioNuovePassword extends Activity implements
 	LinearLayout llGeneratorePassword, llRichieste, llCommands, headerLayout;
 
 	SeekBar sbPasswdLen;
-	TextView tvPasswdLen, etEmail, etPasswd;
+	TextView tvPasswdLen, etEmail, etPasswd, tvRilascioTitle;
 	EditText etRepeatPasswd, etNewPasswd;
 	CheckBox cbVediPassword;
 	ImageButton ibGeneratePasswd, ibSavePasswd, ibBack;
@@ -63,10 +63,14 @@ public class RilascioNuovePassword extends Activity implements
 	 */
 	public void setBackButtonVisible(boolean backButtonVisible) {
 		this.backButtonVisible = backButtonVisible;
-		if (backButtonVisible)
+		if (backButtonVisible){
 			ibBack.setVisibility(ImageButton.VISIBLE);
-		else
+			tvRilascioTitle.setVisibility(ImageButton.VISIBLE);
+		}
+		else{
 			ibBack.setVisibility(ImageButton.GONE);
+			tvRilascioTitle.setVisibility(ImageButton.GONE);
+		}
 	}
 
 	/**
@@ -98,6 +102,8 @@ public class RilascioNuovePassword extends Activity implements
 				.getDefaultSharedPreferences(getApplicationContext());
 
 		headerLayout = (LinearLayout) findViewById(R.id.headerLayout);
+		
+		tvRilascioTitle=(TextView)headerLayout.findViewById(R.id.tvRilascioTitle);
 		ibBack = (ImageButton) headerLayout.findViewById(R.id.ibBack);
 
 		setBackButtonVisible(getPrefs.getBoolean("backButtonForPasswordChange",
