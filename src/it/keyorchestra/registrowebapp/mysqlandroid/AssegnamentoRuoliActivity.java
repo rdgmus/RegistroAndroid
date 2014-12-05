@@ -115,7 +115,7 @@ public class AssegnamentoRuoliActivity extends Activity implements
 				toggleAddRemoveButtons(isChecked);
 				reloadUtentiAdapter(getSelectedRole());
 				CaricaUtentiRuoloSelezionato(getSelectedRole(), null);
-				
+
 				int position = getUserIdPositionIntoSpinner(spinnerUtenti,
 						getSelectedUser());
 				spinnerUtenti.setSelection(position, true);
@@ -214,6 +214,7 @@ public class AssegnamentoRuoliActivity extends Activity implements
 
 	/**
 	 * Imposta i bottoni addUser e removeUser visibility
+	 * 
 	 * @param isChecked
 	 */
 	protected void toggleAddRemoveButtons(boolean isChecked) {
@@ -226,6 +227,7 @@ public class AssegnamentoRuoliActivity extends Activity implements
 
 	/**
 	 * Remuove l'utente dal ruolo indicato.
+	 * 
 	 * @param selectedRole
 	 * @param selectedUser
 	 */
@@ -255,14 +257,19 @@ public class AssegnamentoRuoliActivity extends Activity implements
 		Toast.makeText(
 				getApplicationContext(),
 				"Rimosso Utente: ["
-						+ dataBaseOps.getUserName(getApplicationContext(), selectedUser)
+						+ dataBaseOps.getUserSurname(getApplicationContext(),
+								selectedUser)
+						+ " "
+						+ dataBaseOps.getUserName(getApplicationContext(),
+								selectedUser)
 						+ "] da Ruolo: ["
-						+ dataBaseOps.getRuoloName(getApplicationContext(), selectedRole)
-						+ "]", Toast.LENGTH_LONG).show();
+						+ dataBaseOps.getRuoloName(getApplicationContext(),
+								selectedRole) + "]", Toast.LENGTH_LONG).show();
 	}
 
 	/**
 	 * Aggiunge un utente al gruppo avente il ruolo indicato
+	 * 
 	 * @param selectedRole
 	 * @param selectedUser
 	 */
@@ -277,10 +284,15 @@ public class AssegnamentoRuoliActivity extends Activity implements
 		Toast.makeText(
 				getApplicationContext(),
 				"Aggiunto Ruolo: ["
-						+ dataBaseOps.getRuoloName(getApplicationContext(), selectedRole)
-						+ "] " + "a Utente: ["
-						+ dataBaseOps.getUserName(getApplicationContext(), selectedUser)
-						+ "]", Toast.LENGTH_LONG).show();
+						+ dataBaseOps.getRuoloName(getApplicationContext(),
+								selectedRole)
+						+ "] "
+						+ "a Utente: ["
+						+ dataBaseOps.getUserSurname(getApplicationContext(),
+								selectedUser)
+						+ " "
+						+ dataBaseOps.getUserName(getApplicationContext(),
+								selectedUser) + "]", Toast.LENGTH_LONG).show();
 	}
 
 	/**
@@ -294,17 +306,16 @@ public class AssegnamentoRuoliActivity extends Activity implements
 		JSONArray jsonData = CaricaUtentiAsJSON(tag);
 		ArrayList<String> arrayData = CaricaUtentiAsArray(tag);
 		UtentiArrayAdapter utentiAdapter = new UtentiArrayAdapter(
-				getApplicationContext(), jsonData,
-				arrayData);
+				getApplicationContext(), jsonData, arrayData);
 		utentiAdapter
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 		// Apply the adapter to the spinner
 		spinnerUtenti.setAdapter(utentiAdapter);
-		if(jsonData.length()>0){
+		if (jsonData.length() > 0) {
 			spinnerUtenti.setSelection(0);
 		}
-//		utentiAdapter.notifyDataSetChanged();
+		// utentiAdapter.notifyDataSetChanged();
 	}
 
 	/**
@@ -386,6 +397,7 @@ public class AssegnamentoRuoliActivity extends Activity implements
 
 	/**
 	 * Carica gli utenti in formato JSONArray
+	 * 
 	 * @param id_ruolo
 	 * @return
 	 */
@@ -433,6 +445,7 @@ public class AssegnamentoRuoliActivity extends Activity implements
 
 	/**
 	 * Carica gli utenti in formato ArrayList<String>
+	 * 
 	 * @param id_ruolo
 	 * @return
 	 */
@@ -498,9 +511,10 @@ public class AssegnamentoRuoliActivity extends Activity implements
 	}
 
 	/**
-	 * Carica la lista degli utenti appatenenti o non appartenenti al ruolo
-	 * di cui si indica l'id e la stringa del ruolo ricoperto per i confronti
+	 * Carica la lista degli utenti appatenenti o non appartenenti al ruolo di
+	 * cui si indica l'id e la stringa del ruolo ricoperto per i confronti
 	 * necessari nel corpo della funzione.
+	 * 
 	 * @param id_ruolo
 	 * @param ruolo
 	 */
@@ -554,8 +568,8 @@ public class AssegnamentoRuoliActivity extends Activity implements
 	}
 
 	/**
-	 * Lista dei ruoli previsti nella tabella ruoli_utenti del
-	 * database.
+	 * Lista dei ruoli previsti nella tabella ruoli_utenti del database.
+	 * 
 	 * @param phpInterface
 	 * @param ip
 	 * @return
@@ -582,6 +596,7 @@ public class AssegnamentoRuoliActivity extends Activity implements
 	/**
 	 * Costruzione della tabella utenti-ruoli con i dati ricevuti
 	 * dall'interfaccia server-scripting-interface in PHP
+	 * 
 	 * @param jArray
 	 */
 	private void buildUsersAndRolesTable(JSONArray jArray) {
@@ -719,9 +734,9 @@ public class AssegnamentoRuoliActivity extends Activity implements
 	}
 
 	/**
-	 * Aggiunge una riga nella tabella dei contenuti, riguardante
-	 * gli utenti appartenenti o non appartenenti al ruolo con i ruoli
-	 * ricoperti.
+	 * Aggiunge una riga nella tabella dei contenuti, riguardante gli utenti
+	 * appartenenti o non appartenenti al ruolo con i ruoli ricoperti.
+	 * 
 	 * @param applicationContext
 	 * @param headerTable
 	 * @param json_data
@@ -767,10 +782,11 @@ public class AssegnamentoRuoliActivity extends Activity implements
 	}
 
 	/**
-	 * Costruisce la riga di utente e ruoli ricoperti con il layout
-	 * contenuto nella rowView, dal quale richiama i TextView e gli
-	 * ImageButton e li valorizza i primi, e rende visibili o invisibili
-	 * i secondi in base ai ruoli ricoperti dall'utente stesso.
+	 * Costruisce la riga di utente e ruoli ricoperti con il layout contenuto
+	 * nella rowView, dal quale richiama i TextView e gli ImageButton e li
+	 * valorizza i primi, e rende visibili o invisibili i secondi in base ai
+	 * ruoli ricoperti dall'utente stesso.
+	 * 
 	 * @param applicationContext
 	 * @param json_data
 	 * @param rowView
@@ -927,6 +943,7 @@ public class AssegnamentoRuoliActivity extends Activity implements
 
 	/**
 	 * Ricava la posizione del ruolo indicato nello spinner
+	 * 
 	 * @param spinner
 	 * @param id_ruolo
 	 * @return
@@ -947,6 +964,7 @@ public class AssegnamentoRuoliActivity extends Activity implements
 
 	/**
 	 * Dal ruolo ricava l'id interrogando il database
+	 * 
 	 * @param ruolo
 	 * @return
 	 */
@@ -958,6 +976,7 @@ public class AssegnamentoRuoliActivity extends Activity implements
 
 	/**
 	 * Ricava la lista dei ruoli ricoperti dall'utente
+	 * 
 	 * @param id_utente
 	 * @return
 	 */
@@ -969,6 +988,7 @@ public class AssegnamentoRuoliActivity extends Activity implements
 
 	/**
 	 * Ricava la posizione dell'utente indicato nel relativo spinner.
+	 * 
 	 * @param spinner
 	 * @param id
 	 * @return
@@ -989,6 +1009,7 @@ public class AssegnamentoRuoliActivity extends Activity implements
 
 	/**
 	 * Aggiunge la riga con i nomi dei campi nella tabella di intestazione.
+	 * 
 	 * @param context
 	 * @param table
 	 * @param height

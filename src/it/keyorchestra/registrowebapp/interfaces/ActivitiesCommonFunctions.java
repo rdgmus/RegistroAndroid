@@ -4,8 +4,13 @@ import android.view.View;
 import android.widget.ImageButton;
 
 public interface ActivitiesCommonFunctions {
+	
+	public  enum NewPasswordRequestState {
+	    REQUEST_ABORTED , REQUEST_SUCCESS, REQUEST_EXISTS, NONE
+	};
+	
 	/**
-	 * Registra il tooltip per l'ImageButton che usa il parmetro
+	 * Registra il tooltip per l'ImageButton che usa il parametro
 	 * android:contentDescription
 	 * 
 	 * @param ib

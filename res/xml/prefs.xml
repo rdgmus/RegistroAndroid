@@ -31,9 +31,19 @@
         <EditTextPreference
             android:defaultValue="PhpMySqlAndroid/retrieveTableData.php"
             android:key="retrieveTableData"
-            android:summary="Posizione funzioni tabellari nel Server Apache"
-            android:title="Carica Dati in Tabella" />
-    </PreferenceCategory>
+            android:summary="Permette l'invio di SQL al database"
+            android:title="Caricatore dati in Tabella" />
+        <EditTextPreference
+            android:defaultValue="PhpMySqlAndroid/GraphViewInterface.php"
+            android:key="GraphViewInterface"
+            android:summary="Interfaccia per la creazione dei Grafici"
+            android:title="GraphViewInterface" />
+        <EditTextPreference
+            android:defaultValue="PhpMySqlAndroid/sendRequestChangePassword.php"
+            android:key="sendRequestChangePassword"
+            android:summary="Interfaccia per la procedura richiesta Nuova Password"
+            android:title="Richieste Nuove Password" />
+        </PreferenceCategory>
     <PreferenceCategory
         android:enabled="true"
         android:key="regAdmin"

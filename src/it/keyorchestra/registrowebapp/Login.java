@@ -54,9 +54,45 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				startAnimation((ImageButton) v, 2000);
-				Toast.makeText(getApplicationContext(),
-						"Richiesta Nuova Password inviata all'ADMIN!",
-						Toast.LENGTH_LONG).show();
+
+				DatabaseOps databaseOps = new DatabaseOps(
+						getApplicationContext());
+				// Controlla le credenziali dell'utente
+				String sendRequestChangePassword = getPrefs.getString(
+						"sendRequestChangePassword", null);
+				NewPasswordRequestState result = databaseOps
+						.SendRequestChangePassword(getApplicationContext(),
+								etLoginEmail.getText().toString(),
+								sendRequestChangePassword,
+								getDatabaseIpFromPreferences());
+				
+				switch (result) {// PER GLI STATI 0,1,2,... VEDI
+									// sendRequestChangePassword.php
+				case REQUEST_ABORTED:// requestAborted LA RICHIESTA NON E'
+										// PARTITA PER MANCATO RICONOSCIMENTO
+										// EMAIL
+					Toast.makeText(getApplicationContext(),
+							"Richiesta Nuova Password fallita!",
+							Toast.LENGTH_LONG).show();
+					break;
+				case REQUEST_SUCCESS:// inviataRichiestaConferma INVIATA CON
+										// SUCCESSO
+					Toast.makeText(getApplicationContext(),
+							"Richiesta Nuova Password inviata all'ADMIN!",
+							Toast.LENGTH_LONG).show();
+					break;
+				case REQUEST_EXISTS:// alreadyExistsPasswordRequest ESISTE GIA'
+									// UNA RICHIESTA PRECEDENTE
+					// PIU' CHE ALTRO PER IMPEDIRE CHE L'UTENTE RICHIEDA ANCORA
+					// PER SBAGLIO O ALTRO
+					Toast.makeText(getApplicationContext(),
+							"Una richiesta precedente esiste!",
+							Toast.LENGTH_LONG).show();
+					break;
+				default:
+					break;
+				}
+				
 			}
 		});
 

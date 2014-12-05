@@ -1,10 +1,13 @@
 package it.keyorchestra.registrowebapp.dbMatthed;
 
+import it.keyorchestra.registrowebapp.interfaces.ActivitiesCommonFunctions.NewPasswordRequestState;
 import it.keyorchestra.registrowebapp.interfaces.DatabasesInterface;
 import it.keyorchestra.registrowebapp.mysqlandroid.MySqlAndroid;
 import it.keyorchestra.registrowebapp.scuola.util.GMailSender;
 import it.keyorchestra.registrowebapp.scuola.util.SimpleMail2;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -411,14 +414,14 @@ public class DatabaseOps implements DatabasesInterface {
 						+ "?actionEncode=generateHash");
 		return hash;
 	}
-	
+
 	public String generatePassword(Context applicationContext, String ip,
 			String phpencoder, String length) {
 		// TODO Auto-generated method stub
 		// Genera hash tramite php
 		String password = new MySqlAndroid().getEncodedStringFromUri(
 				applicationContext, "http://" + ip + "/" + phpencoder
-						+ "?actionEncode=generatePassword&length="+length);
+						+ "?actionEncode=generatePassword&length=" + length);
 		return password;
 	}
 
@@ -610,14 +613,22 @@ public class DatabaseOps implements DatabasesInterface {
 					Toast.makeText(
 							applicationContext,
 							"Utente: "
+									+ getUserSurname(applicationContext,
+											id_utente)
+									+ " "
 									+ getUserName(applicationContext, id_utente)
-									+ " BLOCCATO!", Toast.LENGTH_SHORT).show();
+									+ " Inserito blocco su Login!",
+							Toast.LENGTH_SHORT).show();
 				else
 					Toast.makeText(
 							applicationContext,
 							"Utente: "
+									+ getUserSurname(applicationContext,
+											id_utente)
+									+ " "
 									+ getUserName(applicationContext, id_utente)
-									+ " SBLOCCATO!", Toast.LENGTH_SHORT).show();
+									+ " Rimosso blocco su Login!",
+							Toast.LENGTH_SHORT).show();
 			}
 			st.close();
 			conn.close();
@@ -658,6 +669,32 @@ public class DatabaseOps implements DatabasesInterface {
 		}
 	}
 
+	public String getUserSurname(Context applicationContext, long selectedUser) {
+		// TODO Auto-generated method stub
+		String url = getUrl(applicationContext);
+		String retval = null;
+
+		Connection conn;
+		try {
+			DriverManager.setLoginTimeout(15);
+			conn = DriverManager.getConnection(url);
+			Statement st = conn.createStatement();
+			String sql = null;
+
+			sql = "SELECT cognome FROM utenti_scuola " + "WHERE  id_utente="
+					+ selectedUser;
+			ResultSet result = st.executeQuery(sql);
+			while (result.next()) {
+				retval = result.getString("cognome");
+			}
+			st.close();
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return retval;
+	}
+
 	public String getUserName(Context applicationContext, long selectedUser) {
 		// TODO Auto-generated method stub
 		String url = getUrl(applicationContext);
@@ -670,12 +707,11 @@ public class DatabaseOps implements DatabasesInterface {
 			Statement st = conn.createStatement();
 			String sql = null;
 
-			sql = "SELECT cognome, nome FROM utenti_scuola "
-					+ "WHERE  id_utente=" + selectedUser;
+			sql = "SELECT nome FROM utenti_scuola " + "WHERE  id_utente="
+					+ selectedUser;
 			ResultSet result = st.executeQuery(sql);
 			while (result.next()) {
-				retval = result.getString("cognome") + " "
-						+ result.getString("nome");
+				retval = result.getString("nome");
 			}
 			st.close();
 			conn.close();
@@ -785,6 +821,56 @@ public class DatabaseOps implements DatabasesInterface {
 			ResultSet result = st.executeQuery(sql);
 			while (result.next()) {
 				retval = result.getLong("id_ruolo");
+			}
+			st.close();
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return retval;
+	}
+
+	public NewPasswordRequestState SendRequestChangePassword(
+			Context applicationContext, String email,
+			String sendRequestChangePassword, String ip) {
+		// TODO Auto-generated method stub
+		long id_utente = getIdOfUserWithEmail(applicationContext,email);
+		String cognome = getUserSurname(applicationContext, id_utente);
+		String nome = getUserName(applicationContext, id_utente);
+		
+		NewPasswordRequestState result = NewPasswordRequestState.NONE;
+		try {
+			result = new MySqlAndroid()
+					.SendRequestChangePassword(applicationContext, "http://" + ip
+							+ "/" + sendRequestChangePassword
+							+ "?cognome="+URLEncoder.encode(cognome, "UTF-8")
+							+"&nome="+URLEncoder.encode(nome, "UTF-8")
+							+"&email="+URLEncoder.encode(email, "UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+
+	public long getIdOfUserWithEmail(Context applicationContext, String email) {
+		// TODO Auto-generated method stub
+		String url = getUrl(applicationContext);
+		long retval = -1;
+
+		Connection conn;
+		try {
+			DriverManager.setLoginTimeout(15);
+			conn = DriverManager.getConnection(url);
+			Statement st = conn.createStatement();
+			String sql = null;
+
+			sql = "SELECT id_utente FROM utenti_scuola " + "WHERE  email='"
+					+ email + "'";
+			ResultSet result = st.executeQuery(sql);
+			while (result.next()) {
+				retval = result.getLong("id_utente");
 			}
 			st.close();
 			conn.close();
