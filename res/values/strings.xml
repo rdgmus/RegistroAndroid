@@ -110,10 +110,12 @@
     <string android:layout_height="wrap_content" android:id="@+id/string1" android:layout_width="wrap_content" name="removeRuolo">Rimuove dal ruolo l\'utente</string>
     <string name="newPasswdHint">Nuova Password</string>
     <string android:layout_height="wrap_content" android:id="@+id/string1" android:layout_width="wrap_content" name="newPasswdText">Nuova Password:</string>
-    <string name="spinnerPasswdReqPrompt">Selezionare la richiesta password da elaborare</string>
+    <string name="spinnerPasswdReqPrompt">Selezionare la richiesta Nuova Password da elaborare</string>
     <string name="impostaNuovaPassword">Imposta Nuova Password</string>
     <string name="generaPassword">Genera Passoword</string>
-    <string name="rilascioNuovePassword">Rilascio Nuova Password</string>
+    <string name="rilascioNuovePassword">Nuova Password</string>
     <string name="forgotPasswdDescription">Hai dimenticato la Password?</string>
+    <string name="requestConfirmed">Confermate</string>
+    <string name="requestPending">In attesa</string>
 
 </resources>

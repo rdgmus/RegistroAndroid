@@ -1,11 +1,22 @@
 package it.keyorchestra.registrowebapp.mysqlandroid;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import it.keyorchestra.registrowebapp.R;
 import it.keyorchestra.registrowebapp.UserMenu;
 import it.keyorchestra.registrowebapp.dbMatthed.DatabaseOps;
 import it.keyorchestra.registrowebapp.interfaces.ActivitiesCommonFunctions;
 import it.keyorchestra.registrowebapp.interfaces.GeneratePasswordInterface;
 import it.keyorchestra.registrowebapp.scuola.util.FieldsValidator;
+import it.keyorchestra.registrowebapp.scuola.util.MySimpleArrayAdapter;
+import it.keyorchestra.registrowebapp.scuola.util.RuoliArrayAdapter;
+import it.keyorchestra.registrowebapp.scuola.util.UtentiArrayAdapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -25,13 +36,17 @@ import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,11 +57,13 @@ public class RilascioNuovePassword extends Activity implements
 
 	LinearLayout llGeneratorePassword, llRichieste, llCommands, headerLayout;
 
+	Spinner spinnerRichiestePassword;
 	SeekBar sbPasswdLen;
 	TextView tvPasswdLen, etEmail, etPasswd, tvRilascioTitle;
 	EditText etRepeatPasswd, etNewPasswd;
 	CheckBox cbVediPassword;
 	ImageButton ibGeneratePasswd, ibSavePasswd, ibBack;
+	RadioGroup rgPendingConfirmed;
 
 	private long selectedUser;
 
@@ -63,12 +80,11 @@ public class RilascioNuovePassword extends Activity implements
 	 */
 	public void setBackButtonVisible(boolean backButtonVisible) {
 		this.backButtonVisible = backButtonVisible;
-		if (backButtonVisible){
+		if (backButtonVisible) {
 			ibBack.setVisibility(ImageButton.VISIBLE);
 			tvRilascioTitle.setVisibility(TextView.VISIBLE);
-		}
-		else{
-			ibBack.setVisibility(ImageButton.GONE);
+		} else {
+			ibBack.setVisibility(ImageButton.INVISIBLE);
 			tvRilascioTitle.setVisibility(TextView.GONE);
 		}
 	}
@@ -102,8 +118,9 @@ public class RilascioNuovePassword extends Activity implements
 				.getDefaultSharedPreferences(getApplicationContext());
 
 		headerLayout = (LinearLayout) findViewById(R.id.headerLayout);
-		
-		tvRilascioTitle=(TextView)headerLayout.findViewById(R.id.tvRilascioTitle);
+
+		tvRilascioTitle = (TextView) headerLayout
+				.findViewById(R.id.tvRilascioTitle);
 		ibBack = (ImageButton) headerLayout.findViewById(R.id.ibBack);
 
 		setBackButtonVisible(getPrefs.getBoolean("backButtonForPasswordChange",
@@ -113,11 +130,11 @@ public class RilascioNuovePassword extends Activity implements
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				//Se il bottone è visibile una volta premuto riporta
-				//alla UserMenu.class
+				// Se il bottone è visibile una volta premuto riporta
+				// alla UserMenu.class
 				startAnimation((ImageButton) v, 2000);
-				Intent ourStartingPoint = new Intent(RilascioNuovePassword.this,
-						UserMenu.class);
+				Intent ourStartingPoint = new Intent(
+						RilascioNuovePassword.this, UserMenu.class);
 				startActivity(ourStartingPoint);
 
 				// FINISH
@@ -125,8 +142,45 @@ public class RilascioNuovePassword extends Activity implements
 			}
 		});
 
+		llRichieste = (LinearLayout) findViewById(R.id.llRichieste);
+		// STATO DELLE RICHIESTE RADIOGROUP
+		rgPendingConfirmed = (RadioGroup) llRichieste
+				.findViewById(R.id.rgPendingConfirmed);
+		rgPendingConfirmed.check(R.id.radioConfirmed);
+		setRadioGroupRequestStateVisible(getPrefs.getBoolean(
+				"backButtonForPasswordChange", false));
+		rgPendingConfirmed
+				.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 
-		llRichieste = (LinearLayout)findViewById(R.id.llRichieste);
+					@Override
+					public void onCheckedChanged(RadioGroup group, int checkedId) {
+						// TODO Auto-generated method stub
+						loadUserRequestPendingConfirmed(checkedId);
+					}
+				});
+		// SPINNER
+		spinnerRichiestePassword = (Spinner) llRichieste
+				.findViewById(R.id.spinnerRichiestePassword);
+
+		reloadRequestPasswordAdapter();
+
+		spinnerRichiestePassword
+				.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+					@Override
+					public void onItemSelected(AdapterView<?> parent,
+							View view, int position, long id) {
+						// TODO Auto-generated method stub
+//						reloadRequestPasswordAdapter();
+					}
+
+					@Override
+					public void onNothingSelected(AdapterView<?> parent) {
+						// TODO Auto-generated method stub
+
+					}
+				});
+
 		// EMAIL E PASSWORD UTENTE CHE HA EFETTUATO RICHIESTA CAMBIO PASSWORD
 		etEmail = (TextView) llRichieste.findViewById(R.id.etEmail);
 		etPasswd = (TextView) llRichieste.findViewById(R.id.etPasswd);
@@ -226,6 +280,140 @@ public class RilascioNuovePassword extends Activity implements
 		});
 		tvPasswdLen.setText("" + (sbPasswdLen.getProgress() + 4) + "");
 
+	}
+
+	private void reloadRequestPasswordAdapter() {
+		// TODO Auto-generated method stub
+		JSONArray jsonData = CaricaUtentiAsJSON();
+		ArrayList<String> arrayData = CaricaUtentiAsArray();
+
+		UtentiArrayAdapter utentiAdapter = new UtentiArrayAdapter(
+				getApplicationContext(), jsonData, arrayData);
+		utentiAdapter
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+		// Apply the adapter to the spinner
+		spinnerRichiestePassword.setAdapter(utentiAdapter);
+		if (jsonData.length() > 0) {
+			spinnerRichiestePassword.setSelection(0);
+		}
+	}
+
+	private ArrayList<String> CaricaUtentiAsArray() {
+		// TODO Auto-generated method stub
+		ArrayList<String> utentiArray = new ArrayList<String>();
+		String retrieveTableData = getPrefs
+				.getString("retrieveTableData", null);
+
+		String ip = getDatabaseIpFromPreferences();
+
+		String query = null;
+
+		switch (rgPendingConfirmed.getCheckedRadioButtonId()) {
+		case R.id.radioPending:
+			query = "SELECT * FROM `change_password_request` AS a, utenti_scuola AS b WHERE a.`pending`=1 AND a.`confirmed`=0"
+					+ " AND a.`from_user` = b.id_utente";
+			break;
+		case R.id.radioConfirmed:
+			query = "SELECT * FROM `change_password_request` AS a, utenti_scuola AS b WHERE a.`pending`=1 AND a.`confirmed`=1"
+					+ " AND a.`from_user` = b.id_utente";
+			break;
+		}
+
+		JSONArray jArray;
+
+		try {
+			jArray = new MySqlAndroid().retrieveTableData(
+					getApplicationContext(),
+					"http://" + ip + "/" + retrieveTableData + "?sql="
+							+ URLEncoder.encode(query, "UTF-8"), null);
+			if(jArray == null)
+				return utentiArray;
+			for (int i = 0; i < jArray.length(); i++) {
+				JSONObject json_data;
+				try {
+					json_data = jArray.getJSONObject(i);
+					long id_utente = json_data.getLong("id_utente");
+					String cognome = json_data.getString("cognome");
+					String nome = json_data.getString("nome");
+					String email = json_data.getString("email");
+
+					utentiArray.add("[" + id_utente + "] " + cognome + " "
+							+ nome + " <" + email + ">");
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return utentiArray;
+	}
+
+	private JSONArray CaricaUtentiAsJSON() {
+		// TODO Auto-generated method stub
+		String retrieveTableData = getPrefs
+				.getString("retrieveTableData", null);
+
+		String ip = getDatabaseIpFromPreferences();
+
+		String query = null;
+
+		switch (rgPendingConfirmed.getCheckedRadioButtonId()) {
+		case R.id.radioPending:
+			query = "SELECT * FROM `change_password_request` AS a, utenti_scuola AS b WHERE a.`pending`=1 AND a.`confirmed`=0"
+					+ " AND a.`from_user` = b.id_utente";
+			break;
+		case R.id.radioConfirmed:
+			query = "SELECT * FROM `change_password_request` AS a, utenti_scuola AS b WHERE a.`pending`=1 AND a.`confirmed`=1"
+					+ " AND a.`from_user` = b.id_utente";
+			break;
+		}
+
+		JSONArray jArray = null;
+
+		try {
+			jArray = new MySqlAndroid().retrieveTableData(
+					getApplicationContext(),
+					"http://" + ip + "/" + retrieveTableData + "?sql="
+							+ URLEncoder.encode(query, "UTF-8"), null);
+
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return jArray;
+	}
+
+	protected void loadUserRequestPendingConfirmed(int checkedId) {
+		// TODO Auto-generated method stub
+		switch (checkedId) {
+		case R.id.radioPending:
+			Toast.makeText(getApplicationContext(), "Richieste in attesa!",
+					Toast.LENGTH_SHORT).show();
+			reloadRequestPasswordAdapter();
+			break;
+		case R.id.radioConfirmed:
+			Toast.makeText(getApplicationContext(), "Richieste confermate!",
+					Toast.LENGTH_SHORT).show();
+			reloadRequestPasswordAdapter();
+			break;
+		}
+	}
+
+	public void setRadioGroupRequestStateVisible(boolean backButtonVisible) {
+		// TODO Auto-generated method stub
+		if (backButtonVisible) {
+			rgPendingConfirmed.setVisibility(RadioGroup.GONE);
+		} else {
+			rgPendingConfirmed.setVisibility(RadioGroup.VISIBLE);
+		}
 	}
 
 	@Override

@@ -154,8 +154,6 @@ public class AssegnamentoRuoliActivity extends Activity implements
 		RuoliArrayAdapter ruoliAdapter = new RuoliArrayAdapter(
 				getApplicationContext(), CaricaRuoliAsJSON(),
 				CaricaRuoliAsArray());
-		ruoliAdapter
-				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 		ruoliAdapter
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -305,6 +303,7 @@ public class AssegnamentoRuoliActivity extends Activity implements
 		// TODO Auto-generated method stub
 		JSONArray jsonData = CaricaUtentiAsJSON(tag);
 		ArrayList<String> arrayData = CaricaUtentiAsArray(tag);
+		
 		UtentiArrayAdapter utentiAdapter = new UtentiArrayAdapter(
 				getApplicationContext(), jsonData, arrayData);
 		utentiAdapter
@@ -342,6 +341,8 @@ public class AssegnamentoRuoliActivity extends Activity implements
 					getApplicationContext(),
 					"http://" + ip + "/" + retrieveTableData + "?sql="
 							+ URLEncoder.encode(query, "UTF-8"), null);
+			if(jArray==null)
+				return ruoliArray;
 			for (int i = 0; i < jArray.length(); i++) {
 				JSONObject json_data;
 				try {

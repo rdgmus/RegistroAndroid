@@ -47,8 +47,7 @@ public class RuoliArrayAdapter extends ArrayAdapter<String> {
 
 		try {
 			JSONObject s = (JSONObject) _objects.get(position);
-			textView.setText("[" + s.getLong("id_ruolo") + "] "
-					+ s.getString("ruolo"));
+			textView.setText(s.getString("ruolo"));
 			textView.setTextColor(_context.getResources().getColor(
 					R.color.colorOrange));
 			textView.setBackgroundColor(_context.getResources().getColor(
@@ -75,8 +74,7 @@ public class RuoliArrayAdapter extends ArrayAdapter<String> {
 
 		try {
 			JSONObject s = (JSONObject) _objects.get(position);
-			textView.setText("[" + s.getLong("id_ruolo") + "] "
-					+ s.getString("ruolo"));
+			textView.setText(s.getString("ruolo"));
 			textView.setTextColor(_context.getResources().getColor(
 					R.color.colorOrange));
 			textView.setBackgroundColor(_context.getResources().getColor(

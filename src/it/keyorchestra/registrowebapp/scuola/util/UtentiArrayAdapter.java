@@ -48,9 +48,7 @@ public class UtentiArrayAdapter extends ArrayAdapter<String> {
 
 		try {
 			JSONObject s = (JSONObject) _objects.get(position);
-			textView.setText("[" + s.getLong("id_utente") + "] "
-					+ s.getString("cognome") + " " + s.getString("nome") + " <"
-					+ s.getString("email") + ">");
+			textView.setText(s.getString("cognome") + " " + s.getString("nome"));
 			textView.setTextColor(_context.getResources().getColor(
 					R.color.colorOrange));
 			textView.setBackgroundColor(_context.getResources().getColor(
@@ -78,9 +76,7 @@ public class UtentiArrayAdapter extends ArrayAdapter<String> {
 
 		try {
 			JSONObject s = (JSONObject) _objects.get(position);
-			textView.setText("[" + s.getLong("id_utente") + "] "
-					+ s.getString("cognome") + " " + s.getString("nome") + " <"
-					+ s.getString("email") + ">");
+			textView.setText(s.getString("cognome") + " " + s.getString("nome") );
 			textView.setTextColor(_context.getResources().getColor(
 					R.color.colorOrange));
 			textView.setBackgroundColor(_context.getResources().getColor(
