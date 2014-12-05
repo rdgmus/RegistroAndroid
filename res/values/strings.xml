@@ -114,5 +114,6 @@
     <string name="impostaNuovaPassword">Imposta Nuova Password</string>
     <string name="generaPassword">Genera Passoword</string>
     <string name="rilascioNuovePassword">Rilascio Nuova Password</string>
+    <string name="forgotPasswdDescription">Hai dimenticato la Password?</string>
 
 </resources>

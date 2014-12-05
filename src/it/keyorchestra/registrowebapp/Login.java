@@ -20,10 +20,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -34,7 +34,7 @@ import android.widget.Toast;
 public class Login extends Activity implements ActivitiesCommonFunctions {
 
 	ImageButton loginButton, bCambiaRuolo, ibFillFields, ibGotoRegister,
-			ibHome, pulisciButton, imShowMenu;
+			ibHome, pulisciButton, imShowMenu, ibForgotPassword;
 	TextView etRuoloScelto;
 	Thread myThread = null;
 	EditText etLoginEmail, etLoginPasswd;
@@ -46,6 +46,20 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 
+		ibForgotPassword = (ImageButton) findViewById(R.id.ibForgotPassword);
+		registerToolTipFor(ibForgotPassword);
+		ibForgotPassword.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				startAnimation((ImageButton) v, 2000);
+				Toast.makeText(getApplicationContext(),
+						"Richiesta Nuova Password inviata all'ADMIN!",
+						Toast.LENGTH_LONG).show();
+			}
+		});
+
 		pulisciButton = (ImageButton) findViewById(R.id.pulisci_campi);
 		registerToolTipFor(pulisciButton);
 		pulisciButton.setOnClickListener(new View.OnClickListener() {
@@ -53,9 +67,9 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				startAnimation((ImageButton)v, 2000);
-				Toast.makeText(getApplicationContext(),
-						"Pulizia campi", Toast.LENGTH_SHORT).show();
+				startAnimation((ImageButton) v, 2000);
+				Toast.makeText(getApplicationContext(), "Pulizia campi",
+						Toast.LENGTH_SHORT).show();
 
 				etLoginEmail.setText("");
 				etLoginPasswd.setText("");
@@ -72,7 +86,7 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				// Va alla pagina di login
-				startAnimation((ImageButton)v, 2000);
+				startAnimation((ImageButton) v, 2000);
 				Toast.makeText(getApplicationContext(),
 						"Re-indirizzamento a pagina iniziale",
 						Toast.LENGTH_SHORT).show();
@@ -93,10 +107,10 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				// Va alla pagina di login
-				startAnimation((ImageButton)v, 2000);
+				startAnimation((ImageButton) v, 2000);
 				Toast.makeText(getApplicationContext(),
-						"Re-indirizzamento a Iscrizione",
-						Toast.LENGTH_SHORT).show();
+						"Re-indirizzamento a Iscrizione", Toast.LENGTH_SHORT)
+						.show();
 
 				Intent loginUserActivity = new Intent(
 						"android.intent.action.REGISTER_USER");
@@ -124,10 +138,9 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 				// Toast.makeText(getApplicationContext(),
 				// "imShowMenu.OnClickListener()", Toast.LENGTH_SHORT)
 				// .show();
-				startAnimation((ImageButton)v, 2000);
-				Toast.makeText(getApplicationContext(),
-						"Richiesta menù", Toast.LENGTH_SHORT)
-						.show();
+				startAnimation((ImageButton) v, 2000);
+				Toast.makeText(getApplicationContext(), "Richiesta menù",
+						Toast.LENGTH_SHORT).show();
 
 				openOptionsMenu();
 			}
@@ -138,13 +151,14 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 		registerToolTipFor(loginButton);
 		loginButton.setOnClickListener(new View.OnClickListener() {
 
+			@SuppressLint("ShowToast")
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				startAnimation((ImageButton)v, 2000);
+				startAnimation((ImageButton) v, 2000);
 				Toast.makeText(getApplicationContext(),
-						"Autenticazione credenziali",
-						Toast.LENGTH_SHORT).show();
+						"Autenticazione credenziali", Toast.LENGTH_SHORT)
+						.show();
 				if (!FieldsValidator.Is_Valid_Email(etLoginEmail)) {
 					etLoginEmail.requestFocus();
 					return;
@@ -176,22 +190,24 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 
 				if (isAuthenticated) {// Credenziali esistenti
 					// Controlla se l'utente è locked
+					ibForgotPassword.setVisibility(ImageButton.INVISIBLE);
 
 					SharedPreferences sharedpreferences = PreferenceManager
 							.getDefaultSharedPreferences(getApplicationContext());
 					Long is_locked = sharedpreferences.getLong("is_locked", -1);
 					if (is_locked == 1) {
-						 Toast myToast = Toast.makeText(
-								getApplicationContext(),
-								"(1) L'utente ha già effettuato il login da un altro IP?\n"
-										+ "(2) Non ha alcun ruolo accreditato?\n"
-										+ "(3) Non ha effettuato il logout?\n"
-										+ "Contattare l'Amministratore!\n"
-										+ "Permesso di accesso NEGATO!",
-								Toast.LENGTH_SHORT);
-						
-					        ToastExpander.showFor(myToast, 10000);
-					        
+						Toast myToast = Toast
+								.makeText(
+										getApplicationContext(),
+										"(1) L'utente ha già effettuato il login da un altro IP?\n"
+												+ "(2) Non ha alcun ruolo accreditato?\n"
+												+ "(3) Non ha effettuato il logout?\n"
+												+ "Contattare l'Amministratore!\n"
+												+ "Permesso di accesso NEGATO!",
+										Toast.LENGTH_SHORT);
+
+						ToastExpander.showFor(myToast, 10000);
+
 					} else {
 
 						// Controlla i permessi del ruolo di accesso prescelto
@@ -227,31 +243,29 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 							// l'utente è un admin avrà anche la possibilità di
 							// accedere
 							// al database con tutti i permessi
-							
-							Thread thread = new Thread(){
-					             @Override
-					            public void run() {
-					                 try {
-					                    Thread.sleep(3500); // As I am using LENGTH_LONG in Toast
-					                    Intent ourStartingPoint = new Intent(Login.this,
-												UserMenu.class);
+
+							Thread thread = new Thread() {
+								@Override
+								public void run() {
+									try {
+										Thread.sleep(3500); // As I am using
+															// LENGTH_LONG in
+															// Toast
+										Intent ourStartingPoint = new Intent(
+												Login.this, UserMenu.class);
 										startActivity(ourStartingPoint);
 										finish();
-					                } catch (Exception e) {
-					                    e.printStackTrace();
-					                }
-					             }  
-					           };
-					           
+									} catch (Exception e) {
+										e.printStackTrace();
+									}
+								}
+							};
+
 							Toast.makeText(getApplicationContext(),
 									"Ora accediamo al suo menù!",
 									Toast.LENGTH_SHORT).show();
 							thread.start();
-							
-//							Intent ourStartingPoint = new Intent(Login.this,
-//									UserMenu.class);
-//							startActivity(ourStartingPoint);
-//							finish();
+
 						} else {
 							Toast.makeText(
 									getApplicationContext(),
@@ -262,8 +276,20 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 						}
 					}
 				} else {
-					Toast.makeText(getApplicationContext(),
-							"Credenziali invalide!", Toast.LENGTH_SHORT).show();
+					Toast myToast = Toast
+							.makeText(
+									getApplicationContext(),
+									"(1) Credenziali invalide!?\n"
+											+ "(2) Vuoi richiedere una Nuova Password?\n"
+											+ "(3) Contattare l'Amministratore\n"
+											+ "    premendo sulle chiavi!\n"
+											+ "Permesso di accesso NEGATO!",
+									Toast.LENGTH_SHORT);
+
+					ToastExpander.showFor(myToast, 10000);
+
+					ibForgotPassword.setVisibility(ImageButton.VISIBLE);
+					startAnimation(ibForgotPassword, 5000);
 				}
 			}
 		});
@@ -283,9 +309,9 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				startAnimation((ImageButton)v, 2000);
-				Toast.makeText(getApplicationContext(),
-						"Cambio Ruolo", Toast.LENGTH_SHORT).show();
+				startAnimation((ImageButton) v, 2000);
+				Toast.makeText(getApplicationContext(), "Cambio Ruolo",
+						Toast.LENGTH_SHORT).show();
 
 				Intent i = new Intent(
 						"it.keyorchestra.registrowebapp.RUOLO_UTENTE");
@@ -303,7 +329,7 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				startAnimation((ImageButton)v, 2000);
+				startAnimation((ImageButton) v, 2000);
 				Toast.makeText(getApplicationContext(),
 						"Inserimento credenziali amministratore",
 						Toast.LENGTH_SHORT).show();
@@ -544,9 +570,10 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 	public void startAnimation(final View ib, final long durationInMilliseconds) {
 		// TODO Auto-generated method stub
 		final String TAG = "ImageButton Animation";
-		Animation animation = new AlphaAnimation(1.0f, 0.25f); // Change alpha from
-														// fully visible to
-														// invisible
+		Animation animation = new AlphaAnimation(1.0f, 0.25f); // Change alpha
+																// from
+		// fully visible to
+		// invisible
 		animation.setDuration(500); // duration - half a second
 		animation.setInterpolator(new LinearInterpolator()); // do not alter
 																// animation
@@ -571,7 +598,7 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 					}
 				} catch (InterruptedException e) {
 					Log.e(TAG, e.toString());
-				}finally{
+				} finally {
 					ib.clearAnimation();
 				}
 			}

@@ -65,11 +65,11 @@ public class RilascioNuovePassword extends Activity implements
 		this.backButtonVisible = backButtonVisible;
 		if (backButtonVisible){
 			ibBack.setVisibility(ImageButton.VISIBLE);
-			tvRilascioTitle.setVisibility(ImageButton.VISIBLE);
+			tvRilascioTitle.setVisibility(TextView.VISIBLE);
 		}
 		else{
 			ibBack.setVisibility(ImageButton.GONE);
-			tvRilascioTitle.setVisibility(ImageButton.GONE);
+			tvRilascioTitle.setVisibility(TextView.GONE);
 		}
 	}
 

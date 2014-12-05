@@ -1,8 +1,9 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/background_color1"
+    android:orientation="vertical"
     android:padding="25dp"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -10,179 +11,184 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".Login" >
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <ImageButton
+            android:id="@+id/ibHome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/home"
+            android:src="@drawable/goto_login" />
+
+        <TextView
+            android:id="@+id/tvLoginTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/imShowMenu"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="@string/loginText"
+            android:textColor="@color/colorOrange"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/imShowMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/showMenu"
+            android:src="@drawable/activity_menu" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tvLoginEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/emailText"
+        android:textColor="@color/colorOrange"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/etLoginEmail"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/mail48"
+        android:ems="10"
+        android:hint="@string/emailHint"
+        android:inputType="textEmailAddress"
+        android:textSize="18sp" >
+
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:id="@+id/tvLoginPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/passwdText"
+        android:textColor="@color/colorOrange"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/etLoginPasswd"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/user_password48"
+        android:ems="10"
+        android:hint="@string/passwdHint"
+        android:inputType="textPassword"
+        android:textSize="18sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical" >
 
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-
-            <ImageButton
-                android:id="@+id/ibHome"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:contentDescription="@string/home"
-                android:src="@drawable/goto_login" />
-
-            <TextView
-                android:id="@+id/tvLoginTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/imShowMenu"
-                android:layout_centerHorizontal="true"
-                android:gravity="center"
-                android:text="@string/loginText"
-                android:textColor="@color/colorOrange"
-                android:textSize="25sp"
-                android:textStyle="bold" />
-
-            <ImageButton
-                android:id="@+id/imShowMenu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:contentDescription="@string/showMenu"
-                android:src="@drawable/activity_menu" 
-                android:background="@android:color/transparent"/>
-        </RelativeLayout>
-
         <TextView
-            android:id="@+id/tvLoginEmail"
+            android:id="@+id/tvRilascioTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/emailText"
+            android:text="@string/ruoloScelto"
             android:textColor="@color/colorOrange"
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/etLoginEmail"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/mail48"
-            android:ems="10"
-            android:hint="@string/emailHint"
-            android:inputType="textEmailAddress"
-            android:textSize="18sp" >
-
-            <requestFocus />
-        </EditText>
-
         <TextView
-            android:id="@+id/tvLoginPassword"
+            android:id="@+id/etRuoloScelto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/passwdText"
-            android:textColor="@color/colorOrange"
+            android:ems="15"
+            android:gravity="left"
+            android:text="@string/ruoloText"
+            android:textColor="@android:color/background_light"
             android:textSize="18sp"
             android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/etLoginPasswd"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/user_password48"
-            android:ems="10"
-            android:hint="@string/passwdHint"
-            android:inputType="textPassword"
-            android:textSize="18sp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-
-            <TextView
-                android:id="@+id/tvRilascioTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/ruoloScelto"
-                android:textColor="@color/colorOrange"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/etRuoloScelto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ems="15"
-                android:gravity="left"
-                android:text="@string/ruoloText"
-                android:textColor="@android:color/background_light"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linearLayout1"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-
-            <ImageButton
-                android:id="@+id/bCambiaRuolo"
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:contentDescription="@string/ruoliUtentiDescription"
-                android:src="@drawable/ruoli_utenti"
-                android:text="@string/cambiaRuolo"
-                android:textColor="@color/colorBlue"
-                android:textStyle="bold" />
-
-            <ImageButton
-                android:id="@+id/ibFillFields"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:contentDescription="@string/fillFieldsDescription"
-                android:src="@drawable/fill" />
-
-            <ImageButton
-                android:id="@+id/login_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:contentDescription="@string/loginButtonDescription"
-                android:src="@drawable/exec"
-                android:text="@string/login_button"
-                android:textColor="@color/colorBlue"
-                android:textStyle="bold"/>
-        </LinearLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-
-            <ImageButton
-                android:id="@+id/ibGotoRegister"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:background="@android:color/transparent"
-                android:contentDescription="@string/gotoRegisterDescription"
-                android:src="@drawable/user_add96" />
-
-            <ImageButton
-                android:id="@+id/pulisci_campi"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:background="@android:color/transparent"
-                android:contentDescription="@string/wipeOutDescription"
-                android:src="@drawable/cestino128"
-                android:textColor="@color/colorBlue"
-                android:textStyle="bold" />
-
-        </RelativeLayout>
     </LinearLayout>
 
-</RelativeLayout>
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <ImageButton
+            android:id="@+id/bCambiaRuolo"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/ruoliUtentiDescription"
+            android:src="@drawable/ruoli_utenti"
+            android:text="@string/cambiaRuolo"
+            android:textColor="@color/colorBlue"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/ibFillFields"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/fillFieldsDescription"
+            android:src="@drawable/fill" />
+
+        <ImageButton
+            android:id="@+id/login_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/loginButtonDescription"
+            android:src="@drawable/exec"
+            android:text="@string/login_button"
+            android:textColor="@color/colorBlue"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <ImageButton
+            android:id="@+id/ibGotoRegister"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/gotoRegisterDescription"
+            android:src="@drawable/user_add96" />
+
+        <ImageButton
+            android:id="@+id/pulisci_campi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/wipeOutDescription"
+            android:src="@drawable/cestino128"
+            android:textColor="@color/colorBlue"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/ibForgotPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/ibGotoRegister"
+            android:layout_centerHorizontal="true"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/forgotPasswdDescription"
+            android:src="@drawable/forgot_password96"
+            android:visibility="invisible" />
+
+    </RelativeLayout>
+
+</LinearLayout>
