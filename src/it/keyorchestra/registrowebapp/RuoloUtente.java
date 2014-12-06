@@ -29,7 +29,7 @@ public class RuoloUtente extends PreferenceActivity {
 		SharedPreferences getPrefs = PreferenceManager
 				.getDefaultSharedPreferences(getBaseContext());
 
-		String ruoloScelto = getPrefs.getString("ruoloList", "Professore");
+		String ruoloScelto = getPrefs.getString("ruoloList", "Insegnante");
 
 		Toast.makeText(getApplicationContext(), "ruoloScelto = " + ruoloScelto,
 				Toast.LENGTH_LONG).show();
@@ -84,7 +84,7 @@ public class RuoloUtente extends PreferenceActivity {
 		Resources res = getResources();
 		if (ruoloScelto.equals("Amministratore")) {
 			pref.setIcon(res.getDrawable(R.drawable.admin));
-		} else if (ruoloScelto.equals("Professore")) {
+		} else if (ruoloScelto.equals("Insegnante")) {
 			pref.setIcon(res.getDrawable(R.drawable.professor));
 		} else if (ruoloScelto.equals("Segreteria")) {
 			pref.setIcon(res.getDrawable(R.drawable.secretary));

@@ -32,5 +32,33 @@
         android:text="@string/authorEmail" 
         android:gravity="center"
         android:textStyle="bold"/>
+
+      <ImageView
+          android:id="@+id/imageView1"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:src="@drawable/mysql_logo" />
+
+      <ImageView
+          android:id="@+id/imageView2"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:src="@drawable/postgresql_logo" />
+
+      <ImageView
+          android:id="@+id/imageView3"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:src="@drawable/graphview_logo" />
+
+      <ImageView
+          android:id="@+id/imageView4"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:src="@drawable/logo_sqlite" />
       
 </LinearLayout>

@@ -52,7 +52,7 @@ public class RuoliArrayAdapter extends ArrayAdapter<String> {
 					R.color.colorOrange));
 			textView.setBackgroundColor(_context.getResources().getColor(
 					R.color.colorBlack));
-			textView.setTextSize(15);
+			textView.setTextSize(12);
 			textView.setTag(s.getLong("id_ruolo"));
 			setIconForRoles(imageView, s.getString("ruolo"));
 		} catch (JSONException e) {
@@ -79,7 +79,7 @@ public class RuoliArrayAdapter extends ArrayAdapter<String> {
 					R.color.colorOrange));
 			textView.setBackgroundColor(_context.getResources().getColor(
 					R.color.colorBlack));
-			textView.setTextSize(15);
+			textView.setTextSize(12);
 			textView.setTag(s.getLong("id_ruolo"));
 			setIconForRoles(imageView, s.getString("ruolo"));
 		} catch (JSONException e) {

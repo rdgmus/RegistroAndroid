@@ -117,5 +117,12 @@
     <string name="forgotPasswdDescription">Hai dimenticato la Password?</string>
     <string name="requestConfirmed">Confermate</string>
     <string name="requestPending">In attesa</string>
+    <string name="graphTitle">Grafici</string>
+    <string name="graficiStatistici">Grafici per Statistiche Database</string>
+    <string name="noGraphMessage">Nessun Grafico Selezionato</string>
+    <string name="connMese">Conn./Mese</string>
+    <string name="connGiorno">Conn./Giorno</string>
+    <string name="lineChart">Line Chart</string>
+    <string name="barChart">Bar Chart</string>
 
 </resources>

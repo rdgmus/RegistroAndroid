@@ -38,6 +38,7 @@ import android.widget.Toast;
  */
 public class DatabaseOps implements DatabasesInterface {
 	SharedPreferences getPrefs;
+	// CREDENZIALI UTENTE DELL'APPLICAZIONE
 	Long id_utente;
 	String cognome;
 	String nome;
@@ -669,6 +670,31 @@ public class DatabaseOps implements DatabasesInterface {
 		}
 	}
 
+	public String getUserEmail(Context applicationContext, long selectedUser) {
+		String url = getUrl(applicationContext);
+		String retval = null;
+
+		Connection conn;
+		try {
+			DriverManager.setLoginTimeout(15);
+			conn = DriverManager.getConnection(url);
+			Statement st = conn.createStatement();
+			String sql = null;
+
+			sql = "SELECT email FROM utenti_scuola " + "WHERE  id_utente="
+					+ selectedUser;
+			ResultSet result = st.executeQuery(sql);
+			while (result.next()) {
+				retval = result.getString("email");
+			}
+			st.close();
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return retval;
+	}
+
 	public String getUserSurname(Context applicationContext, long selectedUser) {
 		// TODO Auto-generated method stub
 		String url = getUrl(applicationContext);
@@ -834,18 +860,18 @@ public class DatabaseOps implements DatabasesInterface {
 			Context applicationContext, String email,
 			String sendRequestChangePassword, String ip) {
 		// TODO Auto-generated method stub
-		long id_utente = getIdOfUserWithEmail(applicationContext,email);
+		long id_utente = getIdOfUserWithEmail(applicationContext, email);
 		String cognome = getUserSurname(applicationContext, id_utente);
 		String nome = getUserName(applicationContext, id_utente);
-		
+
 		NewPasswordRequestState result = NewPasswordRequestState.NONE;
 		try {
-			result = new MySqlAndroid()
-					.SendRequestChangePassword(applicationContext, "http://" + ip
-							+ "/" + sendRequestChangePassword
-							+ "?cognome="+URLEncoder.encode(cognome, "UTF-8")
-							+"&nome="+URLEncoder.encode(nome, "UTF-8")
-							+"&email="+URLEncoder.encode(email, "UTF-8"));
+			result = new MySqlAndroid().SendRequestChangePassword(
+					applicationContext, "http://" + ip + "/"
+							+ sendRequestChangePassword + "?cognome="
+							+ URLEncoder.encode(cognome, "UTF-8") + "&nome="
+							+ URLEncoder.encode(nome, "UTF-8") + "&email="
+							+ URLEncoder.encode(email, "UTF-8"));
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -878,5 +904,37 @@ public class DatabaseOps implements DatabasesInterface {
 			e.printStackTrace();
 		}
 		return retval;
+	}
+
+	public String getUserPasswd(Context applicationContext, long selectedUser) {
+		// TODO Auto-generated method stub
+		String url = getUrl(applicationContext);
+		String retval = null;
+
+		Connection conn;
+		try {
+			DriverManager.setLoginTimeout(15);
+			conn = DriverManager.getConnection(url);
+			Statement st = conn.createStatement();
+			String sql = null;
+
+			sql = "SELECT password FROM utenti_scuola " + "WHERE  id_utente="
+					+ selectedUser;
+			ResultSet result = st.executeQuery(sql);
+			while (result.next()) {
+				retval = result.getString("password");
+			}
+			st.close();
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return retval;
+	}
+
+	public void SaveNewPassword(long id_utente, String email,
+			String oldPassword, String passwordToEncode) {
+		// TODO Auto-generated method stub
+		
 	}
 }

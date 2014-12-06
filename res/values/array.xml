@@ -11,13 +11,13 @@
     </string-array>
     <string-array name="ruoloList">
         <item>Amministratore</item>
-        <item>Professore</item>
+        <item>Insegnante</item>
         <item>Ata</item>
         <item>Segreteria</item>
     </string-array>
     <string-array name="ruoloListValues">
         <item>Amministratore</item>
-        <item>Professore</item>
+        <item>Insegnante</item>
         <item>Ata</item>
         <item>Segreteria</item>
     </string-array>

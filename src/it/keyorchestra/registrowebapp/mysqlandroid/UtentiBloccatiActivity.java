@@ -196,15 +196,8 @@ public class UtentiBloccatiActivity extends Activity implements
 
 			}
 
-			// headerTable = addRowToTableAsJson(getApplicationContext(),
-			// headerTable, longestRow, convertPixelsToDp(1), -1);
 		} catch (JSONException e) {
-
 			Log.e("log_tag", "Error parsing data" + e.toString());
-
-			Toast.makeText(getApplicationContext(), "JsonArray fail",
-					Toast.LENGTH_SHORT).show();
-
 		}
 	}
 

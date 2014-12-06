@@ -32,6 +32,7 @@ public class UsersDataManager extends TabActivity implements
 		ActivitiesCommonFunctions {
 
 	ImageButton ibBack;
+	TextView tvRilascioTitle;
 	private SharedPreferences getPrefs;
 	/*
 	 * (non-Javadoc)
@@ -66,8 +67,11 @@ public class UsersDataManager extends TabActivity implements
 				finish();
 			}
 		});
-//		// TAB
-//		// create the TabHost that will contain the Tabs
+		
+		tvRilascioTitle = (TextView)findViewById(R.id.tvRilascioTitle);
+		tvRilascioTitle.setText("Gestione Utenti");
+		// TAB
+		// create the TabHost that will contain the Tabs
 		TabHost tabHost = (TabHost) findViewById(android.R.id.tabhost);
 		TabSpec tab1 = tabHost.newTabSpec("First Tab");
 		TabSpec tab2 = tabHost.newTabSpec("Second Tab");

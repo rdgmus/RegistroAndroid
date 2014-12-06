@@ -332,7 +332,7 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 
 		etRuoloScelto = (TextView) findViewById(R.id.etRuoloScelto);
 
-		String ruoloScelto = getPrefs.getString("ruoloList", "Professore");
+		String ruoloScelto = getPrefs.getString("ruoloList", "Insegnante");
 
 		etRuoloScelto.setText(ruoloScelto);
 
@@ -404,7 +404,7 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 		Resources res = getResources();
 		if (ruoloScelto.equals("Amministratore")) {
 			bCambiaRuolo.setImageDrawable(res.getDrawable(R.drawable.admin));
-		} else if (ruoloScelto.equals("Professore")) {
+		} else if (ruoloScelto.equals("Insegnante")) {
 			bCambiaRuolo
 					.setImageDrawable(res.getDrawable(R.drawable.professor));
 		} else if (ruoloScelto.equals("Segreteria")) {

@@ -30,6 +30,7 @@ public class UtentiArrayAdapter extends ArrayAdapter<String> {
 		this._objects = objects;
 	}
 
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -53,7 +54,7 @@ public class UtentiArrayAdapter extends ArrayAdapter<String> {
 					R.color.colorOrange));
 			textView.setBackgroundColor(_context.getResources().getColor(
 					R.color.colorBlack));
-			textView.setTextSize(15);
+			textView.setTextSize(12);
 			textView.setTag(s.getLong("id_utente"));
 
 			setIconIsAdmin(imageView, s.getLong("user_is_admin"));
@@ -81,7 +82,7 @@ public class UtentiArrayAdapter extends ArrayAdapter<String> {
 					R.color.colorOrange));
 			textView.setBackgroundColor(_context.getResources().getColor(
 					R.color.colorBlack));
-			textView.setTextSize(15);
+			textView.setTextSize(12);
 			textView.setTag(s.getLong("id_utente"));
 			setIconIsAdmin(imageView, s.getLong("user_is_admin"));
 		} catch (JSONException e) {

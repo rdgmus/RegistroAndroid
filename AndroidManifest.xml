@@ -88,11 +88,31 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="it.keyorchestra.registrowebapp.mysqlandroid.GraficiActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="landscape" >
+            <intent-filter>
+                <action android:name="android.intent.action.GRAFICI_ACTIVITY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity android:name="it.keyorchestra.registrowebapp.mysqlandroid.Tab1Activity" >
         </activity>
         <activity android:name="it.keyorchestra.registrowebapp.mysqlandroid.Tab2Activity" >
         </activity>
         <activity android:name="it.keyorchestra.registrowebapp.mysqlandroid.Tab3Activity" >
+        </activity>
+        <activity
+            android:name="it.keyorchestra.registrowebapp.GraphAndStatsManager"
+            android:label="@string/app_name"
+            android:screenOrientation="landscape" >
+            <intent-filter>
+                <action android:name="android.intent.action.GRAPH_STATS_MANAGER" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
         <activity
             android:name="it.keyorchestra.registrowebapp.UsersDataManager"

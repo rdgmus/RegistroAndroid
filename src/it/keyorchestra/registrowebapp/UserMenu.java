@@ -3,7 +3,9 @@ package it.keyorchestra.registrowebapp;
 import it.keyorchestra.registrowebapp.dbMatthed.DatabaseOps;
 import it.keyorchestra.registrowebapp.interfaces.ActivitiesCommonFunctions;
 import it.keyorchestra.registrowebapp.mysqlandroid.RilascioNuovePassword;
+
 import java.util.Calendar;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
@@ -25,6 +27,7 @@ import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,8 +37,8 @@ public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 	private DatabaseOps databaseOps;
 	TextView tvUserData, tvNow;
 	ImageButton ibLogout, ibRuoloUtente, ibIsAdmin, ibEmail, ibChangePassword,
-			ibDatiUtenti, imShowMenu;
-
+			ibDatiUtenti,ibGrafici, imShowMenu;
+	LinearLayout llSuperUserOptions;
 	private String ruoloScelto;
 
 	@Override
@@ -54,6 +57,9 @@ public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 		String nome = databaseOps.getNome();
 
 		if (id_utente == -1) {
+			Toast.makeText(getApplicationContext(),
+					"ACCESSO PROIBITO A UTENTE SCONOSCIUTO!", Toast.LENGTH_LONG)
+					.show();
 			UserMenu.this.finish();
 		}
 
@@ -61,9 +67,12 @@ public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 				getApplicationContext(),
 				"Menù dell'Utente: [" + id_utente + "] " + cognome + " " + nome,
 				Toast.LENGTH_SHORT).show();
+		// SUPER OPTIONS
+		llSuperUserOptions = (LinearLayout) findViewById(R.id.llSuperUserOptions);
 		// RUOLO SCELTO
 		ibRuoloUtente = (ImageButton) findViewById(R.id.ibRuoloUtente);
 		ruoloScelto = getPrefs.getString("ruoloList", "1");
+		// SETTA L'ICONA IN BASE AL RUOLO
 		setIconRuoloScelto(ibRuoloUtente, ruoloScelto);
 		registerToolTipFor(ibRuoloUtente);
 		ibRuoloUtente.setOnClickListener(new OnClickListener() {
@@ -81,8 +90,10 @@ public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 
 		// IS ADMIN
 		ibIsAdmin = (ImageButton) findViewById(R.id.ibIsAdmin);
-		Long user_is_admin = getPrefs.getLong("user_is_admin", -1);
-		setIconIsAdmin(ibIsAdmin, user_is_admin);
+		 long user_is_admin = getPrefs.getLong("user_is_admin", -1);
+		setIconIsAdmin(ibIsAdmin, (int) user_is_admin);
+		// ABILITA LE OPZIONI PER SUPERUSER SE user_is_admin
+		abilitaSuperUserOptions((int) user_is_admin);
 		registerToolTipFor(ibIsAdmin);
 
 		// DATI UTENTE SULLO SCHERMO
@@ -100,7 +111,7 @@ public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 				// TODO Auto-generated method stub
 				startAnimation((ImageButton) v, 2000);
 
-				 LooperThread thread = new LooperThread() {
+				LooperThread thread = new LooperThread() {
 					@Override
 					public void run() {
 						try {
@@ -119,10 +130,9 @@ public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 					}
 				};
 
-				
 				// SBLOCCA UTENTE
-				databaseOps.UnlockUser(getApplicationContext(),
-						null, id_utente);
+				databaseOps
+						.UnlockUser(getApplicationContext(), null, id_utente);
 				// CANCELLA UTENTE DALLE PREFERENZE
 				databaseOps.DeleteUserFromPreferences(id_utente);
 				// REGISTRA LOGOUT EVENT
@@ -159,15 +169,13 @@ public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				startAnimation((ImageButton) v, 2000);
-				//ABILITA IL BOTTONE DI RITORNO
+				// ABILITA IL BOTTONE DI RITORNO
 				SharedPreferences.Editor editor = getPrefs.edit();
 				editor.putBoolean("backButtonForPasswordChange", true);
 				editor.apply();
-				
-				
-				Toast.makeText(getApplicationContext(),
-						"Cambio Password", Toast.LENGTH_SHORT)
-						.show();
+
+				Toast.makeText(getApplicationContext(), "Cambio Password",
+						Toast.LENGTH_SHORT).show();
 				Intent ourStartingPoint = new Intent(UserMenu.this,
 						RilascioNuovePassword.class);
 				startActivity(ourStartingPoint);
@@ -193,6 +201,23 @@ public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 			}
 		});
 
+		ibGrafici=(ImageButton)findViewById(R.id.ibGrafici);
+		registerToolTipFor(ibGrafici);
+		ibGrafici.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				startAnimation((ImageButton) v, 2000);
+				Toast.makeText(getApplicationContext(), "Grafici e Statistiche",
+						Toast.LENGTH_SHORT).show();
+				Intent ourStartingPoint = new Intent(UserMenu.this,
+						GraphAndStatsManager.class);
+				startActivity(ourStartingPoint);
+				UserMenu.this.finish();				
+			}
+		});
+		
 		tvNow = (TextView) findViewById(R.id.tvNow);
 		setCurrentDate();
 
@@ -215,9 +240,20 @@ public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 		});
 	}
 
+	private void abilitaSuperUserOptions(int user_is_admin) {
+		// TODO Auto-generated method stub
+		switch (user_is_admin) {
+		case 1:
+			llSuperUserOptions.setVisibility(LinearLayout.VISIBLE);
+			break;
+		default:
+			llSuperUserOptions.setVisibility(LinearLayout.INVISIBLE);
+			break;
+		}
+	}
+
 	@Override
-	public void startAnimation(final View ib,
-			final long durationInMilliseconds) {
+	public void startAnimation(final View ib, final long durationInMilliseconds) {
 		// TODO Auto-generated method stub
 		// BUTTONS ANIMATION
 		final String TAG = "ImageButton Animation";
@@ -257,7 +293,7 @@ public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 		t.start();
 	}
 
-	private void setIconIsAdmin(ImageButton ibIsAdmin, Long user_is_admin) {
+	private void setIconIsAdmin(ImageButton ibIsAdmin, int user_is_admin) {
 		// TODO Auto-generated method stub
 		Resources res = getResources();
 		if (user_is_admin == 1) {
@@ -269,20 +305,21 @@ public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 
 	}
 
-	private void setIconRuoloScelto(ImageButton bCambiaRuolo, String ruoloScelto) {
+	private void setIconRuoloScelto(ImageButton ibRuoloUtente,
+			String ruoloScelto) {
 		// TODO Auto-generated method stub
 		// SET ICON admin, professor, secretary, ata
 		Resources res = getResources();
 		if (ruoloScelto.equals("Amministratore")) {
-			bCambiaRuolo.setImageDrawable(res.getDrawable(R.drawable.admin));
-		} else if (ruoloScelto.equals("Professore")) {
-			bCambiaRuolo
-					.setImageDrawable(res.getDrawable(R.drawable.professor));
+			ibRuoloUtente.setImageDrawable(res.getDrawable(R.drawable.admin));
+		} else if (ruoloScelto.equals("Insegnante")) {
+			ibRuoloUtente.setImageDrawable(res
+					.getDrawable(R.drawable.professor));
 		} else if (ruoloScelto.equals("Segreteria")) {
-			bCambiaRuolo
-					.setImageDrawable(res.getDrawable(R.drawable.secretary));
+			ibRuoloUtente.setImageDrawable(res
+					.getDrawable(R.drawable.secretary));
 		} else if (ruoloScelto.equals("Ata")) {
-			bCambiaRuolo.setImageDrawable(res.getDrawable(R.drawable.ata));
+			ibRuoloUtente.setImageDrawable(res.getDrawable(R.drawable.ata));
 		}
 	}
 

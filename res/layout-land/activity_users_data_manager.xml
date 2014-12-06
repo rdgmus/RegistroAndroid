@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:contentDescription="@string/home"
-            android:src="@drawable/wm_back48" />
+            android:src="@drawable/wm_back64" />
 
         <TextView
             android:id="@+id/tvRilascioTitle"
