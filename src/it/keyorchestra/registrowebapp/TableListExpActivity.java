@@ -80,7 +80,7 @@ public class TableListExpActivity extends Activity implements ActivitiesCommonFu
 		StrictMode.setThreadPolicy(policy);
 
 		// get the listview
-		expListView = (ExpandableListView) findViewById(R.id.expandableListView1);
+		expListView = (ExpandableListView) findViewById(R.id.expListViewPeriods);
 
 		// preparing list data
 		prepareListData();

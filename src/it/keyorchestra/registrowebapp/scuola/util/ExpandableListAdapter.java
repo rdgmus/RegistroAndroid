@@ -45,6 +45,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 		// this._listTableChild=listTableChild;
 	}
 
+
+
 	@Override
 	public Object getChild(int groupPosition, int childPosititon) {
 		return this._listDataChild.get(this._listDataHeader.get(groupPosition))
@@ -96,7 +98,9 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 				}else
 					childImg.setImageResource(R.drawable.database_list48);
 
-			} else
+			}else if(headerTitle.equals("Anni") || headerTitle.equals("Mesi") ){
+				childImg.setImageResource(R.drawable.calendar48);
+			}else
 				childImg.setImageResource(R.drawable.database_list48);
 
 			txtListChild.setTypeface(null, Typeface.BOLD);

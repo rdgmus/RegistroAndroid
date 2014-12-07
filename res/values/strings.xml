@@ -119,7 +119,7 @@
     <string name="requestPending">In attesa</string>
     <string name="graphTitle">Grafici</string>
     <string name="graficiStatistici">Grafici per Statistiche Database</string>
-    <string name="noGraphMessage">Nessun Grafico Selezionato</string>
+    <string name="noGraphMessage">Nessun dato nel periodo Selezionato</string>
     <string name="connMese">Conn./Mese</string>
     <string name="connGiorno">Conn./Giorno</string>
     <string name="lineChart">Line Chart</string>

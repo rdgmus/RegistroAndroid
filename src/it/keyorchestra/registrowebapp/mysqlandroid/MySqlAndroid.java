@@ -202,4 +202,28 @@ public class MySqlAndroid {
 
 		return jArray;
 	}
+
+	public JSONArray getMontlyConnectionAsJSON(Context applicationContext,
+			String uri) {
+		// TODO Auto-generated method stub
+		InputStream is = null;
+		is = getInputStreamFromUri(applicationContext, uri);
+		if (is == null) {
+			return null;
+		}
+		String result = null;
+		result = getResultFromInputStream(applicationContext, is);
+
+		JSONArray jArray = null;
+
+		try {
+			jArray = new JSONArray(result);
+		} catch (JSONException e1) {
+			e1.printStackTrace();
+		} catch (ParseException e1) {
+			e1.printStackTrace();
+		}
+
+		return jArray;
+	}
 }
