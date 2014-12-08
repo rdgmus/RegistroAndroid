@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <string-array name="databaseList">
         <item>PostgreSQL</item>
@@ -47,4 +47,13 @@
         <item>NUMERIC</item>
         <item>DATETIME</item>
     </string-array>
+    <string-array android:id="@+id/graficiList" name="graficiList" android:layout_width="wrap_content" android:layout_height="wrap_content">
+        <item android:id="@+id/loginSuccessMensili" android:layout_width="wrap_content" android:layout_height="wrap_content">Login/Mese</item>
+        <item android:id="@+id/loginSuccessAnnuali" android:layout_width="wrap_content" android:layout_height="wrap_content">Login/Anno</item>
+    </string-array>
+    <string-array android:layout_width="wrap_content" android:id="@+id/tipoGraficiList" android:layout_height="wrap_content" name="tipoGraficiList">
+        <item android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/lineChart">Line Chart</item>
+        <item android:id="@+id/barChart" android:layout_width="wrap_content" android:layout_height="wrap_content">Bar Chart</item>
+    </string-array>
+
 </resources>

@@ -131,5 +131,8 @@
     <string name="phpmyadmin_description">phpMyAdmin</string>
     <string name="phpmailer_description">PHPMAILER</string>
     <string name="php_description">PHP</string>
+    <string name="spinnerViewPeriodTitle">Periodi LOG</string>
+    <string name="spinnerSceltaGraficoTitle">Scelta Dati</string>
+    <string name="spinnerTipiGraficoTitle">Tipo Grafico</string>
 
 </resources>

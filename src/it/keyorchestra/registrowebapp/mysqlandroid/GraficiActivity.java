@@ -3,7 +3,12 @@ package it.keyorchestra.registrowebapp.mysqlandroid;
 import it.keyorchestra.registrowebapp.R;
 import it.keyorchestra.registrowebapp.interfaces.ActivitiesCommonFunctions;
 import it.keyorchestra.registrowebapp.scuola.util.ExpandableListAdapter;
+import it.keyorchestra.registrowebapp.scuola.util.GraficiArrayAdapter;
+import it.keyorchestra.registrowebapp.scuola.util.PeriodiLogAdapter;
+import it.keyorchestra.registrowebapp.scuola.util.RuoliArrayAdapter;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +23,9 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ExpandableListView;
@@ -25,6 +33,7 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -37,17 +46,15 @@ import com.jjoe64.graphview.LineGraphView;
 public class GraficiActivity extends Activity implements
 		ActivitiesCommonFunctions {
 	private SharedPreferences getPrefs;
+	private ArrayList<String> periodiArray;
+	private JSONArray jArrayPeriodi;
 
 	LinearLayout llConnessioni;
 	TextView tvNoGraph;
-	ToggleButton tbGraphType;
-	RadioGroup rgGraphChoose;
+
 	private JSONArray jArray;
-	ExpandableListView expListViewPeriods;
-	ExpandableListAdapter listAdapter;
-	List<String> listDataHeader;
-	HashMap<String, List<String>> listDataChild;
-	private int anno, mese;
+	private int anno = 2014, mese = 11;
+	Spinner spinnerSceltaGrafico, spinnerTipoGrafico, spinnerViewPeriod;
 
 	enum GraphTypes {
 		LINE, BAR
@@ -100,73 +107,178 @@ public class GraficiActivity extends Activity implements
 		llConnessioni = (LinearLayout) findViewById(R.id.llConnessioni);
 		tvNoGraph = (TextView) llConnessioni.findViewById(R.id.tvNoGraph);
 
-		expListViewPeriods = (ExpandableListView) findViewById(R.id.expListViewPeriods);
-		prepareListData();
-		listAdapter = new ExpandableListAdapter(this, listDataHeader,
-				listDataChild, "TableListExpActivity");
-
-		// setting list adapter
-		expListViewPeriods.setAdapter(listAdapter);
-		expListViewPeriods.setOnChildClickListener(new OnChildClickListener() {
-
-			@Override
-			public boolean onChildClick(ExpandableListView parent, View v,
-					int groupPosition, int childPosition, long id) {
-				// TODO Auto-generated method stub
-				switch (groupPosition) {
-				case 0:
-					setAnno(2014);
-					Toast.makeText(getBaseContext(), "Anno: " + getAnno(),
-							Toast.LENGTH_SHORT).show();
-					break;
-				case 1:
-					setMese(childPosition + 1);
-					Toast.makeText(
-							getBaseContext(),
-							"Mese: "
-									+ getMeseAsString(), Toast.LENGTH_SHORT)
-							.show();
-					break;
-
-				default:
-					break;
-				}
-				parent.collapseGroup(groupPosition);
-				drawGraph(tbGraphType.isChecked() ? GraphTypes.BAR
-						: GraphTypes.LINE);
-				return true;
-			}
-		});
-
-		rgGraphChoose = (RadioGroup) findViewById(R.id.rgGraphChoose);
-		rgGraphChoose.check(R.id.radioDailyConnections);
-		rgGraphChoose
-				.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+		// FILTRO PERIODO LOG
+		spinnerViewPeriod = (Spinner) findViewById(R.id.spinnerViewPeriod);
+		CaricaPeriodiLog();
+		PeriodiLogAdapter periodiLogAdapter = new PeriodiLogAdapter(
+				getApplicationContext(), jArrayPeriodi, periodiArray);
+		periodiLogAdapter
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinnerViewPeriod.setAdapter(periodiLogAdapter);
+		spinnerViewPeriod
+				.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 					@Override
-					public void onCheckedChanged(RadioGroup group, int checkedId) {
+					public void onItemSelected(AdapterView<?> parent,
+							View view, int position, long id) {
 						// TODO Auto-generated method stub
-						drawGraph(tbGraphType.isChecked() ? GraphTypes.BAR
-								: GraphTypes.LINE);
+						Toast.makeText(getBaseContext(),
+								"" + parent.getItemAtPosition(position),
+								Toast.LENGTH_SHORT).show();
+						TextView myTextView = (TextView) view
+								.findViewById(R.id.tvMyText);
+						String[] tag = (String[]) myTextView.getTag();
+						setAnno(Integer.valueOf(tag[0]));
+						setMese(Integer.valueOf(tag[1]));
+
+						drawGraph(
+								spinnerTipoGrafico.getSelectedItemPosition() == 0 ? GraphTypes.LINE
+										: GraphTypes.BAR, spinnerSceltaGrafico
+										.getSelectedItemPosition());
+					}
+
+					@Override
+					public void onNothingSelected(AdapterView<?> parent) {
+						// TODO Auto-generated method stub
+
 					}
 				});
-		tbGraphType = (ToggleButton) findViewById(R.id.tbGraphType);
-		tbGraphType.setChecked(false);
-		drawGraph(GraphTypes.LINE);
-		tbGraphType.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView,
-					boolean isChecked) {
-				// TODO Auto-generated method stub
-				if (isChecked) {
-					drawGraph(GraphTypes.BAR);
-				} else {
-					drawGraph(GraphTypes.LINE);
+		// TIPO GRAFICO
+		spinnerTipoGrafico = (Spinner) findViewById(R.id.spinnerTipoGrafico);
+		String[] tipoGraficiList;
+		tipoGraficiList = getResources()
+				.getStringArray(R.array.tipoGraficiList);
+		GraficiArrayAdapter tipoGraficiListAdapter = new GraficiArrayAdapter(
+				getBaseContext(), tipoGraficiList);
+		tipoGraficiListAdapter
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+		// Apply the adapter to the spinner
+		spinnerTipoGrafico.setAdapter(tipoGraficiListAdapter);
+		spinnerTipoGrafico
+				.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+					@Override
+					public void onItemSelected(AdapterView<?> parent,
+							View view, int position, long id) {
+						// TODO Auto-generated method stub
+						Toast.makeText(getBaseContext(),
+								"" + parent.getItemAtPosition(position),
+								Toast.LENGTH_SHORT).show();
+						switch (position) {
+						case 0:
+							drawGraph(GraphTypes.LINE, spinnerSceltaGrafico
+									.getSelectedItemPosition());
+							break;
+						case 1:
+							drawGraph(GraphTypes.BAR, spinnerSceltaGrafico
+									.getSelectedItemPosition());
+							break;
+						}
+
+					}
+
+					@Override
+					public void onNothingSelected(AdapterView<?> parent) {
+						// TODO Auto-generated method stub
+
+					}
+				});
+
+		// SCELTA DATI GRAFICO
+		spinnerSceltaGrafico = (Spinner) findViewById(R.id.spinnerSceltaGrafico);
+		// CaricaArrayRuoli();
+		String[] graficiArrayList;
+		graficiArrayList = getResources().getStringArray(R.array.graficiList);
+		GraficiArrayAdapter graficiArrayAdapter = new GraficiArrayAdapter(
+				getBaseContext(), graficiArrayList);
+		//
+		graficiArrayAdapter
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+		// Apply the adapter to the spinner
+		spinnerSceltaGrafico.setAdapter(graficiArrayAdapter);
+
+		spinnerSceltaGrafico
+				.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+					@Override
+					public void onItemSelected(AdapterView<?> parent,
+							View view, int position, long id) {
+						// TODO Auto-generated method stub
+						Toast.makeText(getBaseContext(),
+								"" + parent.getItemAtPosition(position),
+								Toast.LENGTH_SHORT).show();
+						switch (position) {
+						case 0:
+							drawGraph(
+									spinnerTipoGrafico
+											.getSelectedItemPosition() == 0 ? GraphTypes.LINE
+											: GraphTypes.BAR, position);
+							break;
+						case 1:
+							drawGraph(
+									spinnerTipoGrafico
+											.getSelectedItemPosition() == 0 ? GraphTypes.LINE
+											: GraphTypes.BAR, position);
+							break;
+						}
+					}
+
+					@Override
+					public void onNothingSelected(AdapterView<?> parent) {
+						// TODO Auto-generated method stub
+
+					}
+				});
+
+		drawGraph(
+				spinnerTipoGrafico.getSelectedItemPosition() == 0 ? GraphTypes.LINE
+						: GraphTypes.BAR,
+				spinnerSceltaGrafico.getSelectedItemPosition());
+
+	}
+
+	private void CaricaPeriodiLog() {
+		// TODO Auto-generated method stub
+		periodiArray = new ArrayList<String>();
+		String retrieveTableData = getPrefs
+				.getString("retrieveTableData", null);
+
+		String ip = getDatabaseIpFromPreferences();
+
+		// jsonRuoliAmmessi(retrieveTableData, ip);
+
+		String query = "SELECT DISTINCT year(when_registered) as anno, month(when_registered) as mese "
+				+ " FROM scuola.utenti_logger WHERE msg_type = 'LOGIN_SUCCESS'"
+				+ " ORDER BY when_registered DESC";
+
+		try {
+			jArrayPeriodi = new MySqlAndroid().retrieveTableData(
+					getApplicationContext(),
+					"http://" + ip + "/" + retrieveTableData + "?sql="
+							+ URLEncoder.encode(query, "UTF-8"), null);
+
+			for (int i = 0; i < jArrayPeriodi.length(); i++) {
+				JSONObject json_data;
+				try {
+					json_data = jArrayPeriodi.getJSONObject(i);
+					String anno = json_data.getString("anno");
+					String mese = json_data.getString("mese");
+
+					periodiArray.add("" + anno + "/" + mese);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-			}
-		});
 
+			}
+
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	protected JSONArray getMontlyConnectionAsJSON(int anno) {
@@ -182,10 +294,10 @@ public class GraficiActivity extends Activity implements
 		return jArray;
 	}
 
-	protected void drawGraph(GraphTypes graphType) {
+	protected void drawGraph(GraphTypes graphType, int position) {
 		// TODO Auto-generated method stub
 
-		loadData();
+		loadData(position);
 
 		GraphViewData[] data = new GraphViewData[jArray.length()];
 		String[] dataArray = new String[jArray.length()];
@@ -201,12 +313,12 @@ public class GraficiActivity extends Activity implements
 				String anno = json_data.getString("anno");
 
 				String sTimestamp = null;
-				switch (rgGraphChoose.getCheckedRadioButtonId()) {
-				case R.id.radioDailyConnections:
+				switch (position) {
+				case 0:
 					giorno = json_data.getString("giorno");
 					sTimestamp = giorno + "/" + mese;
 					break;
-				case R.id.radioMontlyConnections:
+				case 1:
 					sTimestamp = mese + "/" + anno;
 					break;
 				}
@@ -222,12 +334,12 @@ public class GraficiActivity extends Activity implements
 
 		}
 
-		switch (rgGraphChoose.getCheckedRadioButtonId()) {
-		case R.id.radioDailyConnections:
-			graphTitle = "Connessioni Giornaliere:" + getMeseAsString() + "/"
+		switch (spinnerSceltaGrafico.getSelectedItemPosition()) {
+		case 0:
+			graphTitle = "Connessioni Giornaliere:" + getMese() + "/"
 					+ getAnno();
 			break;
-		case R.id.radioMontlyConnections:
+		case 1:
 			graphTitle = "Connessioni Mensili:" + getAnno();
 			break;
 		}
@@ -272,26 +384,26 @@ public class GraficiActivity extends Activity implements
 		llConnessioni.addView(graphView);
 	}
 
-
-	private String getMeseAsString() {
-		// TODO Auto-generated method stub
-		List<String> mesi = listDataChild.get("Mesi");
-		return mesi.get(getMese()-1);
-	}
-
 	private void showNoGraphMessage() {
 		// TODO Auto-generated method stub
 		llConnessioni.removeAllViews();
 		llConnessioni.addView(tvNoGraph);
 	}
 
-	private void loadData() {
+	/**
+	 * Carica i dati per iul grafico selezionato nella posizione all'interno
+	 * dello spinner 'spinnerSceltaGrafico'
+	 * 
+	 * @param position
+	 */
+	private void loadData(int position) {
 		// TODO Auto-generated method stub
-		switch (rgGraphChoose.getCheckedRadioButtonId()) {
-		case R.id.radioDailyConnections:
+
+		switch (position) {
+		case 0:// GRAFICO LOGIN_SUCCESS NEL MESE DELL'ANNO GIORNO PER GIORNO
 			jArray = getDailyConnectionAsJSON(mese, anno);
 			break;
-		case R.id.radioMontlyConnections:
+		case 1:// GRAFICO LOGIN_SUCCESS NELL'ANNO MESE PER MESE
 			jArray = getMontlyConnectionAsJSON(anno);
 			break;
 		default:
@@ -351,40 +463,6 @@ public class GraficiActivity extends Activity implements
 	public void startAnimation(View ib, long durationInMilliseconds) {
 		// TODO Auto-generated method stub
 
-	}
-
-	/*
-	 * Preparing the list data
-	 */
-	private void prepareListData() {
-		listDataHeader = new ArrayList<String>();
-		listDataChild = new HashMap<String, List<String>>();
-
-		// Adding header data
-
-		listDataHeader.add("Anni");
-		listDataHeader.add("Mesi");
-
-		// Adding child data
-		ArrayList<String> anniList = new ArrayList<String>();
-		ArrayList<String> mesiList = new ArrayList<String>();
-		anniList.add("2014");
-		mesiList.add("Gennaio");
-		mesiList.add("Febbraio");
-		mesiList.add("Marzo");
-		mesiList.add("Aprile");
-		mesiList.add("Maggio");
-		mesiList.add("Giugno");
-		mesiList.add("Luglio");
-		mesiList.add("Agosto");
-		mesiList.add("Settembre");
-		mesiList.add("Ottobre");
-		mesiList.add("Novembre");
-		mesiList.add("Dicembre");
-
-		listDataChild.put(listDataHeader.get(0), anniList); // Header, Child
-															// data
-		listDataChild.put(listDataHeader.get(1), mesiList);
 	}
 
 }
