@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <EditTextPreference
         android:key="name"
@@ -9,7 +9,7 @@
     <CheckBoxPreference
         android:defaultValue="true"
         android:key="music"
-        android:summary="Splash sound on/off"
+        android:summary="Splash sound on/off - Musica di Roberto Della Grotta"
         android:title="Music" />
 
     <PreferenceCategory
@@ -17,57 +17,104 @@
         android:key="phpmysql"
         android:selectable="true"
         android:summary="Server Side Scripting"
-        android:title="Interfaccia Php-MySQL" >
+        android:title="Interfaccia Php-MySQL per RegistroAndroid" >
         <EditTextPreference
+            android:dialogIcon="@drawable/php64"
+            android:icon="@drawable/php64"            
             android:defaultValue="PhpMySqlAndroid/mySqlAndroidTest.php"
             android:key="mysqltest"
             android:summary="Posizione file MySQL-Test nel server Apache"
             android:title="MySQL Test" />
         <EditTextPreference
+            android:dialogIcon="@drawable/php64"
+            android:icon="@drawable/php64"            
             android:defaultValue="PhpMySqlAndroid/phpEncoder.php"
             android:key="phpencoder"
             android:summary="Posizione Php-Encoder nel server Apache"
             android:title="Php Encoder" />
         <EditTextPreference
+            android:dialogIcon="@drawable/php64"
+            android:icon="@drawable/php64"            
             android:defaultValue="PhpMySqlAndroid/retrieveTableData.php"
             android:key="retrieveTableData"
-            android:summary="Permette l'invio di SQL al database"
+            android:summary="Permette l&apos;invio di SQL al database"
             android:title="Caricatore dati in Tabella" />
         <EditTextPreference
+            android:dialogIcon="@drawable/php64"
+            android:icon="@drawable/php64"            
             android:defaultValue="PhpMySqlAndroid/GraphViewInterface.php"
             android:key="GraphViewInterface"
             android:summary="Interfaccia per la creazione dei Grafici"
             android:title="GraphViewInterface" />
         <EditTextPreference
+            android:dialogIcon="@drawable/php64"
+            android:icon="@drawable/php64"            
             android:defaultValue="PhpMySqlAndroid/sendRequestChangePassword.php"
             android:key="sendRequestChangePassword"
             android:summary="Interfaccia per la procedura richiesta Nuova Password"
             android:title="Richieste Nuove Password" />
+        <EditTextPreference
+            android:dialogIcon="@drawable/php64"
+            android:icon="@drawable/php64"            
+            android:defaultValue="PhpMySqlAndroid/LogEventsRegisterInterface.php"
+            android:key="LogEventsRegisterInterface"
+            android:summary="Interfaccia per la registrazione di Messaggi nel Log"
+            android:title="Messaggi nel Log" />
         </PreferenceCategory>
     <PreferenceCategory
         android:enabled="true"
         android:key="regAdmin"
         android:selectable="true"
-        android:summary="Parametri dell&apos;amministratore"
+        android:summary="Credenziali ADMIN"
         android:title="Amministratore del Registro Scolastico" >
         <EditTextPreference
             android:defaultValue="keyorchestra2014@gmail.com"
+            android:dialogIcon="@drawable/administrator64"
+            android:icon="@drawable/administrator64"
             android:inputType="textEmailAddress"
             android:key="adminEmail"
             android:title="Email Admin" />
         <EditTextPreference
+            android:dialogIcon="@drawable/administrator64"
+            android:icon="@drawable/administrator64"
             android:defaultValue="admin"
             android:inputType="textPassword"
             android:key="adminPasswd"
             android:title="Password Admin" />
         <EditTextPreference
+            android:dialogIcon="@drawable/administrator64"
+            android:icon="@drawable/administrator64"
             android:defaultValue="Roberto"
             android:key="adminNome"
             android:title="Nome Admin" />
         <EditTextPreference
+            android:dialogIcon="@drawable/administrator64"
+            android:icon="@drawable/administrator64"
             android:defaultValue="Della Grotta"
             android:key="adminCognome"
             android:title="Cognome Admin" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:enabled="true"
+        android:key="phpmyadmin"
+        android:selectable="true"
+        android:summary="Credenziali per accedere a phpMyAdmin - httpd-xampp.conf"
+        android:title="Credenziali phpMyAdmin" >
+        <EditTextPreference
+            android:summary="UserName per accedere a phpMyAdmin"
+            android:defaultValue="username"
+            android:dialogIcon="@drawable/logo_phpmyadmin64"
+            android:icon="@drawable/logo_phpmyadmin64"
+            android:key="phpmyadmin_username"
+            android:title="User => WEB ACCESS" />
+        <EditTextPreference
+            android:summary="Password per accedere a phpMyAdmin"
+            android:defaultValue="userpassword"
+            android:dialogIcon="@drawable/logo_phpmyadmin64"
+            android:icon="@drawable/logo_phpmyadmin64"
+            android:inputType="textPassword"
+            android:key="phpmyadmin_password"
+            android:title="Password => WEB ACCESS" />
     </PreferenceCategory>
 
 </PreferenceScreen>

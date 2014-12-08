@@ -33,32 +33,78 @@
         android:gravity="center"
         android:textStyle="bold"/>
 
-      <ImageView
-          android:id="@+id/imageView1"
-          android:layout_width="wrap_content"
+      <LinearLayout
+          android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_gravity="center"
-          android:src="@drawable/mysql_logo" />
+          android:layout_gravity="center_horizontal" >
+
+          <ImageView
+              android:id="@+id/imageView1"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center_vertical"
+              android:layout_weight="1"
+              android:contentDescription="@string/mysql_description"
+              android:src="@drawable/mysql_logo" />
+
+          <ImageView
+              android:id="@+id/imageView2"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center_vertical"
+              android:layout_weight="1"
+              android:contentDescription="@string/postgresql_description"
+              android:src="@drawable/postgresql_logo" />
+
+      </LinearLayout>
+
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_horizontal" >
+
+          <ImageView
+              android:id="@+id/imageView3"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center_vertical"
+              android:layout_weight="1"
+              android:contentDescription="@string/graphview_description"
+              android:src="@drawable/graphview_logo" />
+
+          <ImageView
+              android:id="@+id/imageView4"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center_vertical"
+              android:layout_weight="1"
+              android:contentDescription="@string/sqlite_description"
+              android:src="@drawable/connect_to_android_sqlite" />
+
+      </LinearLayout>
 
       <ImageView
-          android:id="@+id/imageView2"
+          android:id="@+id/imageView5"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_gravity="center"
-          android:src="@drawable/postgresql_logo" />
+          android:layout_gravity="center_horizontal"
+          android:contentDescription="@string/phpmyadmin_description"
+          android:src="@drawable/logo_phpmyadmin" />
 
       <ImageView
-          android:id="@+id/imageView3"
+          android:id="@+id/imageView6"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_gravity="center"
-          android:src="@drawable/graphview_logo" />
+          android:layout_gravity="center_horizontal"
+          android:contentDescription="@string/phpmailer_description"
+          android:src="@drawable/phpmailer" />
 
       <ImageView
-          android:id="@+id/imageView4"
+          android:id="@+id/imageView7"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_gravity="center"
-          android:src="@drawable/logo_sqlite" />
+          android:layout_gravity="center_horizontal"
+          android:contentDescription="@string/php_description"
+          android:src="@drawable/php" />
       
 </LinearLayout>

@@ -61,7 +61,7 @@ public class MySqlAndroid {
 	}
 
 	private String getResultFromInputStream(Context context, InputStream is) {
-		String result = null;
+		String result = "";
 		// convert response to string
 		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(
@@ -80,7 +80,7 @@ public class MySqlAndroid {
 					Toast.LENGTH_SHORT).show();
 			// Log.e("log_tag", "Error converting result "+e.toString());
 		}
-		return result;
+		return result.trim();
 	}
 
 	public ArrayList<String> mysqlAndroidTest(Context context, String uri) {
@@ -125,7 +125,7 @@ public class MySqlAndroid {
 		String result = null;
 		result = getResultFromInputStream(context, is);
 
-		return result;
+		return result.trim();
 	}
 
 	/**
@@ -166,8 +166,17 @@ public class MySqlAndroid {
 		is = getInputStreamFromUri(applicationContext, uri);
 
 		int result=-1;
-		result = Integer.valueOf(getResultFromInputStream(applicationContext, is)).intValue();
-
+		try {
+			result = Integer.valueOf(
+					getResultFromInputStream(applicationContext, is).trim())
+					.intValue();
+		} catch (NumberFormatException e) {
+			// TODO: handle exception
+			Toast.makeText(applicationContext,
+					"Error in http connection: " + e.toString(),
+					Toast.LENGTH_LONG).show();
+			return NewPasswordRequestState.NONE;
+		}
 		switch (result){
 		case 0:
 			return NewPasswordRequestState.REQUEST_ABORTED;

@@ -124,5 +124,12 @@
     <string name="connGiorno">Conn./Giorno</string>
     <string name="lineChart">Line Chart</string>
     <string name="barChart">Bar Chart</string>
+    <string name="graphview_description">GraphView</string>
+    <string name="mysql_description">MySQL</string>
+    <string name="postgresql_description">PostgreSQL</string>
+    <string name="sqlite_description">SQLite</string>
+    <string name="phpmyadmin_description">phpMyAdmin</string>
+    <string name="phpmailer_description">PHPMAILER</string>
+    <string name="php_description">PHP</string>
 
 </resources>
