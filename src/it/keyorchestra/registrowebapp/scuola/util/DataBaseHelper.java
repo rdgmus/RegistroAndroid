@@ -12,12 +12,14 @@ import java.io.OutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 
+@SuppressLint("SdCardPath")
 public class DataBaseHelper extends SQLiteOpenHelper {
 	// The Android's default system path of your application database.
 	private static String DB_PATH = "/data/data/it.keyorchestra.registrowebapp/databases/";
@@ -40,6 +42,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 		this.myContext = context;
 	}
 
+	@SuppressWarnings("static-access")
 	public DataBaseHelper(Context baseContext, String databaseName) {
 		// TODO Auto-generated constructor stub
 		super(baseContext,databaseName,null,1);

@@ -2,7 +2,6 @@ package it.keyorchestra.registrowebapp.scuola.util;
 
 import android.content.Context;
 import android.view.GestureDetector;
-import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
 import android.widget.Toast;
 

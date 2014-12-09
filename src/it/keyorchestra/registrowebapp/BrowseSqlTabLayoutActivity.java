@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 
+@SuppressWarnings("deprecation")
 public class BrowseSqlTabLayoutActivity extends TabActivity {
 	private String sqlSqLite;
 	private String dbname;

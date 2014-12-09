@@ -4,10 +4,10 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.HorizontalScrollView;
-import android.widget.Toast;
 
 public class TestHorizontalScrollView extends HorizontalScrollView {
 
+	@SuppressWarnings("unused")
 	private Context _context;
 
 	public TestHorizontalScrollView(Context context) {

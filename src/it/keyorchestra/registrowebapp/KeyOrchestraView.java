@@ -1,5 +1,6 @@
 package it.keyorchestra.registrowebapp;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,6 +13,7 @@ import android.graphics.Typeface;
 import android.util.Log;
 import android.view.View;
 
+@SuppressLint("DrawAllocation")
 public class KeyOrchestraView extends View {
 
 	Bitmap greenBall;
@@ -34,6 +36,7 @@ public class KeyOrchestraView extends View {
 		}
 	}
 
+	@SuppressLint("DrawAllocation")
 	@Override
 	protected void onDraw(Canvas canvas) {
 		// TODO Auto-generated method stub

@@ -378,6 +378,7 @@ public class AdminTables extends Activity implements OnClickListener,
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	private DatabaseTablesInfo getDatabaseTablesInfo() {
 		// TODO Auto-generated method stub
 		ScuolaDb db1 = null;

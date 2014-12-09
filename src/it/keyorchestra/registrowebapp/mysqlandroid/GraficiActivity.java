@@ -2,16 +2,12 @@ package it.keyorchestra.registrowebapp.mysqlandroid;
 
 import it.keyorchestra.registrowebapp.R;
 import it.keyorchestra.registrowebapp.interfaces.ActivitiesCommonFunctions;
-import it.keyorchestra.registrowebapp.scuola.util.ExpandableListAdapter;
 import it.keyorchestra.registrowebapp.scuola.util.GraficiArrayAdapter;
 import it.keyorchestra.registrowebapp.scuola.util.PeriodiLogAdapter;
-import it.keyorchestra.registrowebapp.scuola.util.RuoliArrayAdapter;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,19 +20,12 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.ExpandableListView;
-import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import com.jjoe64.graphview.BarGraphView;
 import com.jjoe64.graphview.GraphView;

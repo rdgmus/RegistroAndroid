@@ -1,14 +1,11 @@
 package it.keyorchestra.registrowebapp.scuola.util;
 
 import it.keyorchestra.registrowebapp.interfaces.AlertMagnatic;
-import android.R;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.graphics.drawable.Drawable;
-import android.view.LayoutInflater;
 
 public class MyDialogs {
 

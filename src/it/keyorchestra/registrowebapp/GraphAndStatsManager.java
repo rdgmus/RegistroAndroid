@@ -1,12 +1,8 @@
 package it.keyorchestra.registrowebapp;
 
 import it.keyorchestra.registrowebapp.interfaces.ActivitiesCommonFunctions;
-import it.keyorchestra.registrowebapp.mysqlandroid.AssegnamentoRuoliActivity;
 import it.keyorchestra.registrowebapp.mysqlandroid.GraficiActivity;
-import it.keyorchestra.registrowebapp.mysqlandroid.RilascioNuovePassword;
-import it.keyorchestra.registrowebapp.mysqlandroid.Tab1Activity;
 import it.keyorchestra.registrowebapp.mysqlandroid.Tab2Activity;
-import it.keyorchestra.registrowebapp.mysqlandroid.UtentiBloccatiActivity;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,17 +13,17 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TabHost;
+import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.TabHost.TabSpec;
 
 @SuppressWarnings("deprecation")
 public class GraphAndStatsManager extends TabActivity implements
@@ -35,6 +31,7 @@ public class GraphAndStatsManager extends TabActivity implements
 
 	ImageButton ibBack;
 	TextView tvRilascioTitle;
+	@SuppressWarnings("unused")
 	private SharedPreferences getPrefs;
 
 	@Override

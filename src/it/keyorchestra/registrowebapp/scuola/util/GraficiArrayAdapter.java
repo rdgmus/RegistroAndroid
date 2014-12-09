@@ -1,12 +1,6 @@
 package it.keyorchestra.registrowebapp.scuola.util;
 
 import it.keyorchestra.registrowebapp.R;
-
-import java.util.ArrayList;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.Context;
 import android.content.res.Resources;
 import android.view.LayoutInflater;

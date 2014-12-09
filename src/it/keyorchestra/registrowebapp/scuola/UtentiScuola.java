@@ -239,6 +239,7 @@ public class UtentiScuola extends Activity implements OnClickListener {
 		etID_RUOLO.setText("");
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub

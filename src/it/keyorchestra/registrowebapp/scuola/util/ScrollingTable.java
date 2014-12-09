@@ -1,15 +1,12 @@
 package it.keyorchestra.registrowebapp.scuola.util;
 
 import it.keyorchestra.registrowebapp.R;
-
 import java.util.LinkedList;
 import java.util.List;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -24,6 +21,7 @@ public class ScrollingTable extends LinearLayout {
 		super(context, attrs);
 	}
 
+	@SuppressLint("DrawAllocation")
 	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
 

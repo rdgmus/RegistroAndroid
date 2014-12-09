@@ -10,7 +10,6 @@ import android.graphics.Typeface;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.EditText;
@@ -18,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
@@ -32,6 +30,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 			lblListItemDfltValue, lblListItemPK;
 	private ImageView childImg;
 
+	@SuppressWarnings("unused")
 	private LinearLayout llListFields;
 
 	// private HashMap<String, TableLayout> _listTableChild;
@@ -144,6 +143,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 		return convertView;
 	}
 
+	@SuppressWarnings("deprecation")
 	private TextView getTextViewForColumnName(CharSequence charSequence) {
 		// TODO Auto-generated method stub
 		Typeface tf = Typeface.createFromAsset(_context.getAssets(),
@@ -163,6 +163,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 		return textView;
 	}
 
+	@SuppressWarnings({ "unused", "deprecation" })
 	private EditText getEditTextForColumnName(CharSequence charSequence) {
 		// TODO Auto-generated method stub
 		Typeface tf = Typeface.createFromAsset(_context.getAssets(),
@@ -182,6 +183,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 		return editText;
 	}
 
+	@SuppressWarnings({ "unused", "deprecation" })
 	private TableRow anOthereConvertView(View convertView, String childText) {
 		// TODO Auto-generated method stub
 		TableRow tableRow = new TableRow(_context);

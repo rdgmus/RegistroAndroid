@@ -93,6 +93,7 @@ public class AdminDatabases extends Activity implements OnClickListener,
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
@@ -211,6 +212,7 @@ public class AdminDatabases extends Activity implements OnClickListener,
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	private void apriListaTabelleDatabase() {
 		// TODO Auto-generated method stub
 		String dbName = databaseName.getText().toString();
@@ -246,7 +248,7 @@ public class AdminDatabases extends Activity implements OnClickListener,
 	}
 
 	/**
-	 * Lancia l'attivitˆ per l'amministrazione delle tabelle e relative colonne
+	 * Lancia l'attivitï¿½ per l'amministrazione delle tabelle e relative colonne
 	 * 
 	 * @param dbName
 	 */

@@ -11,6 +11,7 @@ public class GFX extends Activity{
 	KeyOrchestraView ourView;
 	WakeLock wL;
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub

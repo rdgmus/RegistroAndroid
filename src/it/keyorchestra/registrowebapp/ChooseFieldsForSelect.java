@@ -40,6 +40,7 @@ public class ChooseFieldsForSelect extends Activity implements
 	private TableLayout tlFieldsChoosen;
 	private ArrayList<TableFieldsForSelect> tffsArray;
 
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -173,6 +174,7 @@ public class ChooseFieldsForSelect extends Activity implements
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	private void addFieldToSelect() {
 		// TODO Auto-generated method stub
 		TableFieldsForSelect tffs = new TableFieldsForSelect(choosenTable,
@@ -215,6 +217,7 @@ public class ChooseFieldsForSelect extends Activity implements
 		});
 	}
 
+	@SuppressWarnings("deprecation")
 	private TextView getTextViewForColumnName(String columnName) {
 		// TODO Auto-generated method stub
 		Typeface tf = Typeface.createFromAsset(this.getAssets(),

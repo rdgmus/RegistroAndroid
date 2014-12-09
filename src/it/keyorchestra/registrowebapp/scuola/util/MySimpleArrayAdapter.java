@@ -1,14 +1,14 @@
 package it.keyorchestra.registrowebapp.scuola.util;
 
+import it.keyorchestra.registrowebapp.R;
+
 import java.util.ArrayList;
 
-import it.keyorchestra.registrowebapp.R;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 public class MySimpleArrayAdapter extends ArrayAdapter<String> {
@@ -33,16 +33,8 @@ public class MySimpleArrayAdapter extends ArrayAdapter<String> {
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View rowView = inflater.inflate(R.layout.icon_row_layout, parent, false);
 		TextView textView = (TextView) rowView.findViewById(R.id.tvMyText);
-		ImageView imageView = (ImageView) rowView.findViewById(R.id.ivMyIcon);
+//		ImageView imageView = (ImageView) rowView.findViewById(R.id.ivMyIcon);
 		textView.setText((CharSequence) values.get(position));
-		// Change the icon for Windows and iPhone
-		String s = (String) values.get(position);
-		// if (s.startsWith("Windows7") || s.startsWith("iPhone")
-		// || s.startsWith("Solaris")) {
-		// imageView.setImageResource(R.drawable.no);
-		// } else {
-		// imageView.setImageResource(R.drawable.ok);
-		// }
 
 		return rowView;
 	}
@@ -55,16 +47,8 @@ public class MySimpleArrayAdapter extends ArrayAdapter<String> {
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View rowView = inflater.inflate(R.layout.icon_row_layout, parent, false);
 		TextView textView = (TextView) rowView.findViewById(R.id.tvMyText);
-		ImageView imageView = (ImageView) rowView.findViewById(R.id.ivMyIcon);
+//		ImageView imageView = (ImageView) rowView.findViewById(R.id.ivMyIcon);
 		textView.setText((CharSequence) values.get(position));
-		// Change the icon for Windows and iPhone
-		String s = (String) values.get(position);
-		// if (s.startsWith("Windows7") || s.startsWith("iPhone")
-		// || s.startsWith("Solaris")) {
-		// imageView.setImageResource(R.drawable.no);
-		// } else {
-		// imageView.setImageResource(R.drawable.ok);
-		// }
 
 		return rowView;
 	}

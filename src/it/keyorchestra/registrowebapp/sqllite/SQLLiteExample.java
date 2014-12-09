@@ -1,7 +1,6 @@
 package it.keyorchestra.registrowebapp.sqllite;
 
 import it.keyorchestra.registrowebapp.R;
-import android.R.bool;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;

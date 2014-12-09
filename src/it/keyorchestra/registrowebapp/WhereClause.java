@@ -47,6 +47,7 @@ public class WhereClause extends Activity implements OnItemSelectedListener,
 	private ArrayList<String> arrTblNames;
 	private String whereClause, choosenOperator;
 
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

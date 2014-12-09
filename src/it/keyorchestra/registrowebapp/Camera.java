@@ -48,6 +48,7 @@ public class Camera extends Activity implements OnClickListener {
 		return true;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub

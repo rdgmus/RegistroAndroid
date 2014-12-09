@@ -1,5 +1,13 @@
 package it.keyorchestra.registrowebapp.mysqlandroid;
 
+import it.keyorchestra.registrowebapp.R;
+import it.keyorchestra.registrowebapp.UserMenu;
+import it.keyorchestra.registrowebapp.dbMatthed.DatabaseOps;
+import it.keyorchestra.registrowebapp.interfaces.ActivitiesCommonFunctions;
+import it.keyorchestra.registrowebapp.interfaces.GeneratePasswordInterface;
+import it.keyorchestra.registrowebapp.scuola.util.FieldsValidator;
+import it.keyorchestra.registrowebapp.scuola.util.UtentiArrayAdapter;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -8,15 +16,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import it.keyorchestra.registrowebapp.R;
-import it.keyorchestra.registrowebapp.UserMenu;
-import it.keyorchestra.registrowebapp.dbMatthed.DatabaseOps;
-import it.keyorchestra.registrowebapp.interfaces.ActivitiesCommonFunctions;
-import it.keyorchestra.registrowebapp.interfaces.GeneratePasswordInterface;
-import it.keyorchestra.registrowebapp.scuola.util.FieldsValidator;
-import it.keyorchestra.registrowebapp.scuola.util.MySimpleArrayAdapter;
-import it.keyorchestra.registrowebapp.scuola.util.RuoliArrayAdapter;
-import it.keyorchestra.registrowebapp.scuola.util.UtentiArrayAdapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -34,16 +33,15 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Spinner;

@@ -1,7 +1,6 @@
 package it.keyorchestra.registrowebapp.mysqlandroid;
 
 import it.keyorchestra.registrowebapp.R;
-import it.keyorchestra.registrowebapp.SqLite;
 import it.keyorchestra.registrowebapp.dbMatthed.DatabaseOps;
 import it.keyorchestra.registrowebapp.interfaces.ActivitiesCommonFunctions;
 import it.keyorchestra.registrowebapp.scuola.util.RuoliArrayAdapter;
@@ -30,7 +29,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
-import android.view.ViewGroup.OnHierarchyChangeListener;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;

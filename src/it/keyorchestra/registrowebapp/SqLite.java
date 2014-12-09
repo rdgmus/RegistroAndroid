@@ -63,6 +63,7 @@ public class SqLite extends Activity implements OnClickListener,
 	private String previousSelect;
 	private int index;
 
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -448,6 +449,7 @@ public class SqLite extends Activity implements OnClickListener,
 		tvEndRec.setText(String.valueOf(endRec));
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean onLongClick(View v) {
 		// TODO Auto-generated method stub
@@ -466,6 +468,7 @@ public class SqLite extends Activity implements OnClickListener,
 		return false;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void onPrepareDialog(int id, Dialog dialog, Bundle args) {
 		// TODO Auto-generated method stub

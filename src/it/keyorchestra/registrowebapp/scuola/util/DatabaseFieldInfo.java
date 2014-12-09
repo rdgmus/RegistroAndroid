@@ -65,6 +65,7 @@ public class DatabaseFieldInfo implements Parcelable {
 				this.fieldName });
 	}
 
+	@SuppressWarnings("rawtypes")
 	public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
 		public DatabaseFieldInfo createFromParcel(Parcel in) {
 			return new DatabaseFieldInfo(in);

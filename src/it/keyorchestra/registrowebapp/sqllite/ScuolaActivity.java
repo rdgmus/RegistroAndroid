@@ -3,6 +3,7 @@ package it.keyorchestra.registrowebapp.sqllite;
 import it.keyorchestra.registrowebapp.scuola.util.DataBaseHelper;
 
 import java.io.IOException;
+
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.ListActivity;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.TwoLineListItem;
 
+@SuppressWarnings("deprecation")
 public class ScuolaActivity extends ListActivity implements OnTouchListener,
 		OnItemClickListener {
 	private Cursor cUtentiScuola;

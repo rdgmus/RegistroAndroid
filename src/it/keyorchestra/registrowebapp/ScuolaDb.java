@@ -651,6 +651,7 @@ public class ScuolaDb extends UtentiScuolaTable implements DatabasesInterface {
 		 * @param endRec
 		 * @return
 		 */
+		@SuppressWarnings("deprecation")
 		public int execSelect(SQLiteDatabase ourDatabase, String sql,
 				TableLayout tlTableHeader, TableLayout tlSqliteSql,
 				Activity sqLite, String tablename, int startRec, int endRec) {
@@ -716,6 +717,7 @@ public class ScuolaDb extends UtentiScuolaTable implements DatabasesInterface {
 		 * @return
 		 */
 
+		@SuppressWarnings("deprecation")
 		private TableRow buildRowData(int columnsCount, String[] columnNames,
 				Cursor c) {
 			// TODO Auto-generated method stub
@@ -770,6 +772,7 @@ public class ScuolaDb extends UtentiScuolaTable implements DatabasesInterface {
 		 * @param value
 		 * @return
 		 */
+		@SuppressWarnings("deprecation")
 		private EditText getEditTextForColumnValue(String value) {
 			// TODO Auto-generated method stub
 			Typeface tf = Typeface.createFromAsset(context.getAssets(),
@@ -797,6 +800,7 @@ public class ScuolaDb extends UtentiScuolaTable implements DatabasesInterface {
 		 * @param columnNames
 		 * @return
 		 */
+		@SuppressWarnings("deprecation")
 		private TableRow buildRowIntestazione(int columnsCount,
 				String[] columnNames) {
 			// TODO Auto-generated method stub
@@ -825,6 +829,7 @@ public class ScuolaDb extends UtentiScuolaTable implements DatabasesInterface {
 		 * @param columnName
 		 * @return
 		 */
+		@SuppressWarnings("deprecation")
 		private TextView getTextViewForColumnName(String columnName) {
 			// TODO Auto-generated method stub
 			Typeface tf = Typeface.createFromAsset(context.getAssets(),

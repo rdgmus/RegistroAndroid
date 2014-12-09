@@ -1,8 +1,6 @@
 package it.keyorchestra.registrowebapp.sqllite;
 
 import it.keyorchestra.registrowebapp.interfaces.DatabasesInterface;
-import it.keyorchestra.registrowebapp.interfaces.DatabasesInterface.ColumnInfo;
-import it.keyorchestra.registrowebapp.interfaces.DatabasesInterface.TableColumnsInfo;
 
 import java.util.ArrayList;
 
@@ -162,6 +160,7 @@ public class HotOrNot implements DatabasesInterface {
 		return arrTblNames;
 	}
 
+	@SuppressWarnings("unused")
 	@Override
 	public ArrayList<TableColumnsInfo> getColumnsInfo(
 			ArrayList<String> arrTblNames) {
