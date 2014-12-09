@@ -180,6 +180,9 @@ public class Iscrizione extends Activity implements ActivitiesCommonFunctions {
 					/**
 					 * Va alla pagina di login
 					 */
+					Toast.makeText(getApplicationContext(),
+							"Ora puoi effettuare il LOGIN!",
+							Toast.LENGTH_SHORT).show();
 					Intent loginUserActivity = new Intent(
 							"android.intent.action.LOGIN");
 					startActivity(loginUserActivity);

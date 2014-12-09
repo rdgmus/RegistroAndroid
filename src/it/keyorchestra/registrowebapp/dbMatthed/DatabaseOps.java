@@ -52,6 +52,17 @@ public class DatabaseOps implements DatabasesInterface {
 		getPrefs = PreferenceManager.getDefaultSharedPreferences(context);
 	}
 
+	/**
+	 * Cotruisce la URL per la conessione al database fornando IP, credenziali
+	 * dell'amministratore e altro, prelevando i valori dalle preferenze. Questi
+	 * valori devono essere forniti dall'ammnistratore dell'applicazione e
+	 * dipendono dalla rete in cui è situato il server di database e dalle
+	 * credenziali fornite al momento dell'installazione di XAMPP o di
+	 * PostgreSQL o altro, in futuro.
+	 * 
+	 * @param context
+	 * @return
+	 */
 	private String getUrl(Context context) {
 		String ip = null;
 		String userName = null;
@@ -98,6 +109,13 @@ public class DatabaseOps implements DatabasesInterface {
 		return url;
 	}
 
+	/**
+	 * Controlla se la comunicazione con il servere MySQL sia attiva oppure no.
+	 * Se è attiva ritorna 1.
+	 * 
+	 * @param context
+	 * @return
+	 */
 	public String FetchConnection(Context context) {
 		String retval = "";
 
@@ -124,6 +142,16 @@ public class DatabaseOps implements DatabasesInterface {
 		return retval;
 	}
 
+	/**
+	 * Procedura di autenticazione dell'utente che ha richiesto il LOGIN.
+	 * 
+	 * @param applicationContext
+	 * @param sEmail
+	 * @param sPasswd
+	 * @param ip
+	 * @param phpencoder
+	 * @return
+	 */
 	public boolean AuthenticateUser(Context applicationContext, String sEmail,
 			String sPasswd, String ip, String phpencoder) {
 
@@ -179,6 +207,18 @@ public class DatabaseOps implements DatabasesInterface {
 		return isAuthenticated;
 	}
 
+	/**
+	 * Salva i dati dell'utente che ha effettuato il LOGIN nelle preferenze.
+	 * 
+	 * @param id_utente
+	 * @param cognome
+	 * @param nome
+	 * @param email
+	 * @param user_is_admin
+	 * @param has_to_change_password
+	 * @param is_locked
+	 * @param context
+	 */
 	@SuppressLint("NewApi")
 	private void salvaUtenteNellePreferenze(long id_utente, String cognome,
 			String nome, String email, long user_is_admin,
@@ -255,6 +295,12 @@ public class DatabaseOps implements DatabasesInterface {
 		return false;
 	}
 
+	/**
+	 * Effettua il blocco dell'utente che sta effettuando il LOGIN
+	 * 
+	 * @param applicationContext
+	 * @param databaseIp
+	 */
 	public void LockUserLogging(Context applicationContext, String databaseIp) {
 		// TODO Auto-generated method stub
 		String url = getUrl(applicationContext);
@@ -286,6 +332,14 @@ public class DatabaseOps implements DatabasesInterface {
 		}
 	}
 
+	/**
+	 * Sblocca un utente nel senso che pone a 0 il campo is_locked Ora chiunque
+	 * abbia le credenziali potrà accedere.
+	 * 
+	 * @param applicationContext
+	 * @param databaseIp
+	 * @param id_utente
+	 */
 	public void UnlockUser(Context applicationContext, String databaseIp,
 			Long id_utente) {
 		// TODO Auto-generated method stub
@@ -314,6 +368,19 @@ public class DatabaseOps implements DatabasesInterface {
 		}
 	}
 
+	/**
+	 * Registrazione nuovo utente iscritto al REGISTRO SCOLASTICO ovvero
+	 * all'applicazione Android.
+	 * 
+	 * @param applicationContext
+	 * @param nome
+	 * @param cognome
+	 * @param email
+	 * @param passwd
+	 * @param ip
+	 * @param phpencoder
+	 * @return
+	 */
 	@SuppressLint("DefaultLocale")
 	public boolean RegisterNewUser(Context applicationContext, String nome,
 			String cognome, String email, String passwd, String ip,
@@ -380,6 +447,17 @@ public class DatabaseOps implements DatabasesInterface {
 		return hasBeenRegistered;
 	}
 
+	/**
+	 * Invio email per richiesta conferma all'utente!
+	 * 
+	 * @param applicationContext
+	 * @param ip
+	 * @param phpencoder
+	 * @param cognome
+	 * @param nome
+	 * @param email
+	 * @param hash
+	 */
 	private void sendRequestConfirmEmail(Context applicationContext, String ip,
 			String phpencoder, String cognome, String nome, String email,
 			String hash) {
@@ -406,6 +484,14 @@ public class DatabaseOps implements DatabasesInterface {
 		// "<cbasso1>" );
 	}
 
+	/**
+	 * Richiede all'interfaccia PHP di generare una HASH
+	 * 
+	 * @param applicationContext
+	 * @param ip
+	 * @param phpencoder
+	 * @return
+	 */
 	public String generateHash(Context applicationContext, String ip,
 			String phpencoder) {
 		// TODO Auto-generated method stub
@@ -416,6 +502,18 @@ public class DatabaseOps implements DatabasesInterface {
 		return hash;
 	}
 
+	/**
+	 * Richiede all'interfccia PHP di generare una password di formato
+	 * pressocchè appropriato per cambiamento password da parte dell'utente o
+	 * per intervento dell'ADMIN. Quindi una utility per l'utente
+	 * dell'applicazione Android.
+	 * 
+	 * @param applicationContext
+	 * @param ip
+	 * @param phpencoder
+	 * @param length
+	 * @return
+	 */
 	public String generatePassword(Context applicationContext, String ip,
 			String phpencoder, String length) {
 		// TODO Auto-generated method stub
@@ -426,16 +524,45 @@ public class DatabaseOps implements DatabasesInterface {
 		return password;
 	}
 
+	/**
+	 * Richiama l'interfaccia PHP per la codifica delle informazioni, come la
+	 * password da registrare nel sistema in caso di iscrizione o per
+	 * l'autenticazione dell'utente al LOGIN, etc. etc.
+	 * 
+	 * @param applicationContext
+	 * @param ip
+	 * @param phpencoder
+	 * @param passwd
+	 * @return
+	 */
 	private String encodePassword(Context applicationContext, String ip,
 			String phpencoder, String passwd) {
+		@SuppressWarnings("deprecation")
 		String encoded = new MySqlAndroid().getEncodedStringFromUri(
-				applicationContext, "http://" + ip + "/" + phpencoder
-						+ "?actionEncode=encodePassword&password=" + passwd);
+				applicationContext,
+				"http://" + ip + "/" + phpencoder
+						+ "?actionEncode=encodePassword&password="
+						+ URLEncoder.encode(passwd));
 
 		return encoded;
 
 	}
 
+	/**
+	 * Costruisce il <body/> della email html da inviare all'utente che ha
+	 * chiesto il cambiamento di password fornandogli un link raggiungendo il
+	 * quale potrà confermare di essere stato lui ad effettuare la richiesta al
+	 * sistema.
+	 * 
+	 * @param applicationContext
+	 * @param ip
+	 * @param phpencoder
+	 * @param cognome
+	 * @param nome
+	 * @param email
+	 * @param hash
+	 * @return
+	 */
 	private String requestConfirmEmailBody(Context applicationContext,
 			String ip, String phpencoder, String cognome, String nome,
 			String email, String hash) {
@@ -486,12 +613,31 @@ public class DatabaseOps implements DatabasesInterface {
 		}
 	}
 
+	/**
+	 * Un altro tentativo di implementazione invio email
+	 * 
+	 * @param context
+	 * @param emailTo
+	 * @param subject
+	 * @param body
+	 * @param imgPath
+	 * @param contentId
+	 */
+	@Deprecated
 	public void SimpleMail2Email(Context context, String emailTo,
 			String subject, String body, String imgPath, String contentId) {
 		SimpleMail2 simpleMail2 = new SimpleMail2();
 		simpleMail2.send(emailTo, subject, body, imgPath, contentId);
 	}
 
+	/**
+	 * Invia email in formato html con GMAIL server
+	 * 
+	 * @param context
+	 * @param emailaddress
+	 * @param subject
+	 * @param body
+	 */
 	public void GMailSenderHtmlEmail(Context context, String emailaddress[],
 			String subject, String body) {
 		GMailSender mailsender = new GMailSender("keyorchestra2014@gmail.com",
@@ -508,6 +654,14 @@ public class DatabaseOps implements DatabasesInterface {
 		}
 	}
 
+	/**
+	 * Invia email con GMAIL server
+	 * 
+	 * @param context
+	 * @param emailaddress
+	 * @param subject
+	 * @param body
+	 */
 	public void GMailSenderEmail(Context context, String emailaddress[],
 			String subject, String body) {
 		// TODO Auto-generated method stub
@@ -539,34 +693,91 @@ public class DatabaseOps implements DatabasesInterface {
 		return getPrefs;
 	}
 
+	/**
+	 * Ritorna l'id_utente dalle preferenze
+	 * 
+	 * @return
+	 */
 	public Long getId_utente() {
 		return getPrefs.getLong("id_utente", -1);
 	}
 
+	/**
+	 * Ritorna il cognome dalle preferenze
+	 * 
+	 * @return
+	 */
 	public String getCognome() {
 		return getPrefs.getString("cognome", null);
 	}
 
+	/**
+	 * Ritorna il nome dalle preferenze
+	 * 
+	 * @return
+	 */
 	public String getNome() {
 		return getPrefs.getString("nome", null);
 	}
 
+	/**
+	 * Ritorna l'email dalle preferenze
+	 * 
+	 * @return
+	 */
 	public String getEmail() {
 		return getPrefs.getString("email", null);
 	}
 
+	/**
+	 * Ritorna l'informazione che mi dice se l'utente che ha effettuato il login
+	 * appartiene al gruppo degli ADMIN dalle preferenze
+	 * 
+	 * @return
+	 */
 	public Long getUser_is_admin() {
 		return getPrefs.getLong("user_is_admin", -1);
 	}
 
+	/**
+	 * Mi dice se l'utente deve cambiare password. Serve per notificare
+	 * all'utente che deve cambiare password. Questo avviene quando l'utente ha
+	 * già richiesto un cambiamento di password. Ha poi confermato la richiesta
+	 * rispondendo all'email inviatagli dal sistema. L'ADMIN ha effettuato il
+	 * cambiamento di password e lo ha comunicato all'utente sempre tramite
+	 * email. L'utente ha effettuato il LOGIN con la nuova password fornitagli
+	 * dall'ADMIN, ma ora viene richiesto il suo intervento affinchè cambi
+	 * ancora la password, onde evitare che la password nuova sia conosciuta
+	 * quanto meno dall'ADMIN che la elaborata. In sostanza è una sicurezza in
+	 * più per l'utente che così vede salvaguardata la propria privacy e anche
+	 * una politica di sicurezza che il sistema vuole mantenere solida. Il
+	 * valore è sempre preso dalle preferenze.
+	 * 
+	 * @return
+	 */
 	public Long getHas_to_change_password() {
 		return getPrefs.getLong("has_to_change_password", -1);
 	}
 
+	/**
+	 * L'informazione relativa al fatto che l'utente sia o no bloccato in caso
+	 * di successivi tentativi di LOGIN con le stesse credenziali. Questa
+	 * informazione dovrebbe essere naturalmente = 1, avendo l'utente effettuato
+	 * il login con successo e quindi il sistema ha provveduto a registrare
+	 * l'accesso ponendo a 1 questo bit.
+	 * 
+	 * @return
+	 */
 	public Long getIs_locked() {
 		return getPrefs.getLong("is_locked", -1);
 	}
 
+	/**
+	 * In caso di LOGOUT vengono cancellati i dati relativi all'utente dalle
+	 * preferenze
+	 * 
+	 * @param id_utente
+	 */
 	@SuppressLint("NewApi")
 	public void DeleteUserFromPreferences(long id_utente) {
 		// TODO Auto-generated method stub
@@ -618,7 +829,7 @@ public class DatabaseOps implements DatabasesInterface {
 											id_utente)
 									+ " "
 									+ getUserName(applicationContext, id_utente)
-									+ " Inserito blocco su Login!",
+									+ "\n Inserito blocco su Login!",
 							Toast.LENGTH_SHORT).show();
 				else
 					Toast.makeText(
@@ -628,7 +839,7 @@ public class DatabaseOps implements DatabasesInterface {
 											id_utente)
 									+ " "
 									+ getUserName(applicationContext, id_utente)
-									+ " Rimosso blocco su Login!",
+									+ "\nRimosso blocco su Login!",
 							Toast.LENGTH_SHORT).show();
 			}
 			st.close();
@@ -670,6 +881,13 @@ public class DatabaseOps implements DatabasesInterface {
 		}
 	}
 
+	/**
+	 * Ritorna l'email dell'utente indicato
+	 * 
+	 * @param applicationContext
+	 * @param selectedUser
+	 * @return
+	 */
 	public String getUserEmail(Context applicationContext, long selectedUser) {
 		String url = getUrl(applicationContext);
 		String retval = null;
@@ -695,6 +913,14 @@ public class DatabaseOps implements DatabasesInterface {
 		return retval;
 	}
 
+	/**
+	 * Ritorna il solo cognome dell'utente
+	 * 
+	 * @param applicationContext
+	 * @param selectedUser
+	 * @return
+	 */
+	@Deprecated
 	public String getUserSurname(Context applicationContext, long selectedUser) {
 		// TODO Auto-generated method stub
 		String url = getUrl(applicationContext);
@@ -721,6 +947,14 @@ public class DatabaseOps implements DatabasesInterface {
 		return retval;
 	}
 
+	/**
+	 * Ritorna il solo nome dell'utente
+	 * 
+	 * @param applicationContext
+	 * @param selectedUser
+	 * @return
+	 */
+	@Deprecated
 	public String getUserName(Context applicationContext, long selectedUser) {
 		// TODO Auto-generated method stub
 		String url = getUrl(applicationContext);
@@ -747,6 +981,13 @@ public class DatabaseOps implements DatabasesInterface {
 		return retval;
 	}
 
+	/**
+	 * Ritorna il ruolo corrispondente all'ID fornito
+	 * 
+	 * @param applicationContext
+	 * @param selectedRole
+	 * @return
+	 */
 	public String getRuoloName(Context applicationContext, long selectedRole) {
 		// TODO Auto-generated method stub
 		String url = getUrl(applicationContext);
@@ -803,6 +1044,13 @@ public class DatabaseOps implements DatabasesInterface {
 		}
 	}
 
+	/**
+	 * Lista dei ruoli ricoperti dall'utente
+	 * 
+	 * @param applicationContext
+	 * @param selectedUser
+	 * @return
+	 */
 	public ArrayList<String> listUserRoles(Context applicationContext,
 			long selectedUser) {
 		// TODO Auto-generated method stub
@@ -830,6 +1078,13 @@ public class DatabaseOps implements DatabasesInterface {
 		return myRoles;
 	}
 
+	/**
+	 * ID del ruolo indicato nella tabella ruoli_utenti
+	 * 
+	 * @param applicationContext
+	 * @param ruolo
+	 * @return
+	 */
 	public long getIdRuolo(Context applicationContext, String ruolo) {
 		// TODO Auto-generated method stub
 		String url = getUrl(applicationContext);
@@ -856,6 +1111,16 @@ public class DatabaseOps implements DatabasesInterface {
 		return retval;
 	}
 
+	/**
+	 * Si occupa di inoltrare una richiesta di cambiamento password
+	 * all'interfaccia PHP.
+	 * 
+	 * @param applicationContext
+	 * @param email
+	 * @param sendRequestChangePassword
+	 * @param ip
+	 * @return un valore enum del tipo NewPasswordRequestState
+	 */
 	public NewPasswordRequestState SendRequestChangePassword(
 			Context applicationContext, String email,
 			String sendRequestChangePassword, String ip) {
@@ -880,6 +1145,15 @@ public class DatabaseOps implements DatabasesInterface {
 		return result;
 	}
 
+	/**
+	 * Carica l'id_utente corrispondente alla email fornita nel tentativo di
+	 * LOGIN andato a male perchè non si conosce la password oppure è stata
+	 * dimenticata.
+	 * 
+	 * @param applicationContext
+	 * @param email
+	 * @return
+	 */
 	public long getIdOfUserWithEmail(Context applicationContext, String email) {
 		// TODO Auto-generated method stub
 		String url = getUrl(applicationContext);
@@ -906,6 +1180,16 @@ public class DatabaseOps implements DatabasesInterface {
 		return retval;
 	}
 
+	/**
+	 * Ritorna la password dell'utente come codificata e quindi a meno di
+	 * conoscere l'algoritmo di decodifica non la può leggere neanche l'admin
+	 * che svolge l'operazione di cambiamento password per gli utenti
+	 * richiedenti.
+	 * 
+	 * @param applicationContext
+	 * @param selectedUser
+	 * @return
+	 */
 	public String getUserPasswd(Context applicationContext, long selectedUser) {
 		// TODO Auto-generated method stub
 		String url = getUrl(applicationContext);
@@ -932,9 +1216,110 @@ public class DatabaseOps implements DatabasesInterface {
 		return retval;
 	}
 
-	public void SaveNewPassword(long id_utente, String email,
-			String oldPassword, String passwordToEncode) {
+	/**
+	 * Procedura cambiamento password a sistema
+	 * 
+	 * @param id_utente
+	 * @param email
+	 * @param oldPassword
+	 * @param passwordToEncode
+	 * @return
+	 */
+	public boolean SaveNewPassword(Context applicationContext, long id_utente,
+			String email, String oldPassword, String passwordToEncode,
+			String ip, String phpencoder) {
 		// TODO Auto-generated method stub
-		
+
+		String url = getUrl(applicationContext);
+
+		String encodedPassword = encodePassword(applicationContext, ip,
+				phpencoder, passwordToEncode);
+
+		Connection conn;
+		try {
+			DriverManager.setLoginTimeout(15);
+			conn = DriverManager.getConnection(url);
+			Statement st = conn.createStatement();
+			String sql = null;
+
+			sql = "UPDATE utenti_scuola SET password = '" + encodedPassword
+					+ "', has_to_change_password = 1" + " WHERE id_utente = "
+					+ id_utente + " AND email = '" + email
+					+ "' AND password = '" + oldPassword + "'";
+
+			@SuppressWarnings("unused")
+			int result = st.executeUpdate(sql);
+			if (result == 1) {
+				// SETTA CAMPI DELLA change_password_request
+				long id_utenteAdmin = getPrefs.getLong("id_utente", -1);
+				sql = "UPDATE `change_password_request` SET `request_done_date`=NOW(),`request_done`= 1,`email_sent`= 0,`id_admin`= "
+						+ id_utenteAdmin
+						+ ", pending = 0"
+						+ " WHERE from_user = "
+						+ id_utente
+						+ " AND pending = 1 AND confirmed = 1";
+				result = st.executeUpdate(sql);
+
+			}
+			st.close();
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Procedura cambiamento password: invio della email con la passord
+	 * 
+	 * @param id_utente2
+	 * @param email2
+	 * @param passwordToEncode
+	 * @param msg
+	 * @return
+	 */
+	public boolean EmailPasswordToUser(Context applicationContext,
+			long id_utente, String email, String passwordToEncode,
+			String sendNewPasswordToUser, String ip) {
+		// TODO Auto-generated method stub
+
+		try {
+			return new MySqlAndroid().EmailPasswordToUser(applicationContext,
+					"http://" + ip + "/" + sendNewPasswordToUser + "?email="
+							+ URLEncoder.encode(email, "UTF-8") + "&password="
+							+ URLEncoder.encode(passwordToEncode, "UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public boolean setEmailSentWithSuccessAt(Context applicationContext,
+			long id_utente, String hash) {
+		// TODO Auto-generated method stub
+		String url = getUrl(applicationContext);
+
+		Connection conn;
+		try {
+			DriverManager.setLoginTimeout(15);
+			conn = DriverManager.getConnection(url);
+			Statement st = conn.createStatement();
+			String sql = null;
+
+			sql = "UPDATE `change_password_request` SET `email_sent`= 1 "
+					+ " WHERE from_user = " + id_utente + " AND hash = '"
+					+ hash + "'";
+
+			@SuppressWarnings("unused")
+			int result = st.executeUpdate(sql);
+			st.close();
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 }

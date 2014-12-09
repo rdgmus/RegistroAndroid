@@ -60,6 +60,13 @@
             android:key="LogEventsRegisterInterface"
             android:summary="Interfaccia per la registrazione di Messaggi nel Log"
             android:title="Messaggi nel Log" />
+        <EditTextPreference
+            android:dialogIcon="@drawable/php64"
+            android:icon="@drawable/php64"            
+            android:defaultValue="PhpMySqlAndroid/sendNewPasswordToUser.php"
+            android:key="sendNewPasswordToUser"
+            android:summary="Interfaccia per invio Nuova Password"
+            android:title="Send New Password" />
         </PreferenceCategory>
     <PreferenceCategory
         android:enabled="true"

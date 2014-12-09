@@ -90,9 +90,13 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 							Toast.LENGTH_LONG).show();
 					break;
 				default:
+					Toast.makeText(getApplicationContext(),
+							"L'invio della richiesta non è andato a buon fine!\n"
+							+ "Contattare l'ADMIN: keyorchestra2014@gmail.com",
+							Toast.LENGTH_LONG).show();
 					break;
 				}
-				
+				ibForgotPassword.setVisibility(ImageButton.INVISIBLE);
 			}
 		});
 
@@ -440,29 +444,6 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 						+ "Controlla i parametri...e i server MySQL & Apache");
 				openOptionsMenu();
 				setLoginState(false);
-				// SE LA CONNESSIONE FALLISCE RIMANDA ALLE PREFERENZE PER
-				// LA SCELTA DI UN'ALTRO DATABASE
-				// Thread timer = new Thread() {
-				//
-				// @Override
-				// public void run() {
-				// // TODO Auto-generated method stub
-				//
-				// try {
-				// sleep(2000);
-				// } catch (InterruptedException e) {
-				// e.printStackTrace();
-				// } finally {
-				//
-				// Intent d = new Intent(
-				// "it.keyorchestra.registrowebapp.DATABASE");
-				// startActivity(d);
-				// }
-				// }
-				//
-				// };
-				// timer.start();
-
 			}
 		}
 

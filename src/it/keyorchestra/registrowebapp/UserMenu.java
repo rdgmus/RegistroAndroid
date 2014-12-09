@@ -119,7 +119,7 @@ public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 												// Toast
 							// LANCIA TableListExpActivity
 							Intent ourStartingPoint = new Intent(UserMenu.this,
-									TableListExpActivity.class);
+									Login.class);
 							startActivity(ourStartingPoint);
 
 							// FINISH

@@ -273,7 +273,9 @@ public class RilascioNuovePassword extends Activity implements
 					etRepeatPasswd.requestFocus();
 					return;
 				}
-
+				// jsonData contiene la lista degli utenti confermati
+				// La lista non sarà mai vuota perchè la funzione in php
+				// richiamata, ritorna in tal caso una riga [{}]
 				if (jsonData.length() == 0) {
 					Toast.makeText(getApplicationContext(),
 							"Non vi sono utenti confermati!",
@@ -282,21 +284,50 @@ public class RilascioNuovePassword extends Activity implements
 				}
 
 				try {
-					long id_utente = jsonData.getJSONObject(0).getLong(
-							"id_utente");
+					long id_utente = jsonData.getJSONObject(
+							spinnerRichiestePassword.getSelectedItemPosition())
+							.getLong("id_utente");
 
-					 SaveNewPassword(id_utente, 
-							 etEmail.getText().toString(),
-							 etPasswd.getText().toString(),
-							 etNewPasswd.getText().toString());
+					if (SaveNewPassword(id_utente,
+							etEmail.getText().toString(), etPasswd.getText()
+									.toString(), etNewPasswd.getText()
+									.toString())) {
+						Toast.makeText(
+								getApplicationContext(),
+								"Password impostata per l'utente: " + id_utente,
+								Toast.LENGTH_LONG).show();
+					} else {
+						Toast.makeText(
+								getApplicationContext(),
+								"Non è stato possibile impostare la nuova passord per l'utente: "
+										+ id_utente, Toast.LENGTH_LONG).show();
+						return;
+					}
 
-					// EmailToUser(id_utente, newPassword, msg);
+					if (EmailPasswordToUser(id_utente, etEmail.getText()
+							.toString(), etNewPasswd.getText().toString())) {
+						Toast.makeText(getApplicationContext(),
+								"Inviata Email!  all'utente: " + id_utente,
+								Toast.LENGTH_LONG).show();
 
-					Toast.makeText(
-							getApplicationContext(),
-							"Password impostata per l'utente: " + id_utente
-									+ " !\n" + "Inviata Email!",
-							Toast.LENGTH_SHORT).show();
+						// SETTARE IL CAMPO email_sent della tabella
+						// change_password_request
+						JSONObject jsonRequest = jsonData
+								.getJSONObject(spinnerRichiestePassword
+										.getSelectedItemPosition());
+						String hash = jsonRequest.getString("hash");
+						setEmailSentWithSuccessAt(id_utente, hash);
+
+						// Ricarica i dati utente con la nuova password
+						loadUserRequestPendingConfirmed(tbPendingConfirmed
+								.isChecked());
+					} else {
+						Toast.makeText(
+								getApplicationContext(),
+								"Non è stato possibile inviare l'Email!  all'utente: "
+										+ id_utente, Toast.LENGTH_LONG).show();
+					}
+
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -334,6 +365,36 @@ public class RilascioNuovePassword extends Activity implements
 		});
 		tvPasswdLen.setText("" + (sbPasswdLen.getProgress() + 4) + "");
 
+	}
+
+	protected boolean setEmailSentWithSuccessAt(long id_utente, String hash) {
+		// TODO Auto-generated method stub
+
+		DatabaseOps databaseOps = new DatabaseOps(getApplicationContext());
+		return databaseOps.setEmailSentWithSuccessAt(getApplicationContext(),
+				id_utente, hash);
+	}
+
+	/**
+	 * Invio email per comunicazione nuova password impostat nel sistema
+	 * 
+	 * @param id_utente
+	 * @param email
+	 * @param password
+	 * @param msg
+	 * @return
+	 */
+	@Override
+	public boolean EmailPasswordToUser(long id_utente, String email,
+			String passwordToEncode) {
+		// TODO Auto-generated method stub
+		String sendNewPasswordToUser = getPrefs.getString(
+				"sendNewPasswordToUser", null);
+		String ip = getDatabaseIpFromPreferences();
+
+		DatabaseOps databaseOps = new DatabaseOps(getApplicationContext());
+		return databaseOps.EmailPasswordToUser(getApplicationContext(),
+				id_utente, email, passwordToEncode, sendNewPasswordToUser, ip);
 	}
 
 	protected void loadUserRequestPendingConfirmed(boolean isChecked) {
@@ -383,11 +444,28 @@ public class RilascioNuovePassword extends Activity implements
 					+ getPrefs.getLong("id_utente", -1l);
 		} else {// CAMBIO PASSWORD PER GESTIONE UTENTI DA PARTE DI UN ADMIN
 			if (tbPendingConfirmed.isChecked()) {// RICHIESTE PENDING AND
-													// CONFIRMED
-				query = "SELECT * FROM `change_password_request` AS a, utenti_scuola AS b WHERE a.`pending`=1 AND a.`confirmed`=1"
+													// CONFIRMED NECESSARIA
+													// QUESTA QUERY PER
+													// ESCLUDERE IL CAMPO hash
+													// della tabella utenti_scuola
+				query = "SELECT a.`id_request`, a.`from_user`, a.`user_email`, a.`request_date`, "
+						+ "a.`pending`, a.`hash`, a.`confirmed`, a.`request_done_date`, a.`request_done`, "
+						+ "a.`email_sent`, a.`id_admin`, a.`elapsed_days`,"
+						+ "b.`id_utente`, b.`cognome`, b.`nome`, b.`email`, b.`password`, "
+						+ "b.`register_date`, b.`user_is_admin`, b.`has_to_change_password`,"
+						+ " b.`is_locked`, b.`email_confirmed` "
+						+ " FROM `change_password_request` AS a, utenti_scuola AS b "
+						+ " WHERE a.`pending`=1 AND a.`confirmed`=1"
 						+ " AND a.`from_user` = b.id_utente";
 			} else {// RICHIESTE PENDING MA NON CONFIRMED
-				query = "SELECT * FROM `change_password_request` AS a, utenti_scuola AS b WHERE a.`pending`=1 AND a.`confirmed`=0"
+				query = "SELECT a.`id_request`, a.`from_user`, a.`user_email`, a.`request_date`, "
+						+ "a.`pending`, a.`hash`, a.`confirmed`, a.`request_done_date`, a.`request_done`, "
+						+ "a.`email_sent`, a.`id_admin`, a.`elapsed_days`,"
+						+ "b.`id_utente`, b.`cognome`, b.`nome`, b.`email`, b.`password`, "
+						+ "b.`register_date`, b.`user_is_admin`, b.`has_to_change_password`,"
+						+ " b.`is_locked`, b.`email_confirmed` "
+						+ " FROM `change_password_request` AS a, utenti_scuola AS b "
+						+ " WHERE a.`pending`=1 AND a.`confirmed`=0"
 						+ " AND a.`from_user` = b.id_utente";
 			}
 		}
@@ -565,17 +643,15 @@ public class RilascioNuovePassword extends Activity implements
 	}
 
 	@Override
-	public boolean SaveNewPassword(long id_utente, String email, String oldPassword, String passwordToEncode) {
+	public boolean SaveNewPassword(long id_utente, String email,
+			String oldPassword, String passwordToEncode) {
 		// TODO Auto-generated method stub
+		String phpencoder = getPrefs.getString("phpencoder", null);
+		String ip = getDatabaseIpFromPreferences();
+
 		DatabaseOps databaseOps = new DatabaseOps(getApplicationContext());
-		databaseOps.SaveNewPassword( id_utente,  email,  oldPassword,  passwordToEncode);
-		return false;
-	}
-
-	@Override
-	public void EmailToUser(long id_utente, String newPassword, String msg) {
-		// TODO Auto-generated method stub
-
+		return databaseOps.SaveNewPassword(getApplicationContext(), id_utente,
+				email, oldPassword, passwordToEncode, ip, phpencoder);
 	}
 
 	@Override

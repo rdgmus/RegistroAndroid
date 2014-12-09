@@ -164,7 +164,7 @@ public class MySqlAndroid {
 		InputStream is = null;
 		is = getInputStreamFromUri(applicationContext, uri);
 
-		int result=-1;
+		int result = -1;
 		try {
 			result = Integer.valueOf(
 					getResultFromInputStream(applicationContext, is).trim())
@@ -176,15 +176,16 @@ public class MySqlAndroid {
 					Toast.LENGTH_LONG).show();
 			return NewPasswordRequestState.NONE;
 		}
-		switch (result){
+		switch (result) {
 		case 0:
 			return NewPasswordRequestState.REQUEST_ABORTED;
 		case 1:
 			return NewPasswordRequestState.REQUEST_SUCCESS;
 		case 2:
 			return NewPasswordRequestState.REQUEST_EXISTS;
+		default:
+			return NewPasswordRequestState.NONE;
 		}
-		return NewPasswordRequestState.NONE;
 	}
 
 	public JSONArray getDailyConnectionAsJSON(Context applicationContext,
@@ -233,5 +234,26 @@ public class MySqlAndroid {
 		}
 
 		return jArray;
+	}
+
+	public boolean EmailPasswordToUser(Context applicationContext, String uri) {
+		// TODO Auto-generated method stub
+		InputStream is = null;
+		is = getInputStreamFromUri(applicationContext, uri);
+		if (is == null) {
+			return false;
+		}
+		String result = null;
+		result = getResultFromInputStream(applicationContext, is);
+
+		int resultValue = 0;
+		try {
+			resultValue = Integer.valueOf(result).intValue();
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return resultValue == 1;
 	}
 }
