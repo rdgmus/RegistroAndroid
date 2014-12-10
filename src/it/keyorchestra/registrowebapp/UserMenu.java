@@ -3,6 +3,8 @@ package it.keyorchestra.registrowebapp;
 import it.keyorchestra.registrowebapp.dbMatthed.DatabaseOps;
 import it.keyorchestra.registrowebapp.interfaces.ActivitiesCommonFunctions;
 import it.keyorchestra.registrowebapp.mysqlandroid.RilascioNuovePassword;
+import it.keyorchestra.registrowebapp.scuola.util.LooperThread;
+import it.keyorchestra.registrowebapp.scuola.util.ToastExpander;
 
 import java.util.Calendar;
 
@@ -12,9 +14,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Gravity;
@@ -37,7 +36,7 @@ public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 	private DatabaseOps databaseOps;
 	TextView tvUserData, tvNow;
 	ImageButton ibLogout, ibRuoloUtente, ibIsAdmin, ibEmail, ibChangePassword,
-			ibDatiUtenti,ibGrafici, imShowMenu;
+			ibDatiUtenti, ibGrafici, imShowMenu;
 	LinearLayout llSuperUserOptions;
 	private String ruoloScelto;
 
@@ -90,7 +89,7 @@ public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 
 		// IS ADMIN
 		ibIsAdmin = (ImageButton) findViewById(R.id.ibIsAdmin);
-		 long user_is_admin = getPrefs.getLong("user_is_admin", -1);
+		long user_is_admin = getPrefs.getLong("user_is_admin", -1);
 		setIconIsAdmin(ibIsAdmin, (int) user_is_admin);
 		// ABILITA LE OPZIONI PER SUPERUSER SE user_is_admin
 		abilitaSuperUserOptions((int) user_is_admin);
@@ -111,7 +110,7 @@ public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 				// TODO Auto-generated method stub
 				startAnimation((ImageButton) v, 2000);
 
-				LooperThread thread = new LooperThread() {
+				LooperThread thread = new  LooperThread() {
 					@Override
 					public void run() {
 						try {
@@ -201,23 +200,23 @@ public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 			}
 		});
 
-		ibGrafici=(ImageButton)findViewById(R.id.ibGrafici);
+		ibGrafici = (ImageButton) findViewById(R.id.ibGrafici);
 		registerToolTipFor(ibGrafici);
 		ibGrafici.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				startAnimation((ImageButton) v, 2000);
-				Toast.makeText(getApplicationContext(), "Grafici e Statistiche",
-						Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(),
+						"Grafici e Statistiche", Toast.LENGTH_SHORT).show();
 				Intent ourStartingPoint = new Intent(UserMenu.this,
 						GraphAndStatsManager.class);
 				startActivity(ourStartingPoint);
-				UserMenu.this.finish();				
+				UserMenu.this.finish();
 			}
 		});
-		
+
 		tvNow = (TextView) findViewById(R.id.tvNow);
 		setCurrentDate();
 
@@ -238,6 +237,36 @@ public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 				openOptionsMenu();
 			}
 		});
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.app.Activity#onResume()
+	 */
+	@SuppressLint("ShowToast")
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		if (userHasToChangePassword()) {
+
+			Toast myToast = Toast
+					.makeText(
+							getApplicationContext(),
+							"Ricordiamo all'utente che deve cambiare la\n"
+									+ "propria password per la sicurezza del proprio\n"
+									+ "account, perchè ha ricevuto una nuova password\n"
+									+ "da un ADMIN, avendola dimenticata!",
+							Toast.LENGTH_SHORT);
+
+			ToastExpander.showFor(myToast, 10000);
+		}
+	}
+
+	private boolean userHasToChangePassword() {
+		// TODO Auto-generated method stub
+		return getPrefs.getLong("has_to_change_password", -1l) == 1l;
 	}
 
 	private void abilitaSuperUserOptions(int user_is_admin) {
@@ -407,18 +436,3 @@ public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 
 }
 
-class LooperThread extends Thread {
-	public Handler mHandler;
-
-	public void run() {
-		Looper.prepare();
-
-		mHandler = new Handler() {
-			public void handleMessage(Message msg) {
-				// process incoming messages here
-			}
-		};
-
-		Looper.loop();
-	}
-}

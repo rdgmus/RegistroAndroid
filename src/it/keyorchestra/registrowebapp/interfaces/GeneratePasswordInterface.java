@@ -8,11 +8,12 @@ public interface GeneratePasswordInterface {
 			String servSideScript, String length);
 
 	public boolean EmailPasswordToUser(long id_utente, String email,
-			String passwordToEncode);
+			String passwordToEncode, boolean isChangingPasswordForHimSelf);
 
 	public void SetPasswordVisibility(boolean isVisible);
 
 	public boolean SaveNewPassword(long id_utente, String email,
-			String oldPassword, String passwordToEncode);
+			String oldPassword, String passwordToEncode,
+			boolean isChangingPasswordForHimSelf);
 
 }

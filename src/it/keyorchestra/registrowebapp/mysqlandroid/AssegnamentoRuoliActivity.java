@@ -272,6 +272,7 @@ public class AssegnamentoRuoliActivity extends Activity implements
 	 * @param selectedRole
 	 * @param selectedUser
 	 */
+	@SuppressWarnings("deprecation")
 	protected void removeUserFromRole(long selectedRole, long selectedUser) {
 		// TODO Auto-generated method stub
 
@@ -314,6 +315,7 @@ public class AssegnamentoRuoliActivity extends Activity implements
 	 * @param selectedRole
 	 * @param selectedUser
 	 */
+	@SuppressWarnings("deprecation")
 	protected void addUserToRole(long selectedRole, long selectedUser) {
 		// TODO Auto-generated method stub
 

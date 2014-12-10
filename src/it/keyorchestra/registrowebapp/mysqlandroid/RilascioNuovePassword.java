@@ -1,11 +1,13 @@
 package it.keyorchestra.registrowebapp.mysqlandroid;
 
+import it.keyorchestra.registrowebapp.Login;
 import it.keyorchestra.registrowebapp.R;
 import it.keyorchestra.registrowebapp.UserMenu;
 import it.keyorchestra.registrowebapp.dbMatthed.DatabaseOps;
 import it.keyorchestra.registrowebapp.interfaces.ActivitiesCommonFunctions;
 import it.keyorchestra.registrowebapp.interfaces.GeneratePasswordInterface;
 import it.keyorchestra.registrowebapp.scuola.util.FieldsValidator;
+import it.keyorchestra.registrowebapp.scuola.util.LooperThread;
 import it.keyorchestra.registrowebapp.scuola.util.UtentiArrayAdapter;
 
 import java.io.UnsupportedEncodingException;
@@ -22,6 +24,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.util.Log;
@@ -55,9 +60,25 @@ public class RilascioNuovePassword extends Activity implements
 	private boolean backButtonVisible;
 	private ArrayList<String> arrayData;
 	private JSONArray jsonData;
+	private boolean savingNewPassword = false;
+
+	/**
+	 * @return the savingNewPassword
+	 */
+	public boolean isSavingNewPassword() {
+		return savingNewPassword;
+	}
+
+	/**
+	 * @param savingNewPassword
+	 *            the savingNewPassword to set
+	 */
+	public void setSavingNewPassword(boolean savingNewPassword) {
+		this.savingNewPassword = savingNewPassword;
+	}
 
 	LinearLayout llGeneratorePassword, llRichieste, llCommands, headerLayout,
-			spinnerLayout;
+			llRichiesteCambioPassword;
 
 	Spinner spinnerRichiestePassword;
 	SeekBar sbPasswdLen;
@@ -78,6 +99,8 @@ public class RilascioNuovePassword extends Activity implements
 	}
 
 	/**
+	 * Fa scomparire o comparire il back-button e il titolo
+	 * 
 	 * @param backButtonVisible
 	 *            the backButtonVisible to set
 	 */
@@ -147,12 +170,17 @@ public class RilascioNuovePassword extends Activity implements
 
 		llRichieste = (LinearLayout) findViewById(R.id.llRichieste);
 
-		spinnerLayout = (LinearLayout) findViewById(R.id.spinnerLayout);
+		llRichiesteCambioPassword = (LinearLayout) findViewById(R.id.llRichiesteCambioPassword);
 		// TOGGLE BUTTON
-		tbPendingConfirmed = (ToggleButton) spinnerLayout
+		tbPendingConfirmed = (ToggleButton) llRichiesteCambioPassword
 				.findViewById(R.id.tbPendingConfirmed);
 		tbPendingConfirmed.setChecked(true);
-		setRadioGroupRequestStateVisible(getPrefs.getBoolean(
+
+		// Le due pagine per il cmbiamento password usano questo parametro
+		// nelle preferenze per far sapere all'activity se è stata chiamta
+		// da CambioPassword utente stesso o da un ADMIN che opera il rilascio
+		// delle nuove password su richiesta utenti che le hanno dimenticate.
+		setLayoutRequestsVisible(getPrefs.getBoolean(
 				"backButtonForPasswordChange", false));
 
 		tbPendingConfirmed
@@ -171,7 +199,7 @@ public class RilascioNuovePassword extends Activity implements
 					}
 				});
 		// SPINNER
-		spinnerRichiestePassword = (Spinner) spinnerLayout
+		spinnerRichiestePassword = (Spinner) llRichiesteCambioPassword
 				.findViewById(R.id.spinnerRichiestePassword);
 
 		reloadRequestPasswordAdapter();
@@ -260,9 +288,11 @@ public class RilascioNuovePassword extends Activity implements
 		ibSavePasswd.setOnClickListener(new OnClickListener() {
 
 			@Override
-			public void onClick(View v) {
+			public void onClick(final View v) {
 				// TODO Auto-generated method stub
+
 				startAnimation((ImageButton) v, 2000);
+
 				if (!FieldsValidator.Is_Valid_Password(etNewPasswd)) {
 					etNewPasswd.requestFocus();
 					return;
@@ -282,59 +312,18 @@ public class RilascioNuovePassword extends Activity implements
 							Toast.LENGTH_SHORT).show();
 					return;
 				}
-
-				try {
-					long id_utente = jsonData.getJSONObject(
-							spinnerRichiestePassword.getSelectedItemPosition())
-							.getLong("id_utente");
-
-					if (SaveNewPassword(id_utente,
-							etEmail.getText().toString(), etPasswd.getText()
-									.toString(), etNewPasswd.getText()
-									.toString())) {
-						Toast.makeText(
-								getApplicationContext(),
-								"Password impostata per l'utente: " + id_utente,
-								Toast.LENGTH_LONG).show();
-					} else {
-						Toast.makeText(
-								getApplicationContext(),
-								"Non è stato possibile impostare la nuova passord per l'utente: "
-										+ id_utente, Toast.LENGTH_LONG).show();
-						return;
+				// Disabilita il bottone per evitare richieste multiple al
+				// server per 5sec
+				if (!isSavingNewPassword()) {
+					saveNewPasswordProcedure();
+					etNewPasswd.setText("");
+					etRepeatPasswd.setText("");
+					if (isBackButtonVisible()) {
+						// DEVE RITORNARE A FARE IL LOGIN
+						backToLogin();
 					}
-
-					if (EmailPasswordToUser(id_utente, etEmail.getText()
-							.toString(), etNewPasswd.getText().toString())) {
-						Toast.makeText(getApplicationContext(),
-								"Inviata Email!  all'utente: " + id_utente,
-								Toast.LENGTH_LONG).show();
-
-						// SETTARE IL CAMPO email_sent della tabella
-						// change_password_request
-						JSONObject jsonRequest = jsonData
-								.getJSONObject(spinnerRichiestePassword
-										.getSelectedItemPosition());
-						String hash = jsonRequest.getString("hash");
-						setEmailSentWithSuccessAt(id_utente, hash);
-
-						// Ricarica i dati utente con la nuova password
-						loadUserRequestPendingConfirmed(tbPendingConfirmed
-								.isChecked());
-					} else {
-						Toast.makeText(
-								getApplicationContext(),
-								"Non è stato possibile inviare l'Email!  all'utente: "
-										+ id_utente, Toast.LENGTH_LONG).show();
-					}
-
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					Toast.makeText(getApplicationContext(),
-							"JSONException: " + e.getMessage(),
-							Toast.LENGTH_LONG).show();
 				}
+
 			}
 		});
 
@@ -367,6 +356,115 @@ public class RilascioNuovePassword extends Activity implements
 
 	}
 
+	/**
+	 * Richiamata quando l'utente ha cambiato la propria password. Viene inviato
+	 * di nuovo al LOGIN
+	 */
+	protected void backToLogin() {
+		// TODO Auto-generated method stub
+		LooperThread thread = new LooperThread() {
+			@Override
+			public void run() {
+				try {
+					Thread.sleep(3500); // As I am using LENGTH_LONG in
+										// Toast
+					// LANCIA TableListExpActivity
+					Intent ourStartingPoint = new Intent(
+							RilascioNuovePassword.this, Login.class);
+					startActivity(ourStartingPoint);
+
+					// FINISH
+					RilascioNuovePassword.this.finish();
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		};
+
+		// SBLOCCA UTENTE
+		long id_utente = -1;
+		try {
+			id_utente = jsonData.getJSONObject(
+					spinnerRichiestePassword.getSelectedItemPosition())
+					.getLong("id_utente");
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		DatabaseOps databaseOps = new DatabaseOps(getBaseContext());
+		databaseOps.UnlockUser(getApplicationContext(), null, id_utente);
+		// CANCELLA UTENTE DALLE PREFERENZE
+		databaseOps.DeleteUserFromPreferences(id_utente);
+		// REGISTRA LOGOUT EVENT
+
+		Toast.makeText(getApplicationContext(),
+				"Logout dal Registro Scolastico", Toast.LENGTH_SHORT).show();
+		thread.start();
+	}
+
+	protected void saveNewPasswordProcedure() {
+		// TODO Auto-generated method stub
+		setSavingNewPassword(true);
+		try {
+			long id_utente = jsonData.getJSONObject(
+					spinnerRichiestePassword.getSelectedItemPosition())
+					.getLong("id_utente");
+
+			boolean isChangingPasswordForHimSelf = getPrefs.getBoolean(
+					"backButtonForPasswordChange", false);
+
+			if (SaveNewPassword(id_utente, etEmail.getText().toString(),
+					etPasswd.getText().toString(), etNewPasswd.getText()
+							.toString(), isChangingPasswordForHimSelf)) {
+				Toast.makeText(getApplicationContext(),
+						"Password impostata per l'utente: " + id_utente,
+						Toast.LENGTH_LONG).show();
+			} else {
+				Toast.makeText(
+						getApplicationContext(),
+						"Non è stato possibile impostare la nuova passord per l'utente: "
+								+ id_utente, Toast.LENGTH_LONG).show();
+				setSavingNewPassword(false);
+				return;
+			}
+
+			if (EmailPasswordToUser(id_utente, etEmail.getText().toString(),
+					etNewPasswd.getText().toString(),
+					isChangingPasswordForHimSelf)) {
+				Toast.makeText(getApplicationContext(),
+						"Inviata Email!  all'utente: " + id_utente,
+						Toast.LENGTH_LONG).show();
+
+				// SETTARE IL CAMPO email_sent della tabella
+				// change_password_request
+				JSONObject jsonRequest = jsonData
+						.getJSONObject(spinnerRichiestePassword
+								.getSelectedItemPosition());
+				String hash = jsonRequest.getString("hash");
+				setEmailSentWithSuccessAt(id_utente, hash);
+
+				// Ricarica i dati utente con la nuova password
+				loadUserRequestPendingConfirmed(tbPendingConfirmed.isChecked());
+			} else {
+				Toast.makeText(
+						getApplicationContext(),
+						"Non è stato possibile inviare l'Email!  all'utente: "
+								+ id_utente, Toast.LENGTH_LONG).show();
+				setSavingNewPassword(false);
+			}
+
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Toast.makeText(getApplicationContext(),
+					"JSONException: " + e.getMessage(), Toast.LENGTH_LONG)
+					.show();
+			setSavingNewPassword(false);
+		}
+		setSavingNewPassword(false);
+	}
+
 	protected boolean setEmailSentWithSuccessAt(long id_utente, String hash) {
 		// TODO Auto-generated method stub
 
@@ -380,13 +478,14 @@ public class RilascioNuovePassword extends Activity implements
 	 * 
 	 * @param id_utente
 	 * @param email
+	 * @param isChangingPasswordForHimSelf
 	 * @param password
 	 * @param msg
 	 * @return
 	 */
 	@Override
 	public boolean EmailPasswordToUser(long id_utente, String email,
-			String passwordToEncode) {
+			String passwordToEncode, boolean isChangingPasswordForHimSelf) {
 		// TODO Auto-generated method stub
 		String sendNewPasswordToUser = getPrefs.getString(
 				"sendNewPasswordToUser", null);
@@ -394,22 +493,24 @@ public class RilascioNuovePassword extends Activity implements
 
 		DatabaseOps databaseOps = new DatabaseOps(getApplicationContext());
 		return databaseOps.EmailPasswordToUser(getApplicationContext(),
-				id_utente, email, passwordToEncode, sendNewPasswordToUser, ip);
+				id_utente, email, passwordToEncode, sendNewPasswordToUser, ip,
+				isChangingPasswordForHimSelf);
 	}
 
 	protected void loadUserRequestPendingConfirmed(boolean isChecked) {
 		// TODO Auto-generated method stub
-		if (!isChecked) {
-			Toast.makeText(
-					getApplicationContext(),
-					"Richieste in attesa di \n"
-							+ "conferma da parte dell'utente!",
-					Toast.LENGTH_SHORT).show();
-		} else {
-			Toast.makeText(getApplicationContext(),
-					"Richieste confermate dall'utente!", Toast.LENGTH_SHORT)
-					.show();
-		}
+		if (!isBackButtonVisible())
+			if (!isChecked) {
+				Toast.makeText(
+						getApplicationContext(),
+						"Lista richieste in attesa di \n"
+								+ "conferma da parte dell'utente!",
+						Toast.LENGTH_SHORT).show();
+			} else {
+				Toast.makeText(getApplicationContext(),
+						"Lista richieste già confermate dall'utente!",
+						Toast.LENGTH_SHORT).show();
+			}
 		reloadRequestPasswordAdapter();
 	}
 
@@ -447,7 +548,8 @@ public class RilascioNuovePassword extends Activity implements
 													// CONFIRMED NECESSARIA
 													// QUESTA QUERY PER
 													// ESCLUDERE IL CAMPO hash
-													// della tabella utenti_scuola
+													// della tabella
+													// utenti_scuola
 				query = "SELECT a.`id_request`, a.`from_user`, a.`user_email`, a.`request_date`, "
 						+ "a.`pending`, a.`hash`, a.`confirmed`, a.`request_done_date`, a.`request_done`, "
 						+ "a.`email_sent`, a.`id_admin`, a.`elapsed_days`,"
@@ -500,30 +602,20 @@ public class RilascioNuovePassword extends Activity implements
 		}
 	}
 
-	//
-	// protected void loadUserRequestPendingConfirmed(int checkedId) {
-	// // TODO Auto-generated method stub
-	// switch (checkedId) {
-	// case R.id.radioPending:
-	// Toast.makeText(getApplicationContext(), "Richieste in attesa!",
-	// Toast.LENGTH_SHORT).show();
-	// reloadRequestPasswordAdapter();
-	// break;
-	// case R.id.radioConfirmed:
-	// Toast.makeText(getApplicationContext(), "Richieste confermate!",
-	// Toast.LENGTH_SHORT).show();
-	// reloadRequestPasswordAdapter();
-	// break;
-	// }
-	// }
-	//
-	public void setRadioGroupRequestStateVisible(boolean backButtonVisible) {
+	/**
+	 * Nasconde o mostra il ToogleButton che seleziona le richieste pending e
+	 * confirmed o not confirmed se l'ImageButton ibBack è visibile oppure no,
+	 * per usare la stessa activity sia nel rilascio nuove password attuato da
+	 * un ADMIN che nel cambiamento della propria password da parte dell'utente
+	 * loggato.
+	 * 
+	 * @param backButtonVisible
+	 */
+	public void setLayoutRequestsVisible(boolean backButtonVisible) {
 		// TODO Auto-generated method stub
 		if (backButtonVisible) {
-			// rgPendingConfirmed.setVisibility(RadioGroup.GONE);
 			tbPendingConfirmed.setVisibility(ToggleButton.GONE);
 		} else {
-			// rgPendingConfirmed.setVisibility(RadioGroup.VISIBLE);
 			tbPendingConfirmed.setVisibility(ToggleButton.VISIBLE);
 		}
 	}
@@ -644,14 +736,16 @@ public class RilascioNuovePassword extends Activity implements
 
 	@Override
 	public boolean SaveNewPassword(long id_utente, String email,
-			String oldPassword, String passwordToEncode) {
+			String oldPassword, String passwordToEncode,
+			boolean isChangingPasswordForHimSelf) {
 		// TODO Auto-generated method stub
 		String phpencoder = getPrefs.getString("phpencoder", null);
 		String ip = getDatabaseIpFromPreferences();
 
 		DatabaseOps databaseOps = new DatabaseOps(getApplicationContext());
 		return databaseOps.SaveNewPassword(getApplicationContext(), id_utente,
-				email, oldPassword, passwordToEncode, ip, phpencoder);
+				email, oldPassword, passwordToEncode, ip, phpencoder,
+				isChangingPasswordForHimSelf);
 	}
 
 	@Override

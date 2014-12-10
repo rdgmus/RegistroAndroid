@@ -415,6 +415,7 @@ public final class R {
         public static final int llGeneratorePassword=0x7f0c00db;
         public static final int llListFields=0x7f0c00bf;
         public static final int llRichieste=0x7f0c00d1;
+        public static final int llRichiesteCambioPassword=0x7f0c00d9;
         public static final int llSqlite=0x7f0c00f9;
         public static final int llSuperUserOptions=0x7f0c005a;
         public static final int llUserCommonOptions=0x7f0c0057;
@@ -454,7 +455,6 @@ public final class R {
         public static final int spinOtherTable=0x7f0c007f;
         public static final int spinTables=0x7f0c001d;
         public static final int spinUniqueValues=0x7f0c0078;
-        public static final int spinnerLayout=0x7f0c00d9;
         public static final int spinnerRichiestePassword=0x7f0c00d3;
         public static final int spinnerRuoli=0x7f0c0015;
         public static final int spinnerSceltaGrafico=0x7f0c002c;

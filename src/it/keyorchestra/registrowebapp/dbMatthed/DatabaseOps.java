@@ -1223,11 +1223,13 @@ public class DatabaseOps implements DatabasesInterface {
 	 * @param email
 	 * @param oldPassword
 	 * @param passwordToEncode
+	 * @param isChangingPasswordForHimSelf
 	 * @return
 	 */
+	@SuppressLint("NewApi")
 	public boolean SaveNewPassword(Context applicationContext, long id_utente,
 			String email, String oldPassword, String passwordToEncode,
-			String ip, String phpencoder) {
+			String ip, String phpencoder, boolean isChangingPasswordForHimSelf) {
 		// TODO Auto-generated method stub
 
 		String url = getUrl(applicationContext);
@@ -1242,25 +1244,44 @@ public class DatabaseOps implements DatabasesInterface {
 			Statement st = conn.createStatement();
 			String sql = null;
 
-			sql = "UPDATE utenti_scuola SET password = '" + encodedPassword
-					+ "', has_to_change_password = 1" + " WHERE id_utente = "
-					+ id_utente + " AND email = '" + email
-					+ "' AND password = '" + oldPassword + "'";
+			if (!isChangingPasswordForHimSelf) {
+				sql = "UPDATE utenti_scuola SET password = '" + encodedPassword
+						+ "', has_to_change_password = 1"
+						+ " WHERE id_utente = " + id_utente + " AND email = '"
+						+ email + "' AND password = '" + oldPassword + "'";
+			} else {
+				sql = "UPDATE utenti_scuola SET password = '" + encodedPassword
+						+ "', has_to_change_password = 0"
+						+ " WHERE id_utente = " + id_utente + " AND email = '"
+						+ email + "' AND password = '" + oldPassword + "'";
+			}
 
-			@SuppressWarnings("unused")
 			int result = st.executeUpdate(sql);
+
 			if (result == 1) {
 				// SETTA CAMPI DELLA change_password_request
-				long id_utenteAdmin = getPrefs.getLong("id_utente", -1);
-				sql = "UPDATE `change_password_request` SET `request_done_date`=NOW(),`request_done`= 1,`email_sent`= 0,`id_admin`= "
-						+ id_utenteAdmin
-						+ ", pending = 0"
-						+ " WHERE from_user = "
-						+ id_utente
-						+ " AND pending = 1 AND confirmed = 1";
-				result = st.executeUpdate(sql);
+				if (!isChangingPasswordForHimSelf) {// IS ADMIN DOING THAT.....
+					long id_utenteAdmin = getPrefs.getLong("id_utente", -1);
+					sql = "UPDATE `change_password_request` SET `request_done_date`=NOW(),`request_done`= 1,`email_sent`= 0,`id_admin`= "
+							+ id_utenteAdmin
+							+ ", pending = 0"
+							+ " WHERE from_user = "
+							+ id_utente
+							+ " AND pending = 1 AND confirmed = 1";
+					result = st.executeUpdate(sql);
+				} else {
+					// Vuol dire che sto cambiando la mia password, e se lo
+					// sto facendo dopo aver ricevuto una nuova password
+					// da un ADMIN devo rimettere < 0 il campo
+					// has_to_change_password
+					// Per cancellare il messaggio introduttivo della UserMenu
+					SharedPreferences.Editor editor = getPrefs.edit();
+					editor.putLong("has_to_change_password", 0l);
+					editor.apply();
+				}
 
 			}
+
 			st.close();
 			conn.close();
 		} catch (SQLException e) {
@@ -1276,19 +1297,22 @@ public class DatabaseOps implements DatabasesInterface {
 	 * @param id_utente2
 	 * @param email2
 	 * @param passwordToEncode
+	 * @param isChangingPasswordForHimSelf
 	 * @param msg
 	 * @return
 	 */
 	public boolean EmailPasswordToUser(Context applicationContext,
 			long id_utente, String email, String passwordToEncode,
-			String sendNewPasswordToUser, String ip) {
+			String sendNewPasswordToUser, String ip,
+			boolean isChangingPasswordForHimSelf) {
 		// TODO Auto-generated method stub
-
+		int forHimSelf = isChangingPasswordForHimSelf? 1:0;
 		try {
 			return new MySqlAndroid().EmailPasswordToUser(applicationContext,
 					"http://" + ip + "/" + sendNewPasswordToUser + "?email="
 							+ URLEncoder.encode(email, "UTF-8") + "&password="
-							+ URLEncoder.encode(passwordToEncode, "UTF-8"));
+							+ URLEncoder.encode(passwordToEncode, "UTF-8")
+							+ "&forHimSelf=" + forHimSelf);
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

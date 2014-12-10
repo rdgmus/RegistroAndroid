@@ -165,7 +165,10 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 				.getDefaultSharedPreferences(getBaseContext());
 
 		etLoginEmail = (EditText) findViewById(R.id.etLoginEmail);
-
+		//Imposta il campo email per il login con l'email fornita al login precedente
+		String lastLoginEmail = getPrefs.getString("lastLoginEmail", "");
+		etLoginEmail.setText(lastLoginEmail);
+		
 		etLoginPasswd = (EditText) findViewById(R.id.etLoginPasswd);
 
 		imShowMenu = (ImageButton) findViewById(R.id.imShowMenu);
@@ -229,9 +232,13 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 						getDatabaseIpFromPreferences(), phpencoder);
 
 				if (isAuthenticated) {// Credenziali esistenti
-					// Controlla se l'utente è locked
+					// Salva nelle preferenze l'ultima email
+					SharedPreferences.Editor editor = getPrefs.edit();
+					editor.putString("lastLoginEmail", etLoginEmail.getText().toString());
+					editor.apply();
 					ibForgotPassword.setVisibility(ImageButton.INVISIBLE);
 
+					// Controlla se l'utente è locked
 					SharedPreferences sharedpreferences = PreferenceManager
 							.getDefaultSharedPreferences(getApplicationContext());
 					Long is_locked = sharedpreferences.getLong("is_locked", -1);
