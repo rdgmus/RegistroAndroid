@@ -629,6 +629,7 @@ public final class R {
         public static final int action_settings=0x7f080001;
         public static final int activitiesText=0x7f080031;
         public static final int addRuolo=0x7f080054;
+        public static final int adminOptions=0x7f080070;
         public static final int appVersion=0x7f080033;
         public static final int app_name=0x7f080000;
         public static final int author=0x7f08001d;

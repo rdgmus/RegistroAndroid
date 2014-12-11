@@ -82,8 +82,15 @@ public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 				startAnimation((ImageButton) v, 2000);
 				Toast.makeText(
 						getApplicationContext(),
-						"Non vi sono attività implementate per il ruolo di: "
+						"Attività implementate per il ruolo di: "
 								+ ruoloScelto, Toast.LENGTH_SHORT).show();
+				Intent sendIntent = new Intent();
+				sendIntent.setAction(Intent.ACTION_SEND);
+				sendIntent.putExtra(Intent.EXTRA_TEXT,
+						"Ruolo: "+ruoloScelto);
+				sendIntent.setType("text/plain");
+				startActivity(Intent.createChooser(sendIntent, getResources()
+						.getText(R.string.adminOptions)+" "+ruoloScelto));
 			}
 		});
 
@@ -110,7 +117,7 @@ public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 				// TODO Auto-generated method stub
 				startAnimation((ImageButton) v, 2000);
 
-				LooperThread thread = new  LooperThread() {
+				LooperThread thread = new LooperThread() {
 					@Override
 					public void run() {
 						try {
@@ -435,4 +442,3 @@ public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 	}
 
 }
-
