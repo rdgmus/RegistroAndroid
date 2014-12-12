@@ -65,7 +65,7 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 								etLoginEmail.getText().toString(),
 								sendRequestChangePassword,
 								getDatabaseIpFromPreferences());
-				
+
 				switch (result) {// PER GLI STATI 0,1,2,... VEDI
 									// sendRequestChangePassword.php
 				case REQUEST_ABORTED:// requestAborted LA RICHIESTA NON E'
@@ -90,9 +90,10 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 							Toast.LENGTH_LONG).show();
 					break;
 				default:
-					Toast.makeText(getApplicationContext(),
+					Toast.makeText(
+							getApplicationContext(),
 							"L'invio della richiesta non è andato a buon fine!\n"
-							+ "Contattare l'ADMIN: keyorchestra2014@gmail.com",
+									+ "Contattare l'ADMIN: keyorchestra2014@gmail.com",
 							Toast.LENGTH_LONG).show();
 					break;
 				}
@@ -165,10 +166,11 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 				.getDefaultSharedPreferences(getBaseContext());
 
 		etLoginEmail = (EditText) findViewById(R.id.etLoginEmail);
-		//Imposta il campo email per il login con l'email fornita al login precedente
+		// Imposta il campo email per il login con l'email fornita al login
+		// precedente
 		String lastLoginEmail = getPrefs.getString("lastLoginEmail", "");
 		etLoginEmail.setText(lastLoginEmail);
-		
+
 		etLoginPasswd = (EditText) findViewById(R.id.etLoginPasswd);
 
 		imShowMenu = (ImageButton) findViewById(R.id.imShowMenu);
@@ -234,7 +236,8 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 				if (isAuthenticated) {// Credenziali esistenti
 					// Salva nelle preferenze l'ultima email
 					SharedPreferences.Editor editor = getPrefs.edit();
-					editor.putString("lastLoginEmail", etLoginEmail.getText().toString());
+					editor.putString("lastLoginEmail", etLoginEmail.getText()
+							.toString());
 					editor.apply();
 					ibForgotPassword.setVisibility(ImageButton.INVISIBLE);
 
@@ -283,7 +286,13 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 									getDatabaseIpFromPreferences());
 
 							// REGISTRA LOGIN EVENT
-
+							databaseOps.RegisterLogEvent(getBaseContext(),
+									"LOGIN_SUCCESS", etLoginEmail.getText()
+											.toString(), etLoginPasswd
+											.getText().toString(),
+									getPrefs.getString(
+											"LogEventsRegisterInterface", ""),
+									getDatabaseIpFromPreferences());
 							// Lancia un nuovo Intent per andare allo userMenu
 							// del ruolo prescelto. All'interno dello user menù
 							// verranno mostrate opzioni in base al ruolo e se
@@ -320,9 +329,24 @@ public class Login extends Activity implements ActivitiesCommonFunctions {
 											+ ruoloScelto
 											+ "\nPermesso di accesso NEGATO!",
 									Toast.LENGTH_SHORT).show();
+							databaseOps.RegisterLogEvent(getBaseContext(),
+									"LOGIN_FAILURE", etLoginEmail.getText()
+											.toString(), etLoginPasswd
+											.getText().toString(),
+											getPrefs.getString(
+													"LogEventsRegisterInterface", ""),
+											getDatabaseIpFromPreferences());
+
 						}
 					}
 				} else {
+					databaseOps.RegisterLogEvent(getBaseContext(),
+							"LOGIN_FAILURE", etLoginEmail.getText().toString(),
+							etLoginPasswd.getText().toString(),
+							getPrefs.getString(
+									"LogEventsRegisterInterface", ""),
+							getDatabaseIpFromPreferences());
+
 					Toast myToast = Toast
 							.makeText(
 									getApplicationContext(),

@@ -93,7 +93,7 @@ public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 
 				sendIntent.putExtras(basket);
 				sendIntent.setType("text/plain");
-				
+
 				startActivity(Intent.createChooser(sendIntent, getResources()
 						.getText(R.string.adminOptions) + " " + ruoloScelto));
 			}
@@ -144,9 +144,21 @@ public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 				// SBLOCCA UTENTE
 				databaseOps
 						.UnlockUser(getApplicationContext(), null, id_utente);
+				// REGISTRA LOGOUT EVENT
+				String email = databaseOps.getUserEmail(
+						getApplicationContext(), id_utente);
+
+				String password = databaseOps.getUserPasswdInClear(
+						getApplicationContext(), id_utente,
+						getDatabaseIpFromPreferences(),
+						getPrefs.getString("phpencoder", ""));
+				databaseOps.RegisterLogEvent(getBaseContext(), "LOGOUT", email,
+						password,
+						getPrefs.getString("LogEventsRegisterInterface", ""),
+						getDatabaseIpFromPreferences());
+
 				// CANCELLA UTENTE DALLE PREFERENZE
 				databaseOps.DeleteUserFromPreferences(id_utente);
-				// REGISTRA LOGOUT EVENT
 
 				Toast.makeText(getApplicationContext(),
 						"Logout dal Registro Scolastico", Toast.LENGTH_SHORT)
@@ -254,34 +266,43 @@ public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 	protected Bundle packPreferences() {
 		// TODO Auto-generated method stub
 		Bundle basket = new Bundle();
-		long id_utente = getPrefs.getLong("id_utente",-1);
+		long id_utente = getPrefs.getLong("id_utente", -1);
 		basket.putLong("id_utente", id_utente);
 		basket.putString("hash", generateHashForUserOptions(id_utente));
-		
-		//DATABASE
-		basket.putString("databaseList", getPrefs.getString("databaseList", ""));
-		
-		//PostgreSQL
-		basket.putString("ipPostgreSQL", getPrefs.getString("ipPostgreSQL", ""));
-		basket.putString("userNamePostgreSQL", getPrefs.getString("userNamePostgreSQL", ""));
-		basket.putString("userPasswdPostgreSQL", getPrefs.getString("userPasswdPostgreSQL", ""));
-		basket.putString("portPostgreSQL", getPrefs.getString("portPostgreSQL", ""));
-		basket.putString("schemaPostgreSQL", getPrefs.getString("schemaPostgreSQL", ""));
 
-		//MySQL
+		// DATABASE
+		basket.putString("databaseList", getPrefs.getString("databaseList", ""));
+
+		// PostgreSQL
+		basket.putString("ipPostgreSQL", getPrefs.getString("ipPostgreSQL", ""));
+		basket.putString("userNamePostgreSQL",
+				getPrefs.getString("userNamePostgreSQL", ""));
+		basket.putString("userPasswdPostgreSQL",
+				getPrefs.getString("userPasswdPostgreSQL", ""));
+		basket.putString("portPostgreSQL",
+				getPrefs.getString("portPostgreSQL", ""));
+		basket.putString("schemaPostgreSQL",
+				getPrefs.getString("schemaPostgreSQL", ""));
+
+		// MySQL
 		basket.putString("ipMySQL", getPrefs.getString("ipMySQL", ""));
-		basket.putString("userNameMySQL", getPrefs.getString("userNameMySQL", ""));
-		basket.putString("userPasswdMySQL", getPrefs.getString("userPasswdMySQL", ""));
+		basket.putString("userNameMySQL",
+				getPrefs.getString("userNameMySQL", ""));
+		basket.putString("userPasswdMySQL",
+				getPrefs.getString("userPasswdMySQL", ""));
 		basket.putString("portMySQL", getPrefs.getString("portMySQL", ""));
 		basket.putString("schemaMySQL", getPrefs.getString("schemaMySQL", ""));
 
-		//PhpMySqlAndroid - SERVER SIDE SCRIPTINGs
+		// PhpMySqlAndroid - SERVER SIDE SCRIPTINGs
 		basket.putString("phpencoder", getPrefs.getString("phpencoder", ""));
-		basket.putString("retrieveTableData", getPrefs.getString("retrieveTableData", ""));
-		basket.putString("GraphViewInterface", getPrefs.getString("GraphViewInterface", ""));
-		basket.putString("LogEventsRegisterInterface", getPrefs.getString("LogEventsRegisterInterface", ""));
+		basket.putString("retrieveTableData",
+				getPrefs.getString("retrieveTableData", ""));
+		basket.putString("GraphViewInterface",
+				getPrefs.getString("GraphViewInterface", ""));
+		basket.putString("LogEventsRegisterInterface",
+				getPrefs.getString("LogEventsRegisterInterface", ""));
 		basket.putString("schemaMySQL", getPrefs.getString("schemaMySQL", ""));
-		
+
 		return basket;
 	}
 

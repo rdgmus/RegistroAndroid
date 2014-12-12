@@ -256,4 +256,25 @@ public class MySqlAndroid {
 		
 		return resultValue == 1;
 	}
+
+	public boolean RegisterLogEvent(Context applicationContext, String uri) {
+		// TODO Auto-generated method stub
+		InputStream is = null;
+		is = getInputStreamFromUri(applicationContext, uri);
+		if (is == null) {
+			return false;
+		}
+		String result = null;
+		result = getResultFromInputStream(applicationContext, is);
+
+		int resultValue = 0;
+		try {
+			resultValue = Integer.valueOf(result).intValue();
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return resultValue == 1;
+	}
 }

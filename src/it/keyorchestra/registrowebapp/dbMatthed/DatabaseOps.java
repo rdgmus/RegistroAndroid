@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import junit.framework.Assert;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ComponentName;
@@ -546,6 +545,19 @@ public class DatabaseOps implements DatabasesInterface {
 						+ URLEncoder.encode(passwd));
 
 		return encoded;
+
+	}
+
+	private String decodePassword(Context applicationContext, String ip,
+			String phpencoder, String passwd) {
+		@SuppressWarnings("deprecation")
+		String decoded = new MySqlAndroid().getEncodedStringFromUri(
+				applicationContext,
+				"http://" + ip + "/" + phpencoder
+						+ "?actionEncode=decodePassword&password="
+						+ URLEncoder.encode(passwd));
+
+		return decoded;
 
 	}
 
@@ -1182,6 +1194,14 @@ public class DatabaseOps implements DatabasesInterface {
 	}
 
 	/**
+	 * Password decodificata
+	 */
+	public String getUserPasswdInClear(Context applicationContext, long selectedUser,String ip,String phpencoder){
+		String passwd = this.getUserPasswd(applicationContext, selectedUser);
+		
+		return decodePassword(applicationContext, ip, phpencoder, passwd);
+	}
+	/**
 	 * Ritorna la password dell'utente come codificata e quindi a meno di
 	 * conoscere l'algoritmo di decodifica non la può leggere neanche l'admin
 	 * che svolge l'operazione di cambiamento password per gli utenti
@@ -1427,6 +1447,28 @@ public class DatabaseOps implements DatabasesInterface {
 			st.close();
 			conn.close();
 		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	/**
+	 * Registra l'evento nel LOG
+	 */
+	public boolean RegisterLogEvent(Context applicationContext, String action,
+			String email, String password, String LogEventsRegisterInterface,
+			String ip) {
+		// TODO Auto-generated method stub
+		try {
+			return new MySqlAndroid().RegisterLogEvent(
+					applicationContext,
+					"http://" + ip + "/" + LogEventsRegisterInterface
+							+ "?action=" + URLEncoder.encode(action, "UTF-8")
+							+ "&user_email="
+							+ URLEncoder.encode(email, "UTF-8") + "&password="
+							+ URLEncoder.encode(password, "UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return false;
