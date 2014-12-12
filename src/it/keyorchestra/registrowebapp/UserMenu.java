@@ -7,7 +7,6 @@ import it.keyorchestra.registrowebapp.scuola.util.LooperThread;
 import it.keyorchestra.registrowebapp.scuola.util.ToastExpander;
 
 import java.util.Calendar;
-import java.util.Map;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -259,20 +258,30 @@ public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 		basket.putLong("id_utente", id_utente);
 		basket.putString("hash", generateHashForUserOptions(id_utente));
 		
+		//DATABASE
 		basket.putString("databaseList", getPrefs.getString("databaseList", ""));
 		
+		//PostgreSQL
 		basket.putString("ipPostgreSQL", getPrefs.getString("ipPostgreSQL", ""));
 		basket.putString("userNamePostgreSQL", getPrefs.getString("userNamePostgreSQL", ""));
 		basket.putString("userPasswdPostgreSQL", getPrefs.getString("userPasswdPostgreSQL", ""));
 		basket.putString("portPostgreSQL", getPrefs.getString("portPostgreSQL", ""));
 		basket.putString("schemaPostgreSQL", getPrefs.getString("schemaPostgreSQL", ""));
 
+		//MySQL
 		basket.putString("ipMySQL", getPrefs.getString("ipMySQL", ""));
 		basket.putString("userNameMySQL", getPrefs.getString("userNameMySQL", ""));
 		basket.putString("userPasswdMySQL", getPrefs.getString("userPasswdMySQL", ""));
 		basket.putString("portMySQL", getPrefs.getString("portMySQL", ""));
 		basket.putString("schemaMySQL", getPrefs.getString("schemaMySQL", ""));
 
+		//PhpMySqlAndroid - SERVER SIDE SCRIPTINGs
+		basket.putString("phpencoder", getPrefs.getString("phpencoder", ""));
+		basket.putString("retrieveTableData", getPrefs.getString("retrieveTableData", ""));
+		basket.putString("GraphViewInterface", getPrefs.getString("GraphViewInterface", ""));
+		basket.putString("LogEventsRegisterInterface", getPrefs.getString("LogEventsRegisterInterface", ""));
+		basket.putString("schemaMySQL", getPrefs.getString("schemaMySQL", ""));
+		
 		return basket;
 	}
 
