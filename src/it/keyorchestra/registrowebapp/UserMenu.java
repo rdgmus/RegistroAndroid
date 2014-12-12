@@ -7,6 +7,7 @@ import it.keyorchestra.registrowebapp.scuola.util.LooperThread;
 import it.keyorchestra.registrowebapp.scuola.util.ToastExpander;
 
 import java.util.Calendar;
+import java.util.Map;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -82,15 +83,20 @@ public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 				startAnimation((ImageButton) v, 2000);
 				Toast.makeText(
 						getApplicationContext(),
-						"Attività implementate per il ruolo di: "
-								+ ruoloScelto, Toast.LENGTH_SHORT).show();
+						"Attività implementate per il ruolo di: " + ruoloScelto,
+						Toast.LENGTH_SHORT).show();
 				Intent sendIntent = new Intent();
-				sendIntent.setAction(Intent.ACTION_SEND);
-				sendIntent.putExtra(Intent.EXTRA_TEXT,
-						"Ruolo: "+ruoloScelto);
+				sendIntent
+						.setAction("it.keyorchestra.registroandroid.admin.options.REG_ANDROID_ADMIN_OPTIONS");
+				sendIntent.putExtra(Intent.EXTRA_TEXT, "Utente: [" + id_utente
+						+ "] Ruolo: " + ruoloScelto);
+				Bundle basket = packPreferences();
+
+				sendIntent.putExtras(basket);
 				sendIntent.setType("text/plain");
+				
 				startActivity(Intent.createChooser(sendIntent, getResources()
-						.getText(R.string.adminOptions)+" "+ruoloScelto));
+						.getText(R.string.adminOptions) + " " + ruoloScelto));
 			}
 		});
 
@@ -244,6 +250,46 @@ public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 				openOptionsMenu();
 			}
 		});
+	}
+
+	protected Bundle packPreferences() {
+		// TODO Auto-generated method stub
+		Bundle basket = new Bundle();
+		long id_utente = getPrefs.getLong("id_utente",-1);
+		basket.putLong("id_utente", id_utente);
+		basket.putString("hash", generateHashForUserOptions(id_utente));
+		
+		basket.putString("databaseList", getPrefs.getString("databaseList", ""));
+		
+		basket.putString("ipPostgreSQL", getPrefs.getString("ipPostgreSQL", ""));
+		basket.putString("userNamePostgreSQL", getPrefs.getString("userNamePostgreSQL", ""));
+		basket.putString("userPasswdPostgreSQL", getPrefs.getString("userPasswdPostgreSQL", ""));
+		basket.putString("portPostgreSQL", getPrefs.getString("portPostgreSQL", ""));
+		basket.putString("schemaPostgreSQL", getPrefs.getString("schemaPostgreSQL", ""));
+
+		basket.putString("ipMySQL", getPrefs.getString("ipMySQL", ""));
+		basket.putString("userNameMySQL", getPrefs.getString("userNameMySQL", ""));
+		basket.putString("userPasswdMySQL", getPrefs.getString("userPasswdMySQL", ""));
+		basket.putString("portMySQL", getPrefs.getString("portMySQL", ""));
+		basket.putString("schemaMySQL", getPrefs.getString("schemaMySQL", ""));
+
+		return basket;
+	}
+
+	/**
+	 * Viene richiamata quando l'utente seleziona le opzioni riguardanti il
+	 * ruolo di appartenenza. Un hash String viene generata e salvata nella
+	 * tabella utenti_scuola
+	 * 
+	 * @param id_utente
+	 * @return
+	 */
+	protected String generateHashForUserOptions(long id_utente) {
+		// TODO Auto-generated method stub
+		String phpencoder = getPrefs.getString("phpencoder", null);
+
+		return databaseOps.generateHashAndStoreAtUser(getApplicationContext(),
+				getDatabaseIpFromPreferences(), phpencoder, id_utente);
 	}
 
 	/*
@@ -402,13 +448,23 @@ public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 	@Override
 	public String getDefaultDatabaseFromPreferences() {
 		// TODO Auto-generated method stub
-		return null;
+		String defaultDatabase = getPrefs.getString("databaseList", "1");
+		return defaultDatabase;
 	}
 
 	@Override
 	public String getDatabaseIpFromPreferences() {
 		// TODO Auto-generated method stub
-		return null;
+		String defaultDatabase = getDefaultDatabaseFromPreferences();
+
+		String ip = null;
+
+		if (defaultDatabase.contentEquals("MySQL")) {
+			ip = getPrefs.getString("ipMySQL", "");
+		} else if (defaultDatabase.contentEquals("PostgreSQL")) {
+			ip = getPrefs.getString("ipPostgreSQL", "");
+		}
+		return ip;
 	}
 
 	// display current date both on the text view and the Date Picker when the

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import junit.framework.Assert;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ComponentName;
@@ -1306,7 +1307,7 @@ public class DatabaseOps implements DatabasesInterface {
 			String sendNewPasswordToUser, String ip,
 			boolean isChangingPasswordForHimSelf) {
 		// TODO Auto-generated method stub
-		int forHimSelf = isChangingPasswordForHimSelf? 1:0;
+		int forHimSelf = isChangingPasswordForHimSelf ? 1 : 0;
 		try {
 			return new MySqlAndroid().EmailPasswordToUser(applicationContext,
 					"http://" + ip + "/" + sendNewPasswordToUser + "?email="
@@ -1345,5 +1346,89 @@ public class DatabaseOps implements DatabasesInterface {
 			return false;
 		}
 		return true;
+	}
+
+	public String generateHashAndStoreAtUser(Context applicationContext,
+			String ip, String phpencoder, long id_utente) {
+		// TODO Auto-generated method stub
+		String hash = this.generateHash(applicationContext, ip, phpencoder);
+		if (!storeHashAtUser(applicationContext, id_utente, hash)) {
+			Toast.makeText(applicationContext,
+					"Non è stato possibile salvare l'hash: " + hash,
+					Toast.LENGTH_LONG).show();
+		}
+		return hash;
+	}
+
+	/**
+	 * Salva una nuova hash nel record utenti_scuola per invio a Opzione Ruolo
+	 * 
+	 * @param applicationContext
+	 * @param id_utente
+	 * @param hash
+	 * @return
+	 */
+	private boolean storeHashAtUser(Context applicationContext, long id_utente,
+			String hash) {
+		// TODO Auto-generated method stub
+		String url = getUrl(applicationContext);
+
+		Connection conn;
+		try {
+			DriverManager.setLoginTimeout(15);
+			conn = DriverManager.getConnection(url);
+			Statement st = conn.createStatement();
+			String sql = null;
+
+			sql = "UPDATE utenti_scuola " + " SET hash = '" + hash + "' "
+					+ " WHERE  id_utente=" + id_utente;
+			int result = st.executeUpdate(sql);
+
+			st.close();
+			conn.close();
+			return result == 1;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	/**
+	 * Viene effettuato un test dall'Activity richiamata dall'utente per
+	 * controllare le credenziali dell'utente: id_utente e hash.
+	 * 
+	 * @param context
+	 * @param id_utente
+	 * @param hash
+	 * @return
+	 */
+	public boolean testUserHasHash(Context context, long id_utente, String hash) {
+		// TODO Auto-generated method stub
+		String url = getUrl(context);
+
+		Connection conn;
+		try {
+			DriverManager.setLoginTimeout(15);
+			conn = DriverManager.getConnection(url);
+			Statement st = conn.createStatement();
+			String sql = null;
+
+			sql = "SELECT * FROM  utenti_scuola " + " WHERE  id_utente="
+					+ id_utente + " AND hash = '" + hash + "'";
+			ResultSet result = st.executeQuery(sql);
+			while (result.next()) {
+				if (hash.equals(result.getString("hash"))) {
+					st.close();
+					conn.close();
+					return true;
+				}
+			}
+
+			st.close();
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 }
