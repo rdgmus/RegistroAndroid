@@ -84,18 +84,24 @@ public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 						getApplicationContext(),
 						"Attività implementate per il ruolo di: " + ruoloScelto,
 						Toast.LENGTH_SHORT).show();
-				Intent sendIntent = new Intent();
-				sendIntent
-						.setAction("it.keyorchestra.registroandroid.admin.options.REG_ANDROID_ADMIN_OPTIONS");
-				sendIntent.putExtra(Intent.EXTRA_TEXT, "Utente: [" + id_utente
-						+ "] Ruolo: " + ruoloScelto);
-				Bundle basket = packPreferences();
+				// THREAD TODO
+				Thread timer = new Thread() {
 
-				sendIntent.putExtras(basket);
-				sendIntent.setType("text/plain");
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						try {
+							sleep(2000);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						} finally {
+							startUserRoleOptions(id_utente);
+						}
+					}
 
-				startActivity(Intent.createChooser(sendIntent, getResources()
-						.getText(R.string.adminOptions) + " " + ruoloScelto));
+				};
+				timer.start();
+
 			}
 		});
 
@@ -527,4 +533,19 @@ public class UserMenu extends Activity implements ActivitiesCommonFunctions {
 
 	}
 
+	protected void startUserRoleOptions(long id_utente) {
+		Intent sendIntent = new Intent();
+		sendIntent
+				.setAction("it.keyorchestra.registroandroid.admin.options.REG_ANDROID_ADMIN_OPTIONS");
+		sendIntent.putExtra(Intent.EXTRA_TEXT, "Utente: [" + id_utente
+				+ "] Ruolo: " + ruoloScelto);
+		Bundle basket = packPreferences();
+
+		sendIntent.putExtras(basket);
+		sendIntent.setType("text/plain");
+
+		startActivity(Intent.createChooser(sendIntent,
+				getResources().getText(R.string.adminOptions) + " "
+						+ ruoloScelto));
+	}
 }
